@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMTUzIDIyNjEiPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE0My4zMCw2MDYuNzEpIj4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDM3Ni4xMywtMzUzLjIxKSBzY2FsZSgyLjYyMzgpIj48cGF0aCBkPSJNIDMsLTYgQyAtMjAsLTQyIC02NiwtMjggLTY4LDEwIEMgLTcwLDQ4IC0zNiw2NiAtMiwxMTAgQyA0MCw3MCA3NCw0NCA3Miw2IEMgNzAsLTMyIDI0LC00MiAzLC02IFoiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzU1NDQzQyIgc3Ryb2tlLXdpZHRoPSI4IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L2c+CiAgICA8ZyBpZD0id29yZCIgZmlsbD0iIzU1NDQzQyIgdHJhbnNmb3JtPSJtYXRyaXgoMSwwLDAsLTEsMjY1LjAsNTIxLjApIj4KICAgIDxwYXRoIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsMCkiIGQ9Ik0xMTQgLTM1UTE1MSA1IDE5MC4wIDQ5LjVRMjI5IDk0IDI2NS4wIDEzOC41UTMwMSAxODMgMzMxLjAgMjI2LjVRMzYxIDI3MCAzNzggMzA5UTM4NyAzMzEgNDEyIDMzMVE0MjkgMzMxIDQzOS41IDMxOS41UTQ1MCAzMDggNDUwIDI5NFE0NTAgMjg2IDQ0NyAyNzlRNDI0IDIyNyAzODQuMCAxNzEuMFEzNDQgMTE1IDI5Ny41IDU5LjVRMjUxIDQgMjAyLjUgLTQ4LjVRMTU0IC0xMDEgMTE0IC0xNDZRMTE1IC0yMjYgMTE2LjUgLTMwMy4wUTExOCAtMzgwIDExOCAtNDQ5UTExOCAtNzI0IDY0LjAgLTg1Ny4wUTEwIC05OTAgLTk3IC05OTBRLTEzNCAtOTkwIC0xNjUuMCAtOTc0LjBRLTE5NiAtOTU4IC0yMTguMCAtOTI4LjBRLTI0MCAtODk4IC0yNTIuNSAtODU0LjBRLTI2NSAtODEwIC0yNjUgLTc1NFEtMjY1IC02OTIgLTI0OC41IC02MTguNVEtMjMyIC01NDUgLTE5NS41IC00NjMuMFEtMTU5IC0zODEgLTEwMS4wIC0yOTMuNVEtNDMgLTIwNiAzOSAtMTE2UTM5IC0zMCA0MC4wIDU1LjVRNDEgMTQxIDQzLjUgMjE5LjVRNDYgMjk4IDUwLjUgMzY2LjVRNTUgNDM1IDYxIDQ4OFE2MyA1MDMgNzMuNSA1MTIuMFE4NCA1MjEgOTkgNTIxUTExNCA1MjEgMTI1LjAgNTEwLjBRMTM2IDQ5OSAxMzYgNDgzUTEzNiA0NzcgMTMyLjUgNDQ0LjBRMTI5IDQxMSAxMjUuMCAzNDcuMFExMjEgMjgzIDExNy41IDE4OC41UTExNCA5NCAxMTQgLTM1Wk00MyAtNDQzUTQzIC0zOTIgNDIuMCAtMzQxLjBRNDEgLTI5MCA0MCAtMjMwUS0yMiAtMzA1IC02NS41IC0zNzguMFEtMTA5IC00NTEgLTEzNy4wIC01MTguMFEtMTY1IC01ODUgLTE3Ny41IC02NDUuMFEtMTkwIC03MDUgLTE5MCAtNzU0US0xOTAgLTc4MiAtMTg2LjAgLTgxMC41US0xODIgLTgzOSAtMTcxLjUgLTg2Mi41US0xNjEgLTg4NiAtMTQzLjAgLTkwMC41US0xMjUgLTkxNSAtOTcgLTkxNVEtODYgLTkxNSAtNzEuMCAtOTEwLjBRLTU2IC05MDUgLTQwLjUgLTg4OC41US0yNSAtODcyIC0xMC4wIC04NDEuMFE1IC04MTAgMTcuMCAtNzU3LjVRMjkgLTcwNSAzNi4wIC02MjguMFE0MyAtNTUxIDQzIC00NDNaIi8+CiAgICA8cGF0aCB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzNDAsMCkiIGQ9Ik0zNzAgMTEyUTMzNSA1NSAyODguNSAyMi4wUTI0MiAtMTEgMTk1IC0xMVExNTcgLTExIDEyNy4wIDMuMFE5NyAxNyA3NS4wIDQyLjVRNTMgNjggNDEuNSAxMDQuMFEzMCAxNDAgMzAgMTg1UTMwIDI1NSA0My41IDMwOS4wUTU3IDM2MyA3My4wIDM5OS41UTg5IDQzNiAxMDMuMCA0NTUuMFExMTcgNDc0IDExNyA0NzRRMTIyIDQ4MCAxMjkuNSA0ODMuMFExMzcgNDg2IDE0NSA0ODZRMTYxIDQ4NiAxNzEuNSA0NzQuNVExODIgNDYzIDE4MiA0NDhRMTgyIDQ0MiAxNzkuNSA0MzYuMFExNzcgNDMwIDE3NCA0MjRRMTY5IDQxNSAxNTguMCAzOTYuNVExNDcgMzc4IDEzNS4wIDM0OC4wUTEyMyAzMTggMTE0LjAgMjc3LjVRMTA1IDIzNyAxMDUgMTg1UTEwNSAxMjYgMTI4LjUgOTUuNVExNTIgNjUgMTk1IDY1UTIxMyA2NSAyMzYuNSA3Ni41UTI2MCA4OCAyODIuNSAxMTIuMFEzMDUgMTM2IDMyMi4wIDE3My4wUTMzOSAyMTAgMzQ0IDI2MEwzNTkgNDMyUTM2MSA0NDcgMzcyLjAgNDU3LjBRMzgzIDQ2NyAzOTggNDY3UTQxNSA0NjcgNDI1LjAgNDU0LjVRNDM1IDQ0MiA0MzUgNDI2TDQyMiAyNjBRNDIwIDIzOSA0MjMuNSAyMDUuMFE0MjcgMTcxIDQzOC4wIDEzOC4wUTQ0OSAxMDUgNDcxLjAgODEuNVE0OTMgNTggNTI5IDU4UTU1NSA1OCA1ODAuMCA3MS41UTYwNSA4NSA2MjguMCAxMDcuMFE2NTEgMTI5IDY3MC41IDE1Ni41UTY5MCAxODQgNzA2LjUgMjEyLjBRNzIzIDI0MCA3MzUuMCAyNjUuNVE3NDcgMjkxIDc1NSAzMDlRNzYwIDMyMCA3NjkuMCAzMjYuMFE3NzggMzMyIDc4OSAzMzJRODA3IDMzMiA4MTcuMCAzMjAuMFE4MjcgMzA4IDgyNyAyOTRRODI3IDI4NiA4MjQgMjc5UTgyMCAyNzEgODA4LjUgMjQ1LjVRNzk3IDIyMCA3NzguNSAxODcuNVE3NjAgMTU1IDczNC4wIDExOS4wUTcwOCA4MyA2NzYuMCA1Mi41UTY0NCAyMiA2MDYuNSAyLjVRNTY5IC0xNyA1MjYgLTE3UTQ2NyAtMTcgNDI4LjAgMTYuNVEzODkgNTAgMzcwIDExMloiLz4KICAgIDxwYXRoIHRyYW5zZm9ybT0idHJhbnNsYXRlKDEwNTcsMCkiIGQ9Ik0yNjAgOTBRMjc2IDEyMyAyOTcuMCAxNjIuNVEzMTggMjAyIDM0Mi4wIDI0Mi41UTM2NiAyODMgMzkyLjUgMzIzLjBRNDE5IDM2MyA0NDggMzk5UTQ3NyA0MzQgNTA2LjUgNDQ5LjVRNTM2IDQ2NSA1NjIgNDY1UTYxNCA0NjUgNjM5LjAgNDI3LjBRNjY0IDM4OSA2NjQgMzMzUTY2NCAzMjAgNjYyLjUgMzAxLjVRNjYxIDI4MyA2NTkuNSAyNjIuMFE2NTggMjQxIDY1Ni41IDIxOS41UTY1NSAxOTggNjU1IDE3OVE2NTUgMTU1IDY1Ny41IDEzMy4wUTY2MCAxMTEgNjY3LjAgOTQuNVE2NzQgNzggNjg3LjAgNjguNVE3MDAgNTkgNzIxIDU5UTc1OSA1OSA3OTUuMCA4OC41UTgzMSAxMTggODYxLjUgMTU4LjVRODkyIDE5OSA5MTQuNSAyNDEuMFE5MzcgMjgzIDk0OCAzMDlROTUzIDMyMCA5NjIuNSAzMjYuMFE5NzIgMzMyIDk4MyAzMzJRMTAwMCAzMzIgMTAxMC41IDMxOS41UTEwMjEgMzA3IDEwMjEgMjkzUTEwMjEgMjg2IDEwMTggMjc5UTEwMTQgMjcxIDEwMDIuMCAyNDYuMFE5OTAgMjIxIDk3MC41IDE4OC41UTk1MSAxNTYgOTI1LjAgMTE5LjVRODk5IDgzIDg2Ny41IDUzLjBRODM2IDIzIDc5OS41IDMuMFE3NjMgLTE3IDcyMyAtMTdRNjc4IC0xNyA2NTAuMCAwLjVRNjIyIDE4IDYwNi4wIDQ2LjVRNTkwIDc1IDU4NC41IDEwOS41UTU3OSAxNDQgNTc5IDE3OVE1NzkgMTk0IDU4MC41IDIxMy4wUTU4MiAyMzIgNTg0LjUgMjUzLjBRNTg3IDI3NCA1ODguNSAyOTUuMFE1OTAgMzE2IDU5MCAzMzVRNTkwIDM2NyA1ODAuMCAzNzguNVE1NzAgMzkwIDU2MiAzOTBRNTQ2IDM5MCA1MjUuNSAzNzEuNVE1MDUgMzUzIDQ4Mi41IDMyMy4wUTQ2MCAyOTMgNDM2LjUgMjU1LjVRNDEzIDIxOCAzOTIuNSAxODEuMFEzNzIgMTQ0IDM1NC41IDExMC41UTMzNyA3NyAzMjcgNTVRMzA3IDEzIDI4Ny4wIC0xLjVRMjY3IC0xNiAyNDYgLTE2UTIxNyAtMTYgMTk5LjUgMS41UTE4MiAxOSAxODIgNTFRMTgyIDU4IDE4NC4wIDc4LjVRMTg2IDk5IDE4OS4wIDEyNy41UTE5MiAxNTYgMTk1LjAgMTg5LjBRMTk4IDIyMiAyMDEuMCAyNTQuNVEyMDQgMjg3IDIwNi4wIDMxNS4wUTIwOCAzNDMgMjA4IDM2MlEyMDggMzg3IDIwNi4wIDQxMC4wUTIwNCA0MzMgMTk4IDQzOFExODkgNDM1IDE2Ni4wIDQwMC41UTE0MyAzNjYgMTA3IDI3OVExMDIgMjY4IDkyLjAgMjYyLjBRODIgMjU2IDcxIDI1NlE1NCAyNTYgNDQuMCAyNjcuNVEzNCAyNzkgMzQgMjk0UTM0IDMwMSAzNyAzMDlRODIgNDE2IDEyMS41IDQ2Ni41UTE2MSA1MTcgMjAwIDUxN1EyMjMgNTE3IDIzOS4wIDUwNS41UTI1NSA0OTQgMjY0LjUgNDc1LjBRMjc0IDQ1NiAyNzguNSA0MzMuMFEyODMgNDEwIDI4MyAzODZRMjgzIDM2OCAyODAuNSAzMzAuMFEyNzggMjkyIDI3NC4wIDI0OC41UTI3MCAyMDUgMjY2LjUgMTYyLjBRMjYzIDExOSAyNjAgOTBaIi8+CiAgICA8cGF0aCB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxOTY4LDApIiBkPSJNMTU4IDExMFExNzkgODEgMjEyLjAgNjMuNVEyNDUgNDYgMjkzIDQ2UTM0MiA0NiAzODIuMCA2OS41UTQyMiA5MyA0NTUuMCAxMzEuMFE0ODggMTY5IDUxNC4wIDIxNi4wUTU0MCAyNjMgNTYxIDMxMFE1NjYgMzIxIDU3NS4wIDMyNi41UTU4NCAzMzIgNTk1IDMzMlE2MTIgMzMyIDYyMi41IDMyMC4wUTYzMyAzMDggNjMzIDI5NFE2MzMgMjg5IDYzMi4wIDI4NS41UTYzMSAyODIgNjI5IDI3OFE1NjAgMTI2IDQ3OC41IDQ5LjBRMzk3IC0yOCAyOTQgLTMwUTIyOCAtMzAgMTgwLjAgLTQuNVExMzIgMjEgMTAxLjAgNjEuNVE3MCAxMDIgNTUuMCAxNTMuMFE0MCAyMDQgNDAgMjU1UTQwIDMwNiA1Mi41IDM0OS4wUTY1IDM5MiA4OC41IDQyNC4wUTExMiA0NTYgMTQ0LjUgNDc0LjBRMTc3IDQ5MiAyMTYgNDkyUTIzOSA0OTIgMjYxLjUgNDgyLjVRMjg0IDQ3MyAzMDIuMCA0NTUuNVEzMjAgNDM4IDMzMS4wIDQxMy4wUTM0MiAzODggMzQyIDM1NlEzNDIgMzE1IDMyOC4wIDI3OS4wUTMxNCAyNDMgMjg5LjUgMjEyLjBRMjY1IDE4MSAyMzEuMCAxNTUuMFExOTcgMTI5IDE1OCAxMTBaTTEyOCAxNzVRMTU5IDE4OCAxODQuNSAyMDguMFEyMTAgMjI4IDIyOC4wIDI1Mi4wUTI0NiAyNzYgMjU2LjAgMzAyLjVRMjY2IDMyOSAyNjYgMzU2UTI2NiAzODYgMjUxLjAgNDAxLjVRMjM2IDQxNyAyMTYgNDE3UTE4OSA0MTcgMTcwLjAgNDAyLjBRMTUxIDM4NyAxMzkuMCAzNjMuMFExMjcgMzM5IDEyMS41IDMwOS41UTExNiAyODAgMTE2IDI1MVExMTYgMjMzIDExOS41IDIxMy4wUTEyMyAxOTMgMTI4IDE3NVoiLz4KICA8L2c+CiAgPC9nPgo8L3N2Zz4=">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>June, powered by Cleardesk — Early Access</title>
+<meta name="description" content="An AI-and-human system that fills open caregiver shifts around the clock, powered by Cleardesk's scheduler and recruiter teams. For franchise owners, operators, and the people who advise them.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FFF8EF;
+    --paper-dim:#FFE9C7;
+    --ink:#2E1B12;
+    --ink-soft:#805B45;
+    --navy:#B23A1C;
+    --navy-deep:#8A2C14;
+    --cream-on-navy:#FFF8EF;
+    --navy-line:rgba(255,248,239,0.22);
+    --amber:#FFC22E;
+    --amber-deep:#A56A00;
+    --sage:#E8481F;
+    --sage-tint:#FFE0D2;
+    --line:#FBDDB3;
+    --max:1120px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    font-size:17px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    letter-spacing:-0.01em;
+    margin:0;
+  }
+  a{color:inherit;}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 32px;}
+  @media (max-width:640px){ .wrap{padding:0 20px;} }
+
+  /* ---------- Header ---------- */
+  header.site{
+    padding:28px 0;
+    border-bottom:1px solid var(--line);
+  }
+  header.site .wrap{display:flex;align-items:center;justify-content:space-between;}
+  .wordmark-group{display:flex;align-items:center;gap:10px;}
+  .wordmark-group svg.june-mark{height:38px;width:auto;display:block;}
+  .powered-by{font-size:12px;color:var(--ink-soft);white-space:nowrap;}
+  .powered-by b{font-weight:600;color:var(--ink);}
+  header.site nav a{
+    font-size:14px;
+    text-decoration:none;
+    color:var(--ink-soft);
+    margin-left:28px;
+  }
+  header.site nav a:hover{color:var(--ink);}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    padding:96px 0 72px;
+    background:linear-gradient(180deg, #FFECC7 0%, var(--paper) 60%);
+  }
+  .hero h1{
+    font-size:clamp(34px,5vw,56px);
+    line-height:1.08;
+    max-width:15ch;
+  }
+  .hero p.sub{
+    max-width:52ch;
+    font-size:19px;
+    color:var(--ink-soft);
+    margin-top:24px;
+  }
+  .hero .status{
+    display:inline-block;
+    font-size:13px;
+    font-weight:600;
+    color:var(--sage);
+    background:var(--sage-tint);
+    border-radius:100px;
+    padding:6px 16px;
+    margin-bottom:22px;
+  }
+
+  form.waitlist{
+    margin-top:36px;
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    max-width:520px;
+  }
+  form.waitlist input[type=email]{
+    flex:1 1 260px;
+    padding:14px 16px;
+    border:1px solid var(--ink);
+    border-radius:6px;
+    font-family:'Inter',sans-serif;
+    font-size:16px;
+    background:var(--paper);
+    color:var(--ink);
+  }
+  form.waitlist input[type=email]:focus{
+    outline:2px solid var(--sage);
+    outline-offset:2px;
+  }
+  button.primary{
+    padding:14px 24px;
+    background:var(--sage);
+    color:var(--cream-on-navy);
+    border:none;
+    border-radius:6px;
+    font-family:'Inter',sans-serif;
+    font-weight:700;
+    font-size:16px;
+    cursor:pointer;
+  }
+  button.primary:hover{background:var(--navy-deep);}
+  button.primary:focus-visible{outline:2px solid var(--sage);outline-offset:2px;}
+  .hero .fineprint{font-size:13px;color:var(--ink-soft);margin-top:12px;}
+
+  /* ---------- Problem strip ---------- */
+  .problem{padding:64px 0;border-top:1px solid var(--line);}
+  .problem .grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:48px;
+  }
+  @media (max-width:720px){ .problem .grid{grid-template-columns:1fr;gap:32px;} }
+  .stat{border-left:2px solid var(--amber);padding-left:20px;}
+  .stat .num{font-family:'Fraunces',serif;font-size:42px;font-weight:500;color:var(--amber-deep);}
+  .stat p{margin:8px 0 0;color:var(--ink-soft);max-width:36ch;}
+  .problem .lede{
+    margin-top:40px;
+    max-width:62ch;
+    font-size:18px;
+  }
+
+  /* ---------- Night panel ---------- */
+  .night{
+    background:var(--navy);
+    color:var(--cream-on-navy);
+    padding:88px 0;
+  }
+  .night h2{
+    font-size:clamp(28px,4vw,40px);
+    max-width:16ch;
+    color:var(--cream-on-navy);
+  }
+  .night p.lede{
+    max-width:60ch;
+    margin-top:20px;
+    font-size:18px;
+    color:#C9CDDB;
+  }
+  .flow{
+    margin-top:56px;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:0;
+  }
+  @media (max-width:860px){ .flow{grid-template-columns:1fr;} }
+  .flow .step{
+    padding:24px 22px 24px 0;
+    border-top:1px solid var(--navy-line);
+  }
+  .flow .step + .step{border-left:1px solid var(--navy-line);padding-left:22px;}
+  @media (max-width:860px){
+    .flow .step + .step{border-left:none;border-top:1px solid var(--navy-line);padding-left:0;}
+  }
+  .flow .step .n{font-family:'Fraunces',serif;font-size:15px;color:var(--amber);}
+  .flow .step h3{font-size:17px;font-weight:500;color:var(--cream-on-navy);margin-top:10px;}
+  .flow .step p{font-size:15px;color:#AEB4C6;margin-top:8px;}
+
+  /* ---------- Flywheel ---------- */
+  .flywheel{padding:88px 0;border-bottom:1px solid var(--line);}
+  .flywheel h2{font-size:clamp(26px,3.6vw,34px);max-width:20ch;}
+  .roles{
+    margin-top:48px;
+    display:flex;
+    align-items:flex-start;
+    gap:0;
+    flex-wrap:wrap;
+  }
+  .role{flex:1 1 220px;padding-right:24px;}
+  .role .tag{font-size:13px;color:var(--sage);font-weight:600;}
+  .role h3{font-size:19px;font-weight:500;margin-top:8px;}
+  .role p{color:var(--ink-soft);margin-top:8px;font-size:15px;max-width:32ch;}
+  .arrow{
+    align-self:center;
+    color:var(--line);
+    font-size:22px;
+    padding:0 6px;
+    display:block;
+  }
+  @media (max-width:760px){
+    .roles{flex-direction:column;gap:28px;}
+    .arrow{display:none;}
+  }
+
+  /* ---------- Fit ---------- */
+  .fit{padding:80px 0;}
+  .fit h2{font-size:clamp(26px,3.6vw,34px);max-width:18ch;}
+  .fit .persona-list{
+    list-style:none;
+    margin:36px 0 0;
+    padding:0;
+    max-width:680px;
+  }
+  .fit .persona-list li{
+    padding:22px 0;
+    border-top:1px solid var(--line);
+  }
+  .fit .persona-list li:last-child{border-bottom:1px solid var(--line);}
+  .persona-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;}
+  .persona-name{font-family:'Fraunces',serif;font-size:19px;font-weight:500;}
+  .persona-tag{
+    font-size:12px;
+    font-weight:600;
+    color:var(--ink);
+    background:var(--amber);
+    border-radius:100px;
+    padding:3px 12px;
+  }
+  .fit .persona-list p{margin:8px 0 0;color:var(--ink-soft);font-size:16px;max-width:56ch;}
+
+  /* ---------- CTA band ---------- */
+  .cta{
+    background:var(--paper-dim);
+    border-top:1px solid var(--line);
+    padding:88px 0;
+  }
+  .cta h2{font-size:clamp(28px,4vw,40px);max-width:16ch;}
+  .cta p.sub{max-width:54ch;color:var(--ink-soft);margin-top:16px;font-size:18px;}
+  .cta form.waitlist-full{
+    margin-top:36px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    max-width:640px;
+  }
+  @media (max-width:640px){ .cta form.waitlist-full{grid-template-columns:1fr;} }
+  .cta form.waitlist-full input,
+  .cta form.waitlist-full select{
+    padding:14px 16px;
+    border:1px solid var(--ink);
+    border-radius:6px;
+    font-family:'Inter',sans-serif;
+    font-size:16px;
+    background:var(--paper);
+    color:var(--ink);
+  }
+  .cta form.waitlist-full input:focus,
+  .cta form.waitlist-full select:focus{outline:2px solid var(--sage);outline-offset:2px;}
+  .cta form.waitlist-full .full{grid-column:1 / -1;}
+  .cta .conf-note{
+    margin-top:22px;
+    font-size:14px;
+    color:var(--ink-soft);
+    border-left:2px solid var(--amber);
+    padding-left:14px;
+  }
+  .confirm{
+    display:none;
+    margin-top:20px;
+    padding:16px 18px;
+    background:var(--sage);
+    color:var(--cream-on-navy);
+    border-radius:6px;
+    font-size:15px;
+    font-weight:500;
+  }
+  .confirm.show{display:block;}
+
+  /* ---------- Footer ---------- */
+  footer{padding:40px 0;border-top:1px solid var(--line);}
+  footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+  footer p{font-size:13px;color:var(--ink-soft);margin:0;}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+  }
+  .top-accent{
+    height:5px;
+    background:linear-gradient(90deg, var(--sage) 0%, var(--amber) 100%);
+  }
+</style>
+</head>
+<body>
+<div class="top-accent"></div>
+
+<header class="site">
+  <div class="wrap">
+    <div class="wordmark-group">
+      <svg class="june-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3153 2261">
+  <g transform="translate(143.30,606.71)">
+    <g transform="translate(376.13,-353.21) scale(2.6238)"><path d="M 3,-6 C -20,-42 -66,-28 -68,10 C -70,48 -36,66 -2,110 C 40,70 74,44 72,6 C 70,-32 24,-42 3,-6 Z" fill="none" stroke="#55443C" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></g>
+    <g id="word" fill="#55443C" transform="matrix(1,0,0,-1,265.0,521.0)">
+    <path transform="translate(0,0)" d="M114 -35Q151 5 190.0 49.5Q229 94 265.0 138.5Q301 183 331.0 226.5Q361 270 378 309Q387 331 412 331Q429 331 439.5 319.5Q450 308 450 294Q450 286 447 279Q424 227 384.0 171.0Q344 115 297.5 59.5Q251 4 202.5 -48.5Q154 -101 114 -146Q115 -226 116.5 -303.0Q118 -380 118 -449Q118 -724 64.0 -857.0Q10 -990 -97 -990Q-134 -990 -165.0 -974.0Q-196 -958 -218.0 -928.0Q-240 -898 -252.5 -854.0Q-265 -810 -265 -754Q-265 -692 -248.5 -618.5Q-232 -545 -195.5 -463.0Q-159 -381 -101.0 -293.5Q-43 -206 39 -116Q39 -30 40.0 55.5Q41 141 43.5 219.5Q46 298 50.5 366.5Q55 435 61 488Q63 503 73.5 512.0Q84 521 99 521Q114 521 125.0 510.0Q136 499 136 483Q136 477 132.5 444.0Q129 411 125.0 347.0Q121 283 117.5 188.5Q114 94 114 -35ZM43 -443Q43 -392 42.0 -341.0Q41 -290 40 -230Q-22 -305 -65.5 -378.0Q-109 -451 -137.0 -518.0Q-165 -585 -177.5 -645.0Q-190 -705 -190 -754Q-190 -782 -186.0 -810.5Q-182 -839 -171.5 -862.5Q-161 -886 -143.0 -900.5Q-125 -915 -97 -915Q-86 -915 -71.0 -910.0Q-56 -905 -40.5 -888.5Q-25 -872 -10.0 -841.0Q5 -810 17.0 -757.5Q29 -705 36.0 -628.0Q43 -551 43 -443Z"/>
+    <path transform="translate(340,0)" d="M370 112Q335 55 288.5 22.0Q242 -11 195 -11Q157 -11 127.0 3.0Q97 17 75.0 42.5Q53 68 41.5 104.0Q30 140 30 185Q30 255 43.5 309.0Q57 363 73.0 399.5Q89 436 103.0 455.0Q117 474 117 474Q122 480 129.5 483.0Q137 486 145 486Q161 486 171.5 474.5Q182 463 182 448Q182 442 179.5 436.0Q177 430 174 424Q169 415 158.0 396.5Q147 378 135.0 348.0Q123 318 114.0 277.5Q105 237 105 185Q105 126 128.5 95.5Q152 65 195 65Q213 65 236.5 76.5Q260 88 282.5 112.0Q305 136 322.0 173.0Q339 210 344 260L359 432Q361 447 372.0 457.0Q383 467 398 467Q415 467 425.0 454.5Q435 442 435 426L422 260Q420 239 423.5 205.0Q427 171 438.0 138.0Q449 105 471.0 81.5Q493 58 529 58Q555 58 580.0 71.5Q605 85 628.0 107.0Q651 129 670.5 156.5Q690 184 706.5 212.0Q723 240 735.0 265.5Q747 291 755 309Q760 320 769.0 326.0Q778 332 789 332Q807 332 817.0 320.0Q827 308 827 294Q827 286 824 279Q820 271 808.5 245.5Q797 220 778.5 187.5Q760 155 734.0 119.0Q708 83 676.0 52.5Q644 22 606.5 2.5Q569 -17 526 -17Q467 -17 428.0 16.5Q389 50 370 112Z"/>
+    <path transform="translate(1057,0)" d="M260 90Q276 123 297.0 162.5Q318 202 342.0 242.5Q366 283 392.5 323.0Q419 363 448 399Q477 434 506.5 449.5Q536 465 562 465Q614 465 639.0 427.0Q664 389 664 333Q664 320 662.5 301.5Q661 283 659.5 262.0Q658 241 656.5 219.5Q655 198 655 179Q655 155 657.5 133.0Q660 111 667.0 94.5Q674 78 687.0 68.5Q700 59 721 59Q759 59 795.0 88.5Q831 118 861.5 158.5Q892 199 914.5 241.0Q937 283 948 309Q953 320 962.5 326.0Q972 332 983 332Q1000 332 1010.5 319.5Q1021 307 1021 293Q1021 286 1018 279Q1014 271 1002.0 246.0Q990 221 970.5 188.5Q951 156 925.0 119.5Q899 83 867.5 53.0Q836 23 799.5 3.0Q763 -17 723 -17Q678 -17 650.0 0.5Q622 18 606.0 46.5Q590 75 584.5 109.5Q579 144 579 179Q579 194 580.5 213.0Q582 232 584.5 253.0Q587 274 588.5 295.0Q590 316 590 335Q590 367 580.0 378.5Q570 390 562 390Q546 390 525.5 371.5Q505 353 482.5 323.0Q460 293 436.5 255.5Q413 218 392.5 181.0Q372 144 354.5 110.5Q337 77 327 55Q307 13 287.0 -1.5Q267 -16 246 -16Q217 -16 199.5 1.5Q182 19 182 51Q182 58 184.0 78.5Q186 99 189.0 127.5Q192 156 195.0 189.0Q198 222 201.0 254.5Q204 287 206.0 315.0Q208 343 208 362Q208 387 206.0 410.0Q204 433 198 438Q189 435 166.0 400.5Q143 366 107 279Q102 268 92.0 262.0Q82 256 71 256Q54 256 44.0 267.5Q34 279 34 294Q34 301 37 309Q82 416 121.5 466.5Q161 517 200 517Q223 517 239.0 505.5Q255 494 264.5 475.0Q274 456 278.5 433.0Q283 410 283 386Q283 368 280.5 330.0Q278 292 274.0 248.5Q270 205 266.5 162.0Q263 119 260 90Z"/>
+    <path transform="translate(1968,0)" d="M158 110Q179 81 212.0 63.5Q245 46 293 46Q342 46 382.0 69.5Q422 93 455.0 131.0Q488 169 514.0 216.0Q540 263 561 310Q566 321 575.0 326.5Q584 332 595 332Q612 332 622.5 320.0Q633 308 633 294Q633 289 632.0 285.5Q631 282 629 278Q560 126 478.5 49.0Q397 -28 294 -30Q228 -30 180.0 -4.5Q132 21 101.0 61.5Q70 102 55.0 153.0Q40 204 40 255Q40 306 52.5 349.0Q65 392 88.5 424.0Q112 456 144.5 474.0Q177 492 216 492Q239 492 261.5 482.5Q284 473 302.0 455.5Q320 438 331.0 413.0Q342 388 342 356Q342 315 328.0 279.0Q314 243 289.5 212.0Q265 181 231.0 155.0Q197 129 158 110ZM128 175Q159 188 184.5 208.0Q210 228 228.0 252.0Q246 276 256.0 302.5Q266 329 266 356Q266 386 251.0 401.5Q236 417 216 417Q189 417 170.0 402.0Q151 387 139.0 363.0Q127 339 121.5 309.5Q116 280 116 251Q116 233 119.5 213.0Q123 193 128 175Z"/>
+  </g>
+  </g>
+</svg>
+      <div class="powered-by">powered by <b>Cleardesk</b></div>
+    </div>
+    <nav>
+      <a href="#how-it-works">How it works</a>
+      <a href="#fit">Who it's for</a>
+      <a href="#waitlist">Join waitlist</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="status">Early access &middot; homecare franchises only</span>
+    <h1>Coverage doesn't stop when your scheduler clocks out.</h1>
+    <p class="sub">An AI-and-human system that fills open caregiver shifts around the clock &mdash; backed by Cleardesk's scheduler and recruiter teams, so no one has to sit up managing it.</p>
+    <form class="waitlist" id="hero-form">
+      <input type="email" placeholder="you@franchise.com" required aria-label="Email address">
+      <button type="submit" class="primary">Join the waitlist</button>
+    </form>
+    <p class="fineprint">No new tool to learn. Cleardesk staff run it &mdash; you just see fewer open shifts.</p>
+  </div>
+</section>
+
+<section class="problem">
+  <div class="wrap">
+    <div class="grid">
+      <div class="stat">
+        <div class="num">60&ndash;80%</div>
+        <p>average annual caregiver turnover in homecare. The bench is almost never full.</p>
+      </div>
+      <div class="stat">
+        <div class="num">After hours</div>
+        <p>is when most coverage gaps go unmanaged &mdash; until someone calls in the next morning.</p>
+      </div>
+    </div>
+    <p class="lede">An uncovered shift isn't just a scheduling miss. It's a client with no one showing up, a compliance flag, and a franchise relationship under strain. Today, fixing that requires a skilled scheduler on the phone during business hours &mdash; and nothing after.</p>
+  </div>
+</section>
+
+<section class="night" id="how-it-works">
+  <div class="wrap">
+    <h2>While your office is closed, the shift doesn't wait.</h2>
+    <p class="lede">A caregiver calls out. The system starts working the bench immediately &mdash; texting or calling caregivers in priority order, tracking every response, and confirming a replacement before the shift starts.</p>
+    <div class="flow">
+      <div class="step">
+        <div class="n">01</div>
+        <h3>Gap detected</h3>
+        <p>A callout comes in, or a caregiver hasn't confirmed before their shift starts.</p>
+      </div>
+      <div class="step">
+        <div class="n">02</div>
+        <h3>Outreach begins</h3>
+        <p>SMS for routine fills, a call for urgent ones &mdash; working down the bench in match order.</p>
+      </div>
+      <div class="step">
+        <div class="n">03</div>
+        <h3>Responses tracked</h3>
+        <p>Every reply is logged and checked against certification, hours, and payer rules.</p>
+      </div>
+      <div class="step">
+        <div class="n">04</div>
+        <h3>Handoff if needed</h3>
+        <p>A live scheduler steps in with the full thread &mdash; not a summary, the actual context.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="flywheel">
+  <div class="wrap">
+    <h2>One system, three roles working the same problem.</h2>
+    <div class="roles">
+      <div class="role">
+        <div class="tag">AI</div>
+        <h3>Flags the risk</h3>
+        <p>Spots coverage gaps and churn signals before they become a call you have to make.</p>
+      </div>
+      <span class="arrow">&rarr;</span>
+      <div class="role">
+        <div class="tag">Recruiter VA</div>
+        <h3>Fills the pipeline</h3>
+        <p>Works the bench back up when it's running thin, before it becomes a crisis.</p>
+      </div>
+      <span class="arrow">&rarr;</span>
+      <div class="role">
+        <div class="tag">Scheduler VA</div>
+        <h3>Fills the shift</h3>
+        <p>Handles the exceptions the AI can't close on its own, in real time.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="fit" id="fit">
+  <div class="wrap">
+    <h2>The pilot centers on franchise owners. It isn't only for them.</h2>
+    <ul class="persona-list">
+      <li>
+        <div class="persona-head">
+          <span class="persona-name">Franchise owners</span>
+          <span class="persona-tag">Pilot priority</span>
+        </div>
+        <p>Fewer 2am calls, fewer uncovered shifts, no new hire required to get there.</p>
+      </li>
+      <li>
+        <div class="persona-head">
+          <span class="persona-name">New founders &amp; early franchise owners</span>
+        </div>
+        <p>Build the scheduling and staffing muscle before you're big enough to need a full-time team for it.</p>
+      </li>
+      <li>
+        <div class="persona-head">
+          <span class="persona-name">CEOs &amp; multi-unit operators</span>
+        </div>
+        <p>One system across every location, instead of a different fix improvised at each one.</p>
+      </li>
+      <li>
+        <div class="persona-head">
+          <span class="persona-name">Consultants &amp; brand ambassadors</span>
+        </div>
+        <p>Something concrete to bring to the franchisees you advise, not just another recommendation.</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="cta" id="waitlist">
+  <div class="wrap">
+    <h2>Get in early.</h2>
+    <p class="sub">We're rolling this out with a small group of franchises first. Join the list and we'll reach out as pilot spots open up.</p>
+    <form class="waitlist-full" id="full-form">
+      <input type="text" placeholder="Name" required aria-label="Name">
+      <input type="email" placeholder="Email" required aria-label="Email">
+      <input type="text" placeholder="Company / franchise name" required aria-label="Company or franchise name" class="full">
+      <select required aria-label="Which best describes you" class="full">
+        <option value="" disabled selected>Which best describes you?</option>
+        <option>Franchise owner</option>
+        <option>New founder / early franchise owner</option>
+        <option>CEO / multi-unit operator</option>
+        <option>Consultant / brand ambassador</option>
+        <option>Other</option>
+      </select>
+      <button type="submit" class="primary full">Join the waitlist</button>
+    </form>
+    <div class="confirm" id="confirm-msg">You're on the list. Someone from Cleardesk will follow up directly.</div>
+    <p class="conf-note">Meeting us at [Conference name]? Stop by the booth and mention the waitlist &mdash; we're saving pilot slots for people we meet there.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>&copy; 2026 June, powered by Cleardesk.</p>
+    <p>San Diego, CA</p>
+  </div>
+</footer>
+
+<script>
+  // Placeholder submit handling — no backend wired yet.
+  // Swap this for a real integration before the conference:
+  //   - HubSpot Forms API (portalId + formId), or
+  //   - a simple POST to a CRM webhook / Zapier / own backend
+  function handleSubmit(e){
+    e.preventDefault();
+    const form = e.target;
+    const data = Object.fromEntries(new FormData(form).entries());
+    console.log('Waitlist signup (placeholder — not yet sent anywhere):', data);
+    const confirm = document.getElementById('confirm-msg');
+    if(confirm){
+      confirm.classList.add('show');
+      confirm.scrollIntoView({behavior:'smooth', block:'nearest'});
+    } else {
+      alert("You're on the list.");
+    }
+    form.reset();
+  }
+  document.getElementById('hero-form').addEventListener('submit', handleSubmit);
+  document.getElementById('full-form').addEventListener('submit', handleSubmit);
+</script>
+
+</body>
+</html>
