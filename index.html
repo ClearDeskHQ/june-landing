@@ -399,38 +399,70 @@
   .cred-stats p{margin-top:6px;font-size:14px;color:var(--ink-soft);}
   @media (max-width:760px){ .cred-stats{grid-template-columns:repeat(2,minmax(0,1fr));} }
 
-  /* ---------- Booth card ---------- */
-  .booth-card{
+  /* ---------- Booth modal ---------- */
+  .booth-overlay{
     position:fixed;
-    left:20px;
-    bottom:20px;
-    z-index:50;
-    max-width:320px;
-    background:var(--paper);
-    border:1px solid var(--line);
-    border-left:4px solid var(--sage);
-    border-radius:8px;
-    padding:18px 44px 18px 20px;
-    box-shadow:0 6px 22px rgba(46,27,18,.14);
+    inset:0;
+    z-index:100;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:rgba(46,27,18,.58);
   }
-  .booth-card h3{font-size:16px;margin-bottom:6px;}
-  .booth-card p{font-size:14px;color:var(--ink-soft);line-height:1.55;}
-  .booth-card button{
-    position:absolute;top:10px;right:10px;
-    width:26px;height:26px;
-    border:0;border-radius:5px;
-    background:none;color:var(--ink-soft);
-    font-size:18px;line-height:1;
+  .booth-modal{
+    position:relative;
+    width:100%;
+    max-width:540px;
+    background:var(--paper);
+    border-radius:10px;
+    border-top:5px solid var(--sage);
+    padding:48px 48px 40px;
+    box-shadow:0 18px 50px rgba(46,27,18,.3);
+  }
+  .booth-modal h2{font-size:clamp(26px,3.6vw,33px);max-width:16ch;}
+  .booth-modal p{margin-top:16px;font-size:17px;line-height:1.6;color:var(--ink-soft);max-width:42ch;}
+  .booth-modal form{margin-top:28px;display:flex;gap:10px;flex-wrap:wrap;}
+  .booth-modal input[type=email]{
+    font:inherit;
+    flex:1 1 240px;
+    padding:14px 15px;
+    border:1px solid var(--line);
+    border-radius:5px;
+    background:var(--paper);
+    color:var(--ink);
+  }
+  .booth-modal input[type=email]:focus{outline:2px solid var(--sage);outline-offset:1px;border-color:var(--sage);}
+  .booth-close{
+    position:absolute;
+    top:12px;
+    right:12px;
+    width:34px;
+    height:34px;
+    border:0;
+    border-radius:6px;
+    background:none;
+    color:var(--ink-soft);
+    font-size:22px;
+    line-height:1;
     cursor:pointer;
   }
-  .booth-card button:hover{background:var(--paper-dim);color:var(--ink);}
+  .booth-close:hover{background:var(--paper-dim);color:var(--ink);}
+  .booth-skip{
+    margin-top:18px;
+    font-size:14px;
+    background:none;
+    border:0;
+    padding:0;
+    color:var(--ink-soft);
+    text-decoration:underline;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .booth-skip:hover{color:var(--ink);}
+  body.booth-open{overflow:hidden;}
   @media (max-width:640px){
-    .booth-card{
-      position:static;
-      max-width:none;
-      margin:16px 20px 0;
-      box-shadow:none;
-    }
+    .booth-modal{padding:40px 24px 30px;}
   }
 
   .hero-grid{
@@ -670,42 +702,86 @@
     }
   }
   // arrives from the QR redirect, which forwards the scan's utm params
-  (function boothGreeting(){
+  (function boothWelcome(){
     const p = new URLSearchParams(window.location.search);
-    const fromBooth = p.get('utm_source') === 'conference' || p.get('utm_medium') === 'qr';
-    if(!fromBooth) return;
+    if(p.get('utm_source') !== 'conference' && p.get('utm_medium') !== 'qr') return;
 
     const campaign = p.get('utm_campaign') || '';
-    const key = 'june_booth_dismissed:' + campaign;
+    const key = 'june_booth_done:' + campaign;
     try { if(localStorage.getItem(key)) return; } catch (_) {}
 
     const pretty = campaign
       ? campaign.replace(/[_-]+/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
       : '';
 
-    const card = document.createElement('aside');
-    card.className = 'booth-card';
-    card.setAttribute('role', 'note');
+    const lastFocus = document.activeElement;
+    const overlay = document.createElement('div');
+    overlay.className = 'booth-overlay';
+    overlay.innerHTML = `
+      <div class="booth-modal" role="dialog" aria-modal="true" aria-labelledby="booth-title">
+        <button type="button" class="booth-close" aria-label="Close">&times;</button>
+        <h2 id="booth-title">Thank you for visiting our booth!</h2>
+        <p>${pretty ? 'Good to meet you at ' + pretty + '. Leave' : 'Leave'} your email and we'll hold you a spot in early access.</p>
+        <form novalidate>
+          <input type="email" name="email" placeholder="you@company.com" required aria-label="Email address">
+          <button type="submit" class="primary">Hold my spot</button>
+        </form>
+        <p class="fineprint booth-error" style="display:none;color:var(--navy-deep);"></p>
+        <button type="button" class="booth-skip">No thanks, just looking around</button>
+      </div>`;
 
-    const close = document.createElement('button');
-    close.type = 'button';
-    close.setAttribute('aria-label', 'Dismiss');
-    close.textContent = '\u00d7';
-    close.addEventListener('click', () => {
-      card.remove();
-      try { localStorage.setItem(key, '1'); } catch (_) {}
+    function close(remember){
+      overlay.remove();
+      document.body.classList.remove('booth-open');
+      document.removeEventListener('keydown', onKey);
+      if(remember){ try { localStorage.setItem(key, '1'); } catch (_) {} }
+      if(lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+    function onKey(e){ if(e.key === 'Escape') close(true); }
+
+    overlay.querySelector('.booth-close').addEventListener('click', () => close(true));
+    overlay.querySelector('.booth-skip').addEventListener('click', () => close(true));
+    overlay.addEventListener('click', (e) => { if(e.target === overlay) close(true); });
+    document.addEventListener('keydown', onKey);
+
+    const form = overlay.querySelector('form');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const input = form.querySelector('input[type=email]');
+      const errorEl = overlay.querySelector('.booth-error');
+      const btn = form.querySelector('button[type=submit]');
+      errorEl.style.display = 'none';
+
+      if(!input.checkValidity()){
+        errorEl.textContent = 'That email address does not look right.';
+        errorEl.style.display = 'block';
+        input.focus();
+        return;
+      }
+      btn.disabled = true;
+
+      try {
+        const res = await fetch(INTAKE_API, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: input.value, source_page: campaign ? 'booth:' + campaign : 'booth' })
+        });
+        if(!res.ok) throw new Error('request failed');
+        try {
+          sessionStorage.setItem('june_email', input.value);
+          localStorage.setItem(key, '1');
+        } catch (_) {}
+        window.location.href = 'welcome.html';
+      } catch (err) {
+        errorEl.textContent = "Something went wrong submitting that — mind trying again?";
+        errorEl.style.display = 'block';
+        btn.disabled = false;
+      }
     });
 
-    const h = document.createElement('h3');
-    h.textContent = 'Thank you for visiting our booth!';
-    const body = document.createElement('p');
-    body.textContent = pretty
-      ? 'Good to meet you at ' + pretty + '. Drop your email below and we will hold you a spot in the first group.'
-      : 'Drop your email below and we will hold you a spot in the first group.';
-
-    card.append(close, h, body);
-    // after the header: on phones it sits in the flow instead of over the form
-    document.querySelector('header.site').insertAdjacentElement('afterend', card);
+    document.body.appendChild(overlay);
+    document.body.classList.add('booth-open');
+    overlay.querySelector('input[type=email]').focus();
   })();
 
   document.getElementById('hero-form').addEventListener('submit', handleSubmit);
