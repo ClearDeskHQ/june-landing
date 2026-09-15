@@ -712,7 +712,8 @@
 
     const campaign = p.get('utm_campaign') || '';
     const key = 'june_booth_done:' + campaign;
-    try { if(localStorage.getItem(key)) return; } catch (_) {}
+    // an explicit no is remembered for good; a stray click only for this visit
+    try { if(localStorage.getItem(key) || sessionStorage.getItem(key)) return; } catch (_) {}
 
     const pretty = campaign
       ? campaign.replace(/[_-]+/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
@@ -734,18 +735,18 @@
         <button type="button" class="booth-skip">No thanks, just looking around</button>
       </div>`;
 
-    function close(remember){
+    function close(forGood){
       overlay.remove();
       document.body.classList.remove('booth-open');
       document.removeEventListener('keydown', onKey);
-      if(remember){ try { localStorage.setItem(key, '1'); } catch (_) {} }
+      try { (forGood ? localStorage : sessionStorage).setItem(key, '1'); } catch (_) {}
       if(lastFocus && lastFocus.focus) lastFocus.focus();
     }
-    function onKey(e){ if(e.key === 'Escape') close(true); }
+    function onKey(e){ if(e.key === 'Escape') close(false); }
 
     overlay.querySelector('.booth-close').addEventListener('click', () => close(true));
     overlay.querySelector('.booth-skip').addEventListener('click', () => close(true));
-    overlay.addEventListener('click', (e) => { if(e.target === overlay) close(true); });
+    overlay.addEventListener('click', (e) => { if(e.target === overlay) close(false); });
     document.addEventListener('keydown', onKey);
 
     const form = overlay.querySelector('form');
