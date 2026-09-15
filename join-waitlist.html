@@ -324,6 +324,32 @@
   }
   .confirm.show{display:block;}
 
+  /* ---------- Highlight ---------- */
+  .hl{
+    position:relative;
+    isolation:isolate;
+    display:inline-block;
+    padding:0 6px;
+    color:var(--ink);
+    font-weight:700;
+    white-space:nowrap;
+  }
+  .hl::before{
+    content:"";
+    position:absolute;
+    inset:1px 0 2px;
+    background:var(--amber);
+    transform:skewX(-9deg);
+    border-radius:3px;
+    z-index:-1;
+  }
+  .hero-note{
+    margin-top:14px;
+    font-size:16px;
+    color:var(--ink-soft);
+    max-width:46ch;
+  }
+
   /* ---------- Footer ---------- */
   .booth-bar{
     background:var(--charcoal);
@@ -385,7 +411,7 @@
 <section class="hero" style="padding-bottom:0;">
   <div class="wrap">
     <h1>Coverage doesn't stop when your scheduler clocks out.</h1>
-    <p class="sub">An AI-and-human system that fills open caregiver shifts around the clock.</p>
+    <p class="sub">June fills shifts <span class="hl">24/7/365</span> so your schedulers stop fighting fires and start building experiences.</p>
   </div>
 </section>
 
@@ -408,27 +434,17 @@
   </div>
 </section>
 
-<section class="cta" id="waitlist" style="padding-top:64px;">
+<section class="cta" id="early-access">
   <div class="wrap">
-    <h2 style="font-size:clamp(28px,4vw,40px);max-width:16ch;">Get in early.</h2>
-    <p class="sub" style="max-width:54ch;">June is launching in beta with a limited group of franchises. Join early access and we will follow up as spots become available.</p>
-    <form class="waitlist-full" id="full-form">
+    <h2>Get early access to June.</h2>
+    <p class="sub">We're opening our first small group of teams next month.</p>
+    <form class="waitlist" id="full-form">
       <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;" aria-hidden="true">
-      <input type="text" name="name" placeholder="Name" required aria-label="Name">
-      <input type="email" name="email" placeholder="Email" required aria-label="Email">
-      <input type="text" name="company" placeholder="Company / franchise name" required aria-label="Company or franchise name" class="full">
-      <select name="role" required aria-label="Which best describes you" class="full">
-        <option value="" disabled selected>Which best describes you?</option>
-        <option>Franchise owner</option>
-        <option>New founder / early franchise owner</option>
-        <option>CEO / multi-unit operator</option>
-        <option>Consultant / brand ambassador</option>
-        <option>Other</option>
-      </select>
-      <button type="submit" class="primary full">Join early access</button>
+      <input type="email" name="email" placeholder="you@company.com" required aria-label="Email address">
+      <button type="submit" class="primary">Get early access</button>
     </form>
-    <div class="confirm" id="confirm-msg">You are on the list. Someone from Cleardesk will follow up directly.</div>
     <p class="fineprint" id="full-error" style="display:none;color:var(--navy-deep);"></p>
+    <p class="hero-note">Be among the first teams to try June and help shape it.</p>
   </div>
 </section>
 
@@ -448,12 +464,11 @@
     e.preventDefault();
     const form = e.target;
     const data = Object.fromEntries(new FormData(form).entries());
-    data.source_page = 'join-waitlist';
+    data.source_page = 'join';
     const errorEl = document.getElementById('full-error');
     const submitBtn = form.querySelector('button[type=submit]');
-
-    if(errorEl){ errorEl.style.display = 'none'; }
-    if(submitBtn){ submitBtn.disabled = true; }
+    errorEl.style.display = 'none';
+    submitBtn.disabled = true;
 
     try {
       const res = await fetch(INTAKE_API, {
@@ -462,24 +477,12 @@
         body: JSON.stringify(data)
       });
       if(!res.ok) throw new Error('request failed');
-
-      const confirm = document.getElementById('confirm-msg');
-      if(confirm){
-        confirm.classList.add('show');
-        confirm.scrollIntoView({behavior:'smooth', block:'nearest'});
-      } else {
-        alert("You're on the list.");
-      }
-      form.reset();
+      try { sessionStorage.setItem('june_email', data.email || ''); } catch (_) {}
+      window.location.href = 'welcome.html';
     } catch (err) {
-      if(errorEl){
-        errorEl.textContent = "Something went wrong submitting that — mind trying again?";
-        errorEl.style.display = 'block';
-      } else {
-        alert("Something went wrong submitting that — mind trying again?");
-      }
-    } finally {
-      if(submitBtn){ submitBtn.disabled = false; }
+      errorEl.textContent = "Something went wrong submitting that — mind trying again?";
+      errorEl.style.display = 'block';
+      submitBtn.disabled = false;
     }
   }
   document.getElementById('full-form').addEventListener('submit', handleSubmit);
