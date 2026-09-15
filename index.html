@@ -56,7 +56,7 @@
   }
   header.site .wrap{display:flex;align-items:center;justify-content:space-between;}
   .wordmark-group{display:flex;align-items:center;gap:10px;}
-  .wordmark-group svg.june-mark{height:38px;width:auto;display:block;}
+  .wordmark-group svg.june-mark{height:54px;width:auto;display:block;}
   .powered-by{font-size:12px;color:var(--ink-soft);white-space:nowrap;margin-top:-3px;}
   .powered-by b{font-weight:600;color:var(--ink);}
   header.site nav a{
@@ -350,6 +350,102 @@
     max-width:46ch;
   }
 
+  /* ---------- VSL ---------- */
+  .video{
+    margin-top:28px;
+    max-width:820px;
+    aspect-ratio:16/9;
+    border:1px solid var(--line);
+    border-radius:8px;
+    overflow:hidden;
+    background:var(--paper-dim);
+  }
+  .video iframe{width:100%;height:100%;border:0;display:block;}
+  .video-placeholder{
+    width:100%;height:100%;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
+    color:var(--ink-soft);
+  }
+  .video-placeholder .play{
+    width:0;height:0;
+    border-left:22px solid var(--sage);
+    border-top:14px solid transparent;
+    border-bottom:14px solid transparent;
+    margin-left:6px;
+  }
+  .video-placeholder p{font-size:15px;font-weight:600;}
+
+  /* ---------- Voices ---------- */
+  .voices{padding:72px 0;border-top:1px solid var(--line);}
+  .voices h2{font-size:clamp(24px,3.4vw,32px);max-width:24ch;}
+  .voice-grid{margin-top:34px;display:grid;gap:24px;grid-template-columns:repeat(2,minmax(0,1fr));}
+  .voice-grid blockquote{
+    border-left:3px solid var(--sage);
+    padding:4px 0 4px 22px;
+  }
+  .voice-grid p{font-size:17px;line-height:1.65;color:var(--ink);}
+  .voice-grid cite{display:block;margin-top:16px;font-style:normal;}
+  .voice-grid cite b{display:block;font-size:15px;color:var(--ink);}
+  .voice-grid cite span{display:block;font-size:14px;color:var(--ink-soft);margin-top:2px;}
+  @media (max-width:760px){ .voice-grid{grid-template-columns:1fr;} }
+
+  /* ---------- Credibility ---------- */
+  .credibility{padding:72px 0;border-top:1px solid var(--line);}
+  .credibility .eyebrow{font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--sage);}
+  .credibility p.lede{margin-top:20px;max-width:62ch;font-size:18px;line-height:1.65;color:var(--ink-soft);}
+  .credibility p.lede b{color:var(--ink);font-weight:700;}
+  .cred-stats{margin-top:38px;display:grid;gap:26px;grid-template-columns:repeat(4,minmax(0,1fr));}
+  .cred-stats .num{display:block;font-family:Nunito,system-ui,sans-serif;font-weight:900;font-size:clamp(24px,3vw,30px);color:var(--sage);}
+  .cred-stats p{margin-top:6px;font-size:14px;color:var(--ink-soft);}
+  @media (max-width:760px){ .cred-stats{grid-template-columns:repeat(2,minmax(0,1fr));} }
+
+  /* ---------- Booth card ---------- */
+  .booth-card{
+    position:fixed;
+    left:20px;
+    bottom:20px;
+    z-index:50;
+    max-width:320px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-left:4px solid var(--sage);
+    border-radius:8px;
+    padding:18px 44px 18px 20px;
+    box-shadow:0 6px 22px rgba(46,27,18,.14);
+  }
+  .booth-card h3{font-size:16px;margin-bottom:6px;}
+  .booth-card p{font-size:14px;color:var(--ink-soft);line-height:1.55;}
+  .booth-card button{
+    position:absolute;top:10px;right:10px;
+    width:26px;height:26px;
+    border:0;border-radius:5px;
+    background:none;color:var(--ink-soft);
+    font-size:18px;line-height:1;
+    cursor:pointer;
+  }
+  .booth-card button:hover{background:var(--paper-dim);color:var(--ink);}
+  @media (max-width:640px){
+    .booth-card{
+      position:static;
+      max-width:none;
+      margin:16px 20px 0;
+      box-shadow:none;
+    }
+  }
+
+  .hero-grid{
+    display:grid;
+    grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);
+    gap:56px;
+    align-items:center;
+  }
+  .hero-copy h1{max-width:none;}
+  .hero-copy p.sub{max-width:46ch;}
+  @media (max-width:900px){
+    .hero-grid{grid-template-columns:1fr;gap:32px;}
+    .hero-video{order:-1;}
+  }
+
   /* ---------- Footer ---------- */
   .booth-bar{
     background:var(--charcoal);
@@ -374,15 +470,16 @@
     background:var(--charcoal);
     color:var(--amber);
     text-align:center;
-    font-weight:700;
-    font-size:14px;
-    padding:12px 20px;
+    font-weight:600;
+    font-size:12px;
+    letter-spacing:.01em;
+    padding:7px 20px;
   }
 </style>
 </head>
 <body>
 <div class="top-accent"></div>
-<div class="proof-bar">Created by the team providing back-office support for 450+ home care agencies nationally</div>
+<div class="proof-bar">From the team behind 500+ active clients and 450+ home care agencies nationally</div>
 
 <header class="site">
   <div class="wrap">
@@ -409,16 +506,29 @@
 </header>
 
 <section class="hero">
-  <div class="wrap">
-    <h1>Coverage doesn't stop when your scheduler clocks out.</h1>
-    <p class="sub">June fills shifts <span class="hl">24/7/365</span> so your schedulers stop fighting fires and start building experiences.</p>
-    <form class="waitlist" id="hero-form">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <h1>This is what scheduling should feel like.</h1>
+      <p class="sub">June fills shifts <span class="hl">24/7/365</span> so your schedulers stop fighting fires and start building experiences.</p>
+      <form class="waitlist" id="hero-form">
       <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;" aria-hidden="true">
       <input type="email" name="email" placeholder="you@company.com" required aria-label="Email address">
       <button type="submit" class="primary">Join early access</button>
     </form>
-    <p class="fineprint" id="hero-error" style="display:none;color:var(--navy-deep);"></p>
-    <p class="hero-note">Be among the first teams to try June and help shape it.</p>
+      <p class="fineprint" id="hero-error" style="display:none;color:var(--navy-deep);"></p>
+      <p class="hero-note">Be among the first teams to try June and help shape it.</p>
+    </div>
+    <div class="hero-video">
+      <div class="video">
+      <!-- Paste the Loom share embed here, replacing this placeholder div:
+           <iframe src="https://www.loom.com/embed/VIDEO_ID" frameborder="0"
+                   allowfullscreen title="How June fills a shift"></iframe> -->
+      <div class="video-placeholder">
+        <span class="play" aria-hidden="true"></span>
+        <p>Walkthrough video goes here</p>
+      </div>
+    </div>
+    </div>
   </div>
 </section>
 <section class="outcomes">
@@ -472,6 +582,35 @@
 </section>
 
 
+
+<section class="credibility">
+  <div class="wrap">
+    <h2 class="eyebrow">Who is behind June</h2>
+    <p class="lede">June is built by <b>ClearDesk</b>, which staffs and runs back-office teams &mdash; schedulers and recruiters among them &mdash; for home care agencies across the country. June is that same work, with software doing the parts that never needed a person awake.</p>
+    <div class="cred-stats">
+      <div><span class="num">500+</span><p>Active clients</p></div>
+      <div><span class="num">450+</span><p>Home care agencies supported</p></div>
+      <div><span class="num">4.9 / 5.0</span><p>Client satisfaction after placement</p></div>
+      <div><span class="num">Forbes</span><p>Where our approach was featured</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="voices">
+  <div class="wrap">
+    <h2>What home care operators say about the team behind June.</h2>
+    <div class="voice-grid">
+      <blockquote>
+        <p>We have an outstanding scheduler that has consistently outperformed most, if not all, the employees we had doing this job previously.</p>
+        <cite><b>Tom M.</b><span>Owner, Interim HealthCare</span></cite>
+      </blockquote>
+      <blockquote>
+        <p>Amazing pairing with our VA, she is thorough, polite and compassionate. We are a small, family-owned business and she has truly become another member of the family.</p>
+        <cite><b>Rachel M.</b><span>Director of Operations, Senior Helpers &mdash; Anchorage &amp; Kenai Peninsula</span></cite>
+      </blockquote>
+    </div>
+  </div>
+</section>
 
 <section class="cta" id="early-access">
   <div class="wrap">
@@ -530,6 +669,45 @@
       if(submitBtn){ submitBtn.disabled = false; }
     }
   }
+  // arrives from the QR redirect, which forwards the scan's utm params
+  (function boothGreeting(){
+    const p = new URLSearchParams(window.location.search);
+    const fromBooth = p.get('utm_source') === 'conference' || p.get('utm_medium') === 'qr';
+    if(!fromBooth) return;
+
+    const campaign = p.get('utm_campaign') || '';
+    const key = 'june_booth_dismissed:' + campaign;
+    try { if(localStorage.getItem(key)) return; } catch (_) {}
+
+    const pretty = campaign
+      ? campaign.replace(/[_-]+/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+      : '';
+
+    const card = document.createElement('aside');
+    card.className = 'booth-card';
+    card.setAttribute('role', 'note');
+
+    const close = document.createElement('button');
+    close.type = 'button';
+    close.setAttribute('aria-label', 'Dismiss');
+    close.textContent = '\u00d7';
+    close.addEventListener('click', () => {
+      card.remove();
+      try { localStorage.setItem(key, '1'); } catch (_) {}
+    });
+
+    const h = document.createElement('h3');
+    h.textContent = 'Thank you for visiting our booth!';
+    const body = document.createElement('p');
+    body.textContent = pretty
+      ? 'Good to meet you at ' + pretty + '. Drop your email below and we will hold you a spot in the first group.'
+      : 'Drop your email below and we will hold you a spot in the first group.';
+
+    card.append(close, h, body);
+    // after the header: on phones it sits in the flow instead of over the form
+    document.querySelector('header.site').insertAdjacentElement('afterend', card);
+  })();
+
   document.getElementById('hero-form').addEventListener('submit', handleSubmit);
   document.getElementById('full-form').addEventListener('submit', handleSubmit);
 </script>
