@@ -1,0 +1,1168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ask June for ClearDesk</title>
+<meta name="description" content="Ask June is a free chat app for home care agencies on WellSky. Ask about caregivers, clients, shifts and hours in plain words. When you are ready, June fills open shifts too.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+/* one radius for surfaces; the tight bubble corner is only on real messages */
+:root {
+  --bub: 20px;
+  --bub-lg: 32px;
+  --peach: #f4d6c6;
+  --clay: #e07a52;
+}
+.btn, .btn--sm { border-radius: 999px; }
+.btn:not(.btn--sm):not(.btn--line), .dialog { border-radius: 28px 28px 6px 28px; }
+.hero .stage, .cover .stage { border-radius: 48px 48px 10px 48px; }
+
+/* the bar floats in the margin, so the action stays one press away all the way down */
+.bar { position: fixed; top: 12px; left: var(--margin); right: var(--margin); margin-inline: auto; max-width: 2000px; padding: 8px 8px 8px 20px; background: var(--ui); border-radius: 999px; transition: max-width .45s var(--ease), padding .45s var(--ease), box-shadow .3s var(--ease); }
+.bar.is-floating { max-width: 660px; padding: 4px 4px 4px 16px; box-shadow: 0 12px 32px rgba(28, 26, 24, .1); /* taste-skill-ignore: the bar truly floats over content */ }
+.bar__logo { width: 68px; transition: width .45s var(--ease); }
+.bar__logo img { width: 100%; height: auto; }
+.bar__logo { position: relative; }
+.bar__word { transition: opacity 260ms var(--ease), filter 260ms var(--ease), transform 260ms var(--ease); transform-origin: left center; }
+.bar__heart { position: absolute; left: 0; top: 50%; width: 26px; height: 26px; fill: #e8582f; opacity: 0; transform: translateY(-50%) scale(.6); transition: opacity 260ms var(--ease), transform 320ms cubic-bezier(.34, 1.4, .64, 1); }
+.bar.is-floating .bar__logo { width: 26px; }
+.bar.is-floating .bar__word { opacity: 0; filter: blur(2px); transform: scale(.8); }
+.bar.is-floating .bar__heart { opacity: 1; transform: translateY(-50%) scale(1); }
+@media (prefers-reduced-motion: reduce) { .bar__word, .bar__heart, .bar__logo { transition: opacity 150ms ease; } }
+.bar.is-floating nav { gap: 18px; }
+.bar .btn--sm { transition: min-height .45s var(--ease), padding .45s var(--ease), background-color .18s var(--ease); }
+.bar.is-floating .btn--sm { min-height: 34px; padding: 0 14px; }
+.bar.is-floating nav a:not(.btn) { padding: 4px 0; }
+.bar nav { gap: clamp(12px, 2vw, 28px); }
+main { padding-top: 84px; }
+
+/* hero */
+.hero { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 24px; row-gap: 40px; align-items: center; min-height: calc(100svh - 84px); padding: clamp(24px, 5vh, 64px) var(--margin) 56px; }
+.hero__go { margin-top: 32px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; }
+.hero__go .btn { min-height: 60px; padding: 0 34px; font-size: 1.0625rem; }
+.hero__say { grid-column: 1 / span 7; }
+.hero h1 { font-size: clamp(2.25rem, 1rem + 3.4vw, 4rem); }
+.hero__sub { margin-top: 20px; font-size: var(--step-body); color: var(--ink-2); max-width: 46ch; }
+.hero__form { margin-top: 32px; width: min(100%, 540px); display: flex; gap: 6px; padding: 6px; background: var(--ui); border-radius: 32px 32px 8px 32px; }
+.hero__form:focus-within { outline: 2px solid var(--accent); outline-offset: 3px; }
+.hero__form input { flex: 1; min-width: 0; border: 0; background: transparent; padding: 0 8px 0 22px; font: inherit; font-size: 16px; color: var(--ink); }
+.hero__form input::placeholder { color: var(--ink-2); }
+.hero__form input:focus { outline: none; }
+.steps { margin: 28px 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 12px 28px; font-size: 15px; font-weight: 500; }
+.steps li { display: flex; align-items: center; gap: 10px; }
+.steps b { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 13px; font-weight: 600; }
+.stage { grid-column: 8 / -1; background: var(--accent); border-radius: var(--bub-lg); padding: clamp(32px, 4vw, 56px); display: grid; place-items: center; }
+.js .stage { animation: shutter 1.1s var(--ease) both; }
+.js .stage .thread { animation: settle 1.1s var(--ease) both; }
+@keyframes shutter { from { clip-path: inset(0 0 0 100% round 48px); } to { clip-path: inset(0 0 0 0 round 48px 48px 10px 48px); } }
+@keyframes settle { from { transform: scale(1.12); } }
+
+.thread { width: min(100%, 380px); aspect-ratio: 5 / 6; display: flex; flex-direction: column; overflow: hidden; border-radius: var(--bub); }
+.thread__top { display: flex; align-items: center; gap: 12px; padding: 16px 18px 14px; background: var(--ui-2); }
+.thread__face { width: 34px; height: 34px; border-radius: 50%; background: #fde9e2; display: grid; place-items: center; flex: none; }
+.thread__face svg { width: 18px; }
+.thread__who { font-size: 14px; font-weight: 600; line-height: 1.25; }
+.thread__who span { display: block; font-weight: 400; color: var(--ui-ink-2); font-size: 13px; }
+.thread__clock { margin-left: auto; white-space: nowrap; font-size: 13px; color: var(--ui-ink-2); font-variant-numeric: tabular-nums; }
+.thread__body { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; gap: 8px; padding: 14px 16px 16px; overflow: hidden; }
+.msg { max-width: 84%; padding: 9px 12px; border-radius: 14px; font-size: 14px; line-height: 1.4; }
+.msg--june { align-self: flex-end; background: #c94b22; color: #fff; border-bottom-right-radius: 4px; }
+.msg--cg { align-self: flex-start; background: var(--ui-2); border-bottom-left-radius: 4px; }
+.msg--event { align-self: center; max-width: none; padding: 4px 10px; font-size: 13px; color: var(--ui-ink-2); background: none; }
+.msg--done { align-self: center; max-width: none; font-size: 13px; font-weight: 600; color: #1d6b3d; background: #e3f3e8; border-radius: 14px; }
+.msg--typing { align-self: flex-start; background: var(--ui-2); display: inline-flex; gap: 4px; padding: 12px 14px; }
+.msg--typing i { width: 6px; height: 6px; border-radius: 50%; background: #a39a93; animation: dot 1s infinite var(--ease); }
+.msg--typing i:nth-child(2) { animation-delay: .15s; } .msg--typing i:nth-child(3) { animation-delay: .3s; }
+@keyframes dot { 0%, 100% { opacity: .3; transform: none; } 50% { opacity: 1; transform: translateY(-2px); } }
+.js .thread .msg { animation: pop .45s var(--ease) both; }
+@keyframes pop { from { opacity: 0; transform: translateY(10px) scale(.98); } }
+
+/* ask june, drawn as the app: a question in a grey bubble, her answer as prose beside her face, the composer below */
+
+.ai { width: min(100%, 540px); height: 560px; display: flex; flex-direction: column; overflow: hidden; border-radius: var(--bub); }
+.ai__top { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; font-size: 14px; }
+.ai__top b { font-weight: 600; }
+.ai__top span { color: var(--ui-ink-2); }
+.ai__body { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; gap: 18px; padding: 8px 20px 12px; overflow: hidden; }
+.ai .msg { max-width: none; padding: 0; border-radius: 0; font-size: 14px; line-height: 1.55; }
+.msg--you { align-self: flex-end; max-width: 80% !important; padding: 9px 14px !important; background: var(--ui-2); border-radius: 16px !important; }
+.msg--ai { align-self: stretch; display: grid; grid-template-columns: 28px 1fr; column-gap: 12px; }
+.msg--ai > img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
+.msg--ai > div { display: grid; gap: 8px; }
+.ai table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.ai th { text-align: left; font-weight: 500; color: var(--ui-ink-2); font-size: 13px; padding: 4px 0; border-bottom: 1px solid var(--ui-line); }
+.ai td { padding: 6px 0; border-bottom: 1px solid var(--ui-line); }
+.ai th:last-child, .ai td:last-child { text-align: right; }
+.who { display: inline-flex; align-items: center; gap: 8px; }
+.who img { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; flex: none; }
+.faces { display: flex; flex-wrap: wrap; gap: 6px 14px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chips span { padding: 4px 12px; border-radius: 999px; background: var(--ui-2); font-size: 13px; }
+.ai .msg--typing { grid-template-columns: none; display: inline-flex; align-self: flex-start; margin-left: 40px; padding: 10px 12px; border-radius: 14px; background: var(--ui-2); }
+.ai__ask { margin: 0 14px 14px; padding: 10px 10px 10px 16px; display: flex; align-items: center; gap: 12px; border: 1px solid var(--ui-line); border-radius: 18px; color: var(--ui-ink-2); font-size: 14px; }
+.ai__ask i { display: none; margin-left: auto; width: 32px; height: 32px; border-radius: 50%; background: var(--accent); display: grid; place-items: center; flex: none; }
+.ai__ask svg { width: 16px; color: #fff; }
+
+/* june's answers are working cards, not only words: a step she took, then the thing itself */
+.ai { --out: cubic-bezier(.23, 1, .32, 1); }
+.ai__body { justify-content: flex-start; overflow-y: auto; scrollbar-width: none; }
+.ai__body::-webkit-scrollbar { display: none; }
+.ai__body > :first-child { margin-top: auto; }
+.ai .msg { animation: msg-in 280ms var(--out) both; }
+@keyframes msg-in { from { opacity: 0; transform: translateY(8px); } }
+.ans { display: grid; gap: 10px; min-width: 0; }
+.ans > * { animation: msg-in 320ms var(--out) both; }
+.ans > :nth-child(2) { animation-delay: 60ms; } .ans > :nth-child(3) { animation-delay: 120ms; } .ans > :nth-child(4) { animation-delay: 180ms; } .ans > :nth-child(5) { animation-delay: 240ms; }
+.step { display: inline-flex; align-items: center; gap: 6px; justify-self: start; padding: 3px 10px 3px 6px; border-radius: 999px; background: var(--ui-2); font-size: 12px; color: var(--ui-ink-2); }
+.step svg, .done svg { width: 14px; height: 14px; fill: none; stroke: #1d6b3d; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.card-ui { display: grid; gap: 10px; padding: 12px 14px; border: 1px solid var(--ui-line); border-radius: 14px; background: var(--ui); }
+.card-ui__head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-size: 13px; }
+.card-ui__head span { color: var(--ui-ink-2); font-size: 12px; }
+.hours, .fits, .dates { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.hours li { display: grid; grid-template-columns: 1fr 72px 44px; align-items: center; gap: 12px; font-size: 13px; }
+.hours b { text-align: right; font-variant-numeric: tabular-nums; }
+.meter { height: 6px; border-radius: 999px; background: var(--ui-2); overflow: hidden; }
+.meter i { display: block; height: 100%; border-radius: inherit; background: var(--accent); transform-origin: left; transform: scaleX(var(--v)); transition: transform 700ms var(--out); }
+@starting-style { .meter i { transform: scaleX(0); } }
+.fits { gap: 2px; }
+.fit__row { all: unset; box-sizing: border-box; cursor: pointer; width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 6px 8px; margin: 0 -8px; width: calc(100% + 16px); border-radius: 10px; font-size: 13px; transition: background-color .2s ease, transform 160ms var(--out); }
+.fit__row:active { transform: scale(.99); }
+.fit__row:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+@media (hover: hover) and (pointer: fine) { .fit__row:hover { background: var(--ui-2); } }
+.fit__row[aria-expanded="true"] { background: var(--ui-2); }
+.fit__row > span:last-child { display: inline-flex; align-items: center; gap: 6px; color: var(--ui-ink-2); font-size: 12px; white-space: nowrap; }
+.chev { width: 7px; height: 7px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg) translateY(-2px); transition: transform 200ms var(--out); }
+.fit__row[aria-expanded="true"] .chev { transform: rotate(-135deg) translateY(-1px); }
+.fit__why { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 220ms var(--out); }
+.fit__why > ul { overflow: hidden; margin: 0; padding: 0 0 0 32px; list-style: none; display: grid; gap: 4px; font-size: 12px; color: var(--ui-ink); }
+.fit__row[aria-expanded="true"] + .fit__why { grid-template-rows: 1fr; }
+.fit__row[aria-expanded="true"] + .fit__why > ul { padding-top: 6px; padding-bottom: 8px; }
+.fit__why li { display: flex; align-items: center; gap: 6px; }
+.fit__why svg { width: 14px; height: 14px; flex: none; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.fit__why .ok svg { stroke: #1d6b3d; }
+.fit__why .warn svg { stroke: #92400e; }
+.fit__why .warn { color: #92400e; }
+.fits b { color: #1d6b3d; font-weight: 600; }
+.wave { font-size: 12px; color: var(--ui-ink-2); }
+.dates { grid-template-columns: 1fr 1fr; gap: 6px; }
+.dates li { padding: 6px 10px; border-radius: 8px; background: var(--ui-2); font-size: 12px; font-variant-numeric: tabular-nums; }
+.reason { font-size: 12px; color: var(--ui-ink-2); }
+.shifts { display: grid; gap: 6px; }
+.shift { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 12px; border: 1px solid var(--ui-line); border-radius: 12px; font-size: 13px; }
+.shift span { display: block; font-size: 12px; color: var(--ui-ink-2); }
+.badge { flex: none; padding: 2px 8px; border-radius: 999px; background: #fbe4f1; color: #9b1c62; font-size: 12px; font-weight: 600; }
+.acts { display: flex; gap: 8px; }
+.acts .go, .acts .no { all: unset; cursor: pointer; padding: 7px 14px; border-radius: 999px; font-size: 13px; font-weight: 500; transition: transform 160ms var(--out), background-color .2s ease, opacity .2s ease; }
+.acts .go { background: var(--accent); color: #fff; }
+.acts .no { background: var(--ui-2); color: var(--ui-ink); }
+.acts .go:active, .acts .no:active, .chips button:active { transform: scale(.97); }
+.acts .go:disabled { opacity: .7; cursor: progress; }
+.acts .go:focus-visible, .acts .no:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (hover: hover) and (pointer: fine) { .acts .go:hover { background: #a63c19; } .acts .no:hover { background: var(--panel-2); } }
+.card-ui--done { background: #f1faf4; border-color: #cfe9d8; animation: msg-in 280ms var(--out) both; }
+.done { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: #1d6b3d; }
+.ai .msg--typing { margin-left: 40px; }
+@media (prefers-reduced-motion: reduce) {
+  .ai .msg, .ans > *, .card-ui--done { animation: none; }
+  .meter i, .fit__why, .chev { transition: none; }
+}
+
+.pro { padding: 2px 8px; border-radius: 999px; background: var(--accent); color: #fff !important; font-size: 11px !important; font-weight: 600; }
+.fill__status { font-size: 12px; font-weight: 600; color: var(--ui-ink-2); }
+.feed { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.feed li { display: grid; grid-template-columns: 20px 1fr auto; gap: 8px; align-items: start; font-size: 12.5px; animation: msg-in 280ms var(--out) both; }
+.feed img { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; margin-top: 2px; }
+.feed p { padding: 6px 10px; border-radius: 12px 12px 12px 4px; background: var(--ui-2); }
+.feed__june p { background: #fbeee8; }
+.feed b { display: block; font-size: 11px; font-weight: 600; color: var(--ui-ink-2); }
+.tag-no, .tag-yes { align-self: center; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+.tag-no { background: var(--ui-2); color: var(--ui-ink-2); }
+.tag-yes { background: #e3f3e8; color: #1d6b3d; }
+.acts button.go { all: unset; cursor: pointer; padding: 7px 14px; border-radius: 999px; font-size: 13px; font-weight: 500; background: var(--accent); color: #fff; transition: transform 160ms var(--out), opacity .2s ease; }
+.acts button.go:active { transform: scale(.97); }
+.acts button.go:disabled { opacity: .6; cursor: default; }
+@media (prefers-reduced-motion: reduce) { .feed li { animation: none; } }
+
+.trust { margin: 14px 0 0; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 0; font-size: 14px; color: var(--ink-2); }
+.trust svg { width: 14px; height: 14px; margin-right: 8px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.ai__ask input { flex: 1; min-width: 0; border: 0; background: none; font: inherit; font-size: 14px; color: var(--ui-ink); }
+.ai__ask input:focus { outline: none; }
+.ai__ask:focus-within { border-color: var(--accent); }
+.ai__ask button { all: unset; cursor: pointer; margin-left: auto; width: 32px; height: 32px; border-radius: 50%; background: var(--accent); display: grid; place-items: center; flex: none; transition: transform 160ms var(--out); }
+.ai__ask button:active { transform: scale(.94); }
+.ai__ask button svg { width: 16px; color: #fff; }
+
+/* the hero is the app: words above, ask june's own window below, on the orange stage */
+.hero { align-items: end; min-height: 0; row-gap: 48px; }
+.hero__say { grid-column: 1 / -1 !important; }
+.hero__act { grid-column: 1 / -1; align-self: start; margin-top: -16px; }
+.hero__act .trust { margin-top: 14px; }
+.hero__act .hero__go { margin-top: 0; }
+.hero .stage--app { grid-column: 1 / -1 !important; display: block; padding: clamp(12px, 2.4vw, 36px); }
+/* words left, the action closes the far side, so the app starts on the first screen */
+@media (min-width: 1101px) {
+  .hero { row-gap: 40px; padding-top: clamp(16px, 3vh, 40px); }
+  .hero__say { grid-column: 1 / span 8 !important; }
+  .hero__act { grid-column: 9 / -1 !important; align-self: end; justify-self: end; margin: 0; display: grid; justify-items: end; }
+  .hero__act .trust { justify-content: flex-end; }
+}
+.who { white-space: nowrap; }
+.hours li { grid-template-columns: minmax(0, 1fr) 64px 44px !important; }
+.app { width: 100%; max-width: 1200px; margin: 0 auto; --ground: #ededed; --page: #f7f7f7; --line: #e4e4e4; display: grid; grid-template-columns: 208px 1fr; height: 660px; background: var(--ground); border-radius: 16px; overflow: hidden; color: #1c1c1c; font-size: 13px; box-shadow: 0 30px 80px rgba(70, 22, 8, .28); /* taste-skill-ignore: the app window floats over the stage */ }
+.app svg { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.app__rail { display: flex; flex-direction: column; gap: 2px; padding: 14px 10px; color: #3a3a3a; }
+.app__me { display: flex; align-items: center; gap: 8px; padding: 4px 8px 12px; font-weight: 600; color: #111; }
+.app__me img { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; }
+.app__search { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; padding: 6px 10px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: #8a8a8a; }
+.app__search svg { width: 14px; height: 14px; }
+.app__search kbd { margin-left: auto; font: inherit; font-size: 11px; color: #a0a0a0; }
+.app__group { padding: 10px 8px 4px; font-size: 12px; color: #9a9a9a; }
+.app__nav { display: flex; align-items: center; gap: 10px; padding: 5px 8px; border-radius: 8px; }
+.app__nav svg { width: 15px; height: 15px; flex: none; }
+.app__nav.on { background: #e1e1e1; color: #111; font-weight: 600; }
+.app__nav .count { margin-left: auto; padding: 0 7px; border-radius: 999px; background: #e45f3c; color: #fff; font-size: 11px; font-weight: 600; }
+.app__page { display: flex; flex-direction: column; min-width: 0; margin: 8px 8px 8px 0; background: var(--page); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.app__head { display: flex; align-items: center; justify-content: space-between; padding: 12px 18px; border-bottom: 1px solid var(--line); }
+.app__title { display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: 600; letter-spacing: -.01em; }
+.app__title svg { width: 18px; height: 18px; }
+.app__counts { display: flex; gap: 12px; padding: 4px 10px; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+.app__counts i { font-style: normal; font-size: 12px; font-weight: 600; color: #d4252b; }
+.app .ai { width: 100%; max-width: 720px; height: auto; flex: 1; min-height: 0; margin: 0 auto; border-radius: 0; background: transparent; }
+.app .ai__body { padding: 16px 20px 12px; }
+.hello { display: grid; grid-template-columns: 28px 1fr; gap: 12px; font-size: 14px; line-height: 1.55; }
+.hello img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
+.starters { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px; }
+.starter { all: unset; box-sizing: border-box; cursor: pointer; display: grid; gap: 2px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: #fff; transition: border-color .2s ease, transform 160ms var(--out); }
+.starter b { font-size: 13.5px; font-weight: 500; }
+.starter span { font-size: 12px; color: #8a8a8a; }
+.starter:active { transform: scale(.98); }
+.starter:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (hover: hover) and (pointer: fine) { .starter:hover { border-color: #c9c9c9; } }
+.app .ai__ask { flex-direction: column; align-items: stretch; gap: 8px; margin: 0 20px 16px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: #fff; box-shadow: 0 1px 2px rgba(0, 0, 0, .05); }
+.app .ai__ask:focus-within { border-color: #c9c9c9; }
+.ai__row { display: flex; align-items: center; justify-content: space-between; }
+.think { padding: 2px 8px; border-radius: 6px; font-size: 12px; color: #5a5a5a; }
+.app .ai__ask button { width: 26px; height: 26px; background: #ededed; transition: background-color .2s ease, transform 160ms var(--out); }
+.app .ai__ask button svg { width: 14px; color: #3a3a3a; }
+.app .ai__ask:has(input:not(:placeholder-shown)) button { background: var(--accent); }
+.app .ai__ask:has(input:not(:placeholder-shown)) button svg { color: #fff; }
+.pills { display: inline-flex; align-items: center; gap: 6px; }
+.pill { display: inline-flex; align-items: center; gap: 4px; padding: 1px 8px; border: 1px solid var(--line, #e4e4e4); border-radius: 7px; background: #fff; font-size: 12px; color: #3a3a3a; white-space: nowrap; }
+.pill svg { width: 11px; height: 11px; }
+.pill--fit { color: #1d7a46; font-weight: 600; }
+.fit__why > div { overflow: hidden; padding-left: 28px; }
+.fit__head { padding-top: 6px; font-size: 12.5px; font-weight: 600; }
+.fit__head b { margin-left: 4px; color: #8a8a8a; font-weight: 500; }
+.fit__why table { width: 100%; margin: 4px 0 8px; border-collapse: collapse; font-size: 12px; }
+.fit__why td { padding: 5px 0; border-top: 1px solid #eee; }
+.fit__why td:nth-child(2) { color: #8a8a8a; text-align: right; padding-right: 12px; }
+.fit__why td:last-child { width: 56px; text-align: right; font-weight: 500; }
+.fit__why tr.warn td { color: #92400e; }
+.shiftcard { display: grid; gap: 6px; padding: 10px 12px; border: 1px solid var(--line, #e4e4e4); border-radius: 12px; background: #fff; font-size: 13px; }
+.shiftcard > div:first-child { display: flex; justify-content: space-between; gap: 12px; }
+.shiftcard > div:first-child span { color: #8a8a8a; font-size: 12px; }
+.shiftcard__who { display: flex; align-items: center; gap: 10px; }
+.shiftcard__who .label { width: 44px; color: #8a8a8a; font-size: 12px; }
+.shiftcard__who .badge { margin-left: auto; }
+@media (max-width: 1100px) { .hero__say, .hero__act { grid-column: 1 / -1 !important; } }
+/* the app at a size you can read from the chair: zoom keeps its own inner layout */
+@media (min-width: 1101px) {
+  .app { zoom: 1.2; width: calc(100% / 1.2); max-width: 1160px; height: 540px; }
+  /* june's greeting and her questions open at the top, inside the first screen */
+  .app .ai__body > :first-child { margin-top: 0; }
+}
+@media (max-width: 900px) {
+  .app { grid-template-columns: 1fr; height: 620px; }
+  .app__rail { display: none; }
+  .app__page { margin: 0; border: 0; border-radius: 0; }
+  .starters { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) { .hours li { grid-template-columns: minmax(0, 1fr) 48px !important; } .hours .meter { display: none; } }
+
+/* the real cards' shapes: candidates with who is kept out, the close-out plan, a chart, follow-ups as outline buttons */
+.chips button { background: #fff !important; border: 1px solid var(--line, #e4e4e4); border-radius: 8px !important; padding: 3px 10px !important; font-size: 12.5px !important; }
+@media (hover: hover) and (pointer: fine) { .chips button:hover { border-color: #c9c9c9; background: #fff !important; } }
+.cand__head { align-items: center !important; }
+.cand__head .who b { font-weight: 600; }
+.cand__right { display: inline-flex; align-items: center; gap: 8px; color: #8a8a8a; font-size: 12px; }
+.xs { all: unset; cursor: pointer; padding: 3px 10px; border-radius: 7px; background: var(--accent); color: #fff; font-size: 12px; font-weight: 500; transition: transform 160ms var(--out); }
+.xs:active { transform: scale(.97); }
+.held { font-size: 12px; color: #8a8a8a; border-top: 1px solid #eee; padding-top: 8px; }
+.held summary { cursor: pointer; }
+.held__row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 6px 0 0; color: #3a3a3a; }
+.held__row > span:last-child { color: #8a8a8a; }
+.plan__sub { font-size: 12.5px; color: #8a8a8a; margin-top: -4px; }
+.plan__h { font-size: 12px; font-weight: 600; color: #3a3a3a; }
+.plan__dates { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; font-size: 12.5px; }
+.plan__dates li { display: flex; justify-content: space-between; padding: 5px 0; border-top: 1px solid #f0f0f0; }
+.plan__dates li span:last-child { color: #8a8a8a; }
+.plan__steps { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; font-size: 12.5px; }
+.plan__steps li { position: relative; padding-left: 22px; }
+.plan__steps li::before { content: ""; position: absolute; left: 3px; top: .45em; width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid #c9c9c9; transition: background-color .2s ease, border-color .2s ease; }
+.plan__steps li.done::before { left: 1px; top: .2em; width: 12px; height: 12px; border: 0; background: #1d7a46 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 10px no-repeat; }
+.plan__steps li.done { color: #1d6b3d; }
+.chart { display: grid; grid-template-columns: repeat(7, 1fr); align-items: end; gap: 8px; height: 120px; }
+.chart span { display: grid; grid-template-rows: 1fr auto auto; justify-items: center; height: 100%; font-size: 11px; color: #8a8a8a; }
+.chart i { align-self: end; width: 70%; height: calc(var(--h) * 100%); border-radius: 4px 4px 0 0; background: var(--accent); transform-origin: bottom; animation: grow 600ms var(--out) both; }
+.chart b { color: #3a3a3a; font-weight: 600; }
+.chart em { font-style: normal; }
+@keyframes grow { from { transform: scaleY(0); } }
+.badge--late { background: #fde8e7 !important; color: #b42318 !important; }
+@media (prefers-reduced-motion: reduce) { .chart i { animation: none; } }
+
+/* shift cover: june's paid plan, the text thread beside it */
+.cover { margin-top: clamp(96px, 11vw, 168px); padding: 12px var(--margin) 0; display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 24px; row-gap: 40px; align-items: center; }
+.cover__say { grid-column: 1 / span 5; display: grid; gap: 20px; }
+.cover__say h2 { font-size: var(--step-section); }
+.cover__say ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.cover__say li { position: relative; padding-left: 26px; }
+.cover__say li::before, .plan li::before, .need li::before { content: ""; position: absolute; left: 0; top: .5em; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+.cover .stage { grid-column: 7 / -1; }
+.cover .thread { aspect-ratio: 4 / 5; }
+
+/* two plans: free first */
+.plans { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.plan { padding: clamp(28px, 3.4vw, 48px); border-radius: var(--bub-lg); background: var(--panel); display: grid; gap: 18px; align-content: start; }
+.plan--free { background: var(--accent); color: #fff; }
+.plan h3 { font-size: var(--step-lead); }
+.plan__fig { font-size: clamp(3rem, 1.6rem + 4vw, 5.5rem); font-weight: 600; letter-spacing: -0.05em; line-height: 1; }
+.plan__fig small { font-size: 17px; font-weight: 500; letter-spacing: 0; margin-left: 8px; }
+.plan ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.plan li { position: relative; padding-left: 26px; }
+.plan--free li::before { background: #fff; }
+.plan .btn { justify-self: start; margin-top: 8px; }
+.plan--free .btn { background: #fff; color: var(--accent); }
+.plan--free .btn:hover { background: var(--peach); }
+.btn--line { background: var(--ui); color: var(--ink); }
+.btn--line:hover { background: var(--panel-2); }
+
+/* two plans, free first */
+.price { margin-top: clamp(96px, 11vw, 168px); padding: 12px var(--margin) 0; display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 24px; row-gap: 40px; }
+.price__say { grid-column: 1 / span 8; }
+.price__say h2 { font-size: var(--step-section); }
+.price__say p { margin-top: 16px; max-width: 52ch; }
+
+/* proof: who clearDesk schedules for, what its people did, one owner in their words */
+.letter { max-width: 38ch; margin: 0; }
+.letter p { font-size: var(--step-lead); font-weight: 500; line-height: 1.35; letter-spacing: -0.01em; }
+.letter footer { margin-top: 20px; font-size: 15px; }
+.letter footer span { display: block; color: var(--ink-2); }
+.wins { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px clamp(24px, 4vw, 64px); }
+.wins li { display: grid; align-content: start; gap: 12px; max-width: 40ch; }
+.brands__then { margin-top: 24px; font-size: var(--step-body); line-height: 1.5; max-width: 60ch; }
+.brands .letter { max-width: 60ch; margin-top: 8px; }
+@media (max-width: 900px) { .wins { grid-template-columns: 1fr; } }
+.wins__fig { font-size: clamp(1.75rem, 1.1rem + 1.6vw, 2.75rem); font-weight: 600; line-height: 1; letter-spacing: -0.03em; white-space: nowrap; }
+.wins p { margin: 0; font-size: var(--step-body); line-height: 1.5; }
+.wins .link { white-space: nowrap; }
+
+/* one ink for every brand, so no logo shouts over the others */
+.brands { padding: clamp(40px, 6vw, 88px) var(--margin) 0; display: grid; gap: 44px; }
+.brands h2 { font-size: var(--step-lead); font-weight: 500; line-height: 1.35; letter-spacing: -0.01em; max-width: 48ch; }
+.brands h2 .brands__cd { display: inline-block; height: 1.35em; width: auto; vertical-align: -0.32em; margin: 0 0.04em 0 0.3em; }
+.brands h2 { line-height: 1.6; }
+.brands__logos { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 32px 48px; }
+.brands img { display: block; height: calc(clamp(34px, 3.4vw, 54px) * var(--h, 1)); width: auto; opacity: .8; }
+@media (max-width: 1100px) {
+  .brands__logos { justify-content: flex-start; gap: 24px 40px; }
+}
+
+/* questions filed like cards */
+.faq { margin-top: clamp(96px, 11vw, 168px); padding: 12px var(--margin) 0; display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 24px; }
+.faq h2 { grid-column: 3 / span 8; font-size: var(--step-section); margin-bottom: 40px; }
+.drawer { grid-column: 3 / span 8; display: grid; }
+.qcard { --step: 0; position: relative; margin-top: -24px; padding-top: 40px; }
+.qcard:first-child { margin-top: 0; }
+.qcard__tab { position: absolute; top: 0; left: calc(var(--step) * 120px); width: 200px; height: 44px; padding: 10px 20px 0; border-radius: 18px 18px 0 0; font-size: 15px; font-weight: 500; background: inherit; }
+.qcard__body { border-radius: 0 20px 20px 20px; background: inherit; padding: 4px 28px 32px; }
+.qcard__tab, .qcard__body { background: var(--c); }
+.qcard:nth-child(3n+1) { --c: var(--panel); }
+.qcard:nth-child(3n+2) { --c: var(--peach); }
+.qcard:nth-child(3n) { --c: var(--panel-2); }
+.qcard button { all: unset; cursor: pointer; display: block; width: 100%; padding: 8px 0 12px; font-size: var(--step-lead); font-weight: 500; letter-spacing: -0.01em; line-height: 1.3; }
+.qcard button:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; border-radius: 6px; }
+.qcard__a { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .35s var(--ease); }
+.qcard__a > div { overflow: hidden; }
+.qcard__a p { max-width: 54ch; padding-top: 4px; }
+.qcard.is-open .qcard__a { grid-template-rows: 1fr; }
+
+/* first step, already open */
+.close { margin-top: clamp(96px, 11vw, 168px); min-height: 90svh; background: var(--accent); color: #fff; padding: 72px var(--margin); display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 24px; row-gap: 40px; align-items: center; }
+.close__say { grid-column: 1 / span 5; align-self: end; }
+.close__say h2 { font-size: clamp(2.5rem, 1rem + 4.4vw, 5.25rem); line-height: 1.02; }
+.close__say p { margin-top: 20px; max-width: 40ch; }
+.dialog { grid-column: 7 / span 5; padding: 32px; border-radius: var(--bub); display: grid; gap: 14px; box-shadow: 0 24px 60px rgba(60,20,8,.28); /* taste-skill-ignore: an open dialog casts its shadow */ }
+.dialog h3 { font-size: var(--step-lead); }
+.dialog > p { color: var(--ui-ink-2); font-size: 15px; margin-top: -6px; }
+.dialog label { font-size: 15px; color: var(--ui-ink-2); }
+.dialog input[type=email] { min-height: 52px; padding: 0 16px; border: 1px solid var(--ui-line); border-radius: 12px; font: inherit; font-size: 16px; color: var(--ui-ink); background: var(--ui); }
+.dialog input[type=email]:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.seg { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; background: var(--ui-2); border-radius: 14px; }
+.seg input { position: absolute; opacity: 0; pointer-events: none; }
+.seg label { text-align: center; padding: 10px; border-radius: 10px; cursor: pointer; color: var(--ui-ink); transition: background-color .2s var(--ease); }
+.seg input:checked + label { background: var(--ui); font-weight: 500; }
+.seg input:focus-visible + label { outline: 2px solid var(--accent); }
+.dialog .btn { margin-top: 6px; width: 100%; }
+.dialog input:not([type=radio]) { min-height: 48px; padding: 0 14px; border: 1px solid var(--ui-line); border-radius: 12px; font: inherit; font-size: 16px; color: var(--ui-ink); background: var(--ui); }
+.dialog input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.dialog .fine button { all: unset; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.dialog .btn:disabled { opacity: .6; cursor: progress; }
+.baa { max-width: min(720px, 92vw); max-height: 80vh; border: 0; border-radius: var(--bub); padding: 28px; font-size: 14px; line-height: 1.55; }
+.baa::backdrop { background: rgba(23, 25, 28, .5); }
+.baa form { position: sticky; top: 0; display: flex; justify-content: flex-end; }
+.baa p { margin: 0 0 10px; }
+.chips button { all: unset; cursor: pointer; padding: 4px 12px; border-radius: 999px; background: var(--ui-2); font-size: 13px; transition: background-color .2s var(--ease); }
+.chips button:hover { background: var(--panel-2); }
+.chips button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.need { margin: 0 0 8px; padding: 0; list-style: none; display: grid; gap: 12px; }
+.need li { position: relative; padding-left: 26px; font-size: 16px; }
+.dialog .talk { font-size: 15px; color: var(--ui-ink); }
+.dialog .fine { font-size: 14px; color: var(--ui-ink-2); }
+
+/* the mark, built large */
+.mark { background: var(--night); color: var(--night-ink); padding: 72px var(--margin) 32px; display: grid; gap: 56px; }
+.mark__logo { display: flex; align-items: flex-end; gap: clamp(16px, 3vw, 40px); }
+.mark__logo img { width: clamp(180px, 30vw, 420px); height: auto; }
+.mark nav { display: flex; flex-wrap: wrap; gap: 12px 32px; font-size: 15px; }
+.mark a { color: var(--night-ink); text-decoration: none; }
+.mark a:hover { color: var(--peach); }
+.mark__end { display: flex; justify-content: space-between; align-items: center; gap: 24px; font-size: 15px; color: var(--night-ink-2); }
+
+@media (max-width: 1100px) {
+  .hero__say { grid-column: 1 / span 7; }
+  .stage { grid-column: 8 / -1; padding: 24px; }
+}
+@media (max-width: 900px) {
+  .hero, .facts, .price, .faq, .close, .cover { grid-template-columns: 1fr; }
+  .hero > *, .facts > *, .price > *, .faq > *, .close > *, .cover > * { grid-column: 1 / -1 !important; }
+  .plans { grid-template-columns: 1fr; }
+  .hero { min-height: 0; align-items: start; }
+  .stage { padding: 24px 16px; border-radius: 28px; }
+  .facts dl { grid-template-columns: 1fr 1fr; }
+  .walk { grid-template-columns: 1fr; }
+  .field4 { min-height: 0; padding: 40px 20px; grid-template-rows: auto auto 1fr; }
+  .field4 > p { grid-row: 2; }
+  .field4 .card { grid-row: 3; justify-self: start; align-self: start; }
+  .field4 h2 { font-size: 24px; }
+  .ctl { grid-template-columns: 1fr; width: 100%; }
+  .ctl label { min-height: 0; padding: 22px 24px; border-radius: 24px; }
+  .board { grid-template-columns: 1fr; grid-auto-rows: auto; gap: 6px; }
+  .tile, .t-head, .t-plan, .t-call, .t-read, .t-esc, .t-book, .t-demo { grid-column: 1 / -1; grid-row: auto; min-height: 220px; }
+  .tile { min-height: 0; display: grid; gap: 20px; padding: 24px 0 24px 24px; }
+  .t-head { padding: 28px 24px; }
+  .tile__pic, .t-plan .tile__pic, .t-demo .tile__pic { position: relative; inset: auto; width: auto; height: 240px; border-radius: 18px 0 0 18px; }
+  .tile__cap, .t-demo .tile__cap, .tile__cap[style] { position: static; right: auto !important; padding-right: 24px; }
+  .chip { position: static; max-width: none; border-radius: 22px 0 0 22px; }
+  .price__bub { top: -56px; }
+  .price__fig { margin-top: 56px; }
+  .close { min-height: 84svh; padding: 56px var(--margin); }
+  .close__say { align-self: start; }
+  .mark__end { flex-direction: column; align-items: flex-start; }
+}
+@media (min-width: 561px) and (max-width: 900px) {
+  .field4 { min-height: 0; grid-template-columns: 1fr 1fr; grid-template-rows: auto 1fr; column-gap: 24px; }
+  .field4 h2, .field4 > p { grid-column: 1; }
+  .field4 > p { grid-row: 2; align-self: end; }
+  .field4 .card { grid-column: 2; grid-row: 1 / span 2; justify-self: end; align-self: center; }
+}
+@media (max-width: 560px) {
+  .facts dl { grid-template-columns: 1fr; }
+  .hero { padding-top: 20px; }
+  .hero h1 { font-size: 2.125rem; }
+  .bar { top: 8px; left: 12px; right: 12px; padding-left: 16px; }
+  main { padding-top: 76px; }
+  .hero__go .btn { width: 100%; }
+  .steps { flex-direction: column; gap: 10px; }
+  .faq .qcard__tab { width: 140px; left: calc(var(--step) * 40px); font-size: 14px; }
+  }
+@media (prefers-reduced-motion: reduce) {
+  .js .stage, .js .stage .thread, .js .thread .msg { animation: none; }
+}
+
+/* modern pass: a quiet warm ground, orange only on actions and the heart, five sizes, no travel on entrance */
+:root {
+  --ground: #fafafa;
+  --panel: #f0f0f0;
+  --panel-2: #e6e6e6;
+  --field: #ececec;
+  --ink: #141414;
+  --ink-2: #525252;
+  --night: #161616;
+  --s-display: clamp(2.5rem, 1.2rem + 4.6vw, 5.25rem);
+  --s-h2: clamp(2rem, 1.2rem + 2.4vw, 3.25rem);
+  --s-lead: clamp(1.125rem, 1rem + .35vw, 1.3rem);
+  --s-body: 1.0625rem;
+  --s-small: .875rem;
+}
+body { background: var(--ground); font-size: var(--s-body); }
+h1, h2, h3 { font-weight: 500; letter-spacing: -0.035em; }
+.hero h1 { font-size: var(--s-display); line-height: 1.02; }
+.hero__sub, .cover__say p, .price__say p, .close__say p { font-size: var(--s-lead); line-height: 1.5; }
+.cover__say h2, .price__say h2, .faq h2, .close__say h2 { font-size: var(--s-h2); line-height: 1.05; }
+.plan h3, .dialog h3 { font-size: var(--s-lead); font-weight: 500; }
+.trust, .dialog .fine, .dialog label, .letter footer, .mark nav, .mark__end { font-size: var(--s-small); }
+.letter p { font-size: var(--s-lead); font-weight: 400; }
+
+/* fields: one warm tone instead of slabs of orange */
+.hero .stage, .cover .stage { background: var(--field); }
+.close { background: var(--field); color: var(--ink); }
+.close__say p, .close__say .link { color: var(--ink-2) !important; }
+.plan { background: var(--panel); }
+.plan--free { background: var(--night); color: #f4f2ef; }
+.plan--free li::before { background: var(--accent); }
+.plan--free .btn { background: var(--accent); color: #fff; }
+.plan--free .btn:hover { background: #a63c19; }
+.cover__say li::before, .plan li::before { width: 6px; height: 6px; top: .6em; }
+
+/* entrances: no slide, no wipe; things are simply there, the hero window settles once */
+.js .stage, .js .stage .thread { animation: none; }
+.js [data-rise] { transform: none !important; transition: opacity .5s ease; }
+.js .hero .app { animation: settle-in .7s cubic-bezier(.23, 1, .32, 1) both; }
+@keyframes settle-in { from { opacity: 0; transform: scale(.985); } }
+@keyframes msg-in { from { opacity: 0; transform: translateY(3px); } }
+@keyframes pop { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .js .hero .app { animation: none; } }
+
+/* questions: plain rows on a tone step, no folder tabs */
+.faq h2 { margin-bottom: 32px; }
+.qcard { margin-top: 0 !important; padding-top: 0 !important; }
+.qcard + .qcard { margin-top: 8px !important; }
+.qcard__tab { display: none; }
+.qcard__body { border-radius: 18px !important; background: var(--panel) !important; padding: 6px 24px 10px !important; }
+.qcard button { font-size: var(--s-lead) !important; font-weight: 500; display: flex !important; justify-content: space-between; gap: 16px; }
+.qcard button::after { content: "+"; font-weight: 400; color: var(--ink-2); transition: transform .25s cubic-bezier(.23, 1, .32, 1); }
+.qcard.is-open button::after { transform: rotate(45deg); }
+.qcard__a p { padding-bottom: 12px; color: var(--ink-2); }
+
+/* the app mock reads at full contrast */
+.app__group { color: #6f6f6f; }
+
+.plan__name { font-size: var(--s-h2) !important; line-height: 1.05; }
+.plan__price { font-size: var(--s-lead) !important; font-weight: 500; letter-spacing: 0; margin-top: -8px; }
+.plan__price small { font-size: var(--s-small) !important; margin-left: 6px; opacity: .75; }
+@media (min-width: 901px) { .dialog { grid-column: 7 / -1 !important; } }
+.app__search, .app__group { color: #5e5e5e !important; }
+@media (max-width: 560px) { .hero h1 { font-size: 2.125rem; } }
+
+.pledge { gap: 18px !important; }
+.pledge__link { display: flex; align-items: center; justify-content: center; gap: 12px; }
+.pledge__link img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; }
+.pledge__link span { display: flex; gap: 4px; }
+.pledge__link i { width: 4px; height: 4px; border-radius: 50%; background: #b5b5b5; }
+.pledge__link b { display: grid; place-items: center; height: 44px; padding: 0 14px; border-radius: 10px; background: var(--panel); font-size: 15px; font-weight: 600; }
+.pledge h3 { text-align: center; }
+.pledge__list { margin: 0; padding: 0; list-style: none; display: grid; gap: 14px; }
+.pledge__list li { display: flex; gap: 12px; align-items: flex-start; font-size: var(--s-small); line-height: 1.5; color: var(--ink-2); }
+.pledge__list svg { flex: none; width: 18px; height: 18px; margin-top: 2px; fill: none; stroke: var(--ink); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.pledge__list b { display: block; color: var(--ink); font-size: var(--s-body); font-weight: 600; }
+.pledge .btn { width: 100%; }
+
+.bar, .bar.is-floating { top: 0; left: 0; right: 0; max-width: none; margin: 0; padding: 12px var(--margin); border-radius: 0; background: rgba(250, 250, 250, .96); box-shadow: none; }
+.bar.is-floating { box-shadow: 0 1px 0 var(--panel-2); /* taste-skill-ignore: the edge of a fixed bar over content */ }
+.bar.is-floating .bar__logo, .bar__logo { width: 68px; }
+.bar.is-floating .bar__word { opacity: 1; filter: none; transform: none; }
+.bar.is-floating .bar__heart { opacity: 0; }
+.bar.is-floating .btn--sm { min-height: 42px; padding: 0 18px; }
+.bar.is-floating nav { gap: clamp(12px, 2vw, 28px); }
+main { padding-top: 88px; }
+@media (max-width: 560px) { .bar, .bar.is-floating { padding: 10px 16px; } main { padding-top: 76px; } }
+
+/* the texts june sends, said where carriers look for it: what, how often, the cost, and how to stop */
+.sms { display: grid; gap: 8px; max-width: 72ch; font-size: var(--s-small); color: var(--night-ink-2); line-height: 1.6; }
+.sms b { color: var(--night-ink); font-weight: 600; }
+.sms a { color: var(--night-ink); }
+
+/* the free app as it is now: chats in the rail, new chat and my chats above, june's heart behind the hello */
+.app__me svg { width: 14px; height: 14px; margin-left: auto; color: #8a8a8a; }
+.app__group-row { display: flex; align-items: center; justify-content: space-between; padding-right: 8px; }
+.app__group-row svg { width: 14px; height: 14px; }
+.app__chat { font-size: 12.5px; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 5px 8px; border-radius: 8px; white-space: nowrap; overflow: hidden; color: #2a2a2a; }
+.app__chat i { font-style: normal; color: #9a9a9a; letter-spacing: 1px; }
+.app__chat.on { background: #e1e1e1; }
+.app__tools { display: flex; align-items: center; gap: 10px; padding: 10px 18px 0; font-size: 13px; font-weight: 500; }
+.app__tools > span { display: inline-flex; align-items: center; gap: 4px; }
+.app__tools svg { width: 14px; height: 14px; }
+.app__tool-icon { padding: 4px; }
+.app__mine { margin-left: auto; padding: 5px 10px; border: 1px solid var(--line, #e4e4e4); border-radius: 8px; background: #fff; }
+.app .ai { position: relative; }
+.app .ai::before { content: ""; position: absolute; left: 50%; top: 12%; width: 260px; height: 240px; transform: translateX(-50%); background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-80 -52 164 174'%3E%3Cpath d='M 3,-6 C -20,-42 -66,-28 -68,10 C -70,48 -36,66 -2,110 C 40,70 74,44 72,6 C 70,-32 24,-42 3,-6 Z' fill='none' stroke='%23e8582f' stroke-width='22' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat; opacity: .08; pointer-events: none; transition: opacity .4s ease; }
+.app .ai:has(.msg--you)::before { opacity: 0; }
+.app .ai__body { position: relative; }
+.chips .chips__try { align-self: center; padding: 0 2px 0 0; background: none; font-size: 12px; font-weight: 600; color: var(--accent); }
+.starter { position: relative; padding-right: 30px !important; }
+.starter i { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-style: normal; color: var(--accent); transition: transform 160ms var(--out); }
+@media (hover: hover) and (pointer: fine) { .starter:hover i { transform: translate(3px, -50%); } .starter:hover { border-color: var(--accent) !important; } }
+.chips button { border-color: #e8c9bd !important; }
+@media (hover: hover) and (pointer: fine) { .chips button:hover { border-color: var(--accent) !important; color: var(--accent); } }
+.fit__row { box-shadow: inset 0 0 0 1px transparent; }
+
+/* june pro: a live call above the texts she answers */
+.prodemo { display: grid; gap: 12px; width: min(100%, 400px); }
+.cover .thread { width: 100%; aspect-ratio: auto; height: 300px; }
+.call { display: grid; gap: 12px; padding: 16px; border-radius: 20px; }
+.call__top { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+.call__top img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
+.call__top span { display: grid; color: var(--ui-ink-2); }
+.call__top b { color: var(--ui-ink); font-weight: 600; }
+.call__top em { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font-style: normal; font-variant-numeric: tabular-nums; color: var(--ui-ink-2); }
+.call__top em i { width: 8px; height: 8px; border-radius: 50%; background: #d4252b; }
+.wave { display: flex; align-items: center; justify-content: space-between; gap: 4px; height: 48px; padding: 0 4px; }
+.wave i { max-width: 5px; }
+.wave i { flex: 1; height: 100%; border-radius: 999px; background: var(--accent); transform: scaleY(var(--h)); transform-origin: center; animation: talk 1.1s var(--d) infinite ease-in-out alternate; }
+@keyframes talk { from { transform: scaleY(calc(var(--h) * .45)); } to { transform: scaleY(var(--h)); } }
+.call__line { font-size: 13px; line-height: 1.45; padding: 8px 12px; border-radius: 12px; background: var(--ui-2); }
+.call__line b { display: block; font-size: 11px; font-weight: 600; color: var(--ui-ink-2); }
+.call__line--june { background: #fbeee8; }
+@media (prefers-reduced-motion: reduce) { .wave i { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .calls__said { transition: none; } }
+
+/* one call to follow: the voice that speaks moves, every line stays in the transcript, the call ends somewhere */
+.onecall .call__top img { width: 36px; height: 36px; }
+.onecall__now { display: grid; grid-template-columns: 64px 1fr; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; background: var(--ui-2); }
+.onecall__who { font-size: 12px; font-weight: 600; color: var(--ui-ink-2); transition: color .25s ease; }
+.onecall[data-speaker="june"] .onecall__who { color: var(--accent); }
+.onecall .wave { height: 36px; gap: 3px; padding: 0; }
+.onecall .wave i { max-width: 4px; background: #b8b8b8; transition: background-color .25s ease; }
+.onecall[data-speaker="none"] .wave i { animation: none; transform: scaleY(.15); }
+.onecall[data-speaker="june"] .wave i { background: var(--accent); }
+.onecall[data-speaker="cg"] .wave i { background: #8f8f8f; }
+.onecall__log { margin: 0; padding: 0 2px 2px; list-style: none; display: grid; gap: 8px; height: 230px; overflow-y: auto; align-content: start; scrollbar-width: none; }
+.onecall__log::-webkit-scrollbar { display: none; }
+.onecall__log li { box-sizing: border-box; display: grid; gap: 2px; max-width: 86%; padding: 8px 12px; border-radius: 14px 14px 14px 4px; background: var(--ui-2); font-size: 13px; line-height: 1.45; animation: msg-in 280ms cubic-bezier(.23, 1, .32, 1) both; }
+.onecall__log li b { font-size: 11px; font-weight: 600; color: var(--ui-ink-2); }
+.onecall__log li.june { justify-self: end; border-radius: 14px 14px 4px 14px; background: #fbeee8; }
+.onecall__log li.june b { color: var(--accent); }
+.onecall__log li.done { justify-self: stretch; max-width: none; border-radius: 12px; background: #e9f6ee; color: #1d6b3d; font-weight: 500; }
+@media (prefers-reduced-motion: reduce) { .onecall__log li { animation: none; } }
+/* june pro as a named stack: an icon, a name for the outcome, one plain line */
+.plan .stack { gap: 18px; }
+.plan .stack li { padding-left: 0; display: grid; grid-template-columns: 22px 1fr; column-gap: 14px; row-gap: 2px; }
+.plan .stack li::before { content: none; }
+.plan .stack svg { grid-row: span 2; width: 22px; height: 22px; margin-top: 1px; fill: none; stroke: var(--accent); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.plan .stack b { font-weight: 600; }
+.plan .stack span { color: inherit; line-height: 1.45; }
+.plan--free .stack svg { stroke: #ef7a52; }
+</style>
+</head>
+<body>
+<header class="bar">
+  <a class="bar__logo" href="/" aria-label="June home"><img class="bar__word" src="/assets/june-logo.svg" alt="June" width="92" height="64"><svg class="bar__heart" viewBox="-80 -52 164 174" aria-hidden="true"><path d="M 3,-6 C -20,-42 -66,-28 -68,10 C -70,48 -36,66 -2,110 C 40,70 74,44 72,6 C 70,-32 24,-42 3,-6 Z"/></svg></a>
+  <nav aria-label="Main">
+    <a href="/how-it-works" class="hide-sm">How It Works</a>
+    <a href="#price" class="hide-sm">Pricing</a>
+    <a href="/demo" class="hide-sm">Watch Demo</a>
+    <a href="https://app.junecare.ai/app/">Sign In</a>
+    <a class="btn btn--sm" href="/signup">Get Started Free</a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero__say">
+      <h1 id="hero-title">Run your agency by talking to June.</h1>
+      <p class="hero__sub">Ask June is a free assistant for home care teams on WellSky. Ask about caregivers, clients, shifts and hours, without pulling a report.</p>
+    </div>
+    <div class="hero__act">
+      <div class="hero__go">
+        <a class="btn" href="/signup">Get started free</a>
+        <a class="link" href="mailto:support@junecare.ai?subject=Talk%20to%20a%20person%20about%20June">Talk to a person</a>
+      </div>
+      <p class="trust"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3.5" y="7" width="9" height="6.5" rx="1.5"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>No credit card. HIPAA secure, BAA included. Your ClearDesk scheduler works alongside June.</p>
+    </div>
+    <div class="stage stage--app">
+      <div class="app" data-ui>
+        <aside class="app__rail" aria-hidden="true">
+          <span class="app__me"><img src="/assets/people/grace.jpg" alt="" width="20" height="20">Dana Price<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>
+          <span class="app__search"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 21l-4.3-4.3M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14"/></svg>Search<kbd>⌘K</kbd></span>
+          <span class="app__nav"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>New Chat</span>
+          <span class="app__group">Agency</span>
+          <span class="app__nav"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg>Clients</span><span class="app__nav"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8"/></svg>Caregivers</span><span class="app__nav"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18M8 17v-4M13 17V8M18 17v-7"/></svg>Analytics</span>
+          <span class="app__group app__group-row">Projects<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span>
+          <span class="app__group">This Week</span>
+          <span class="app__chat on">Who is close to overtime?<i>···</i></span><span class="app__chat">Cancel Frank F.'s shifts<i>···</i></span><span class="app__chat">Who could take Dolores's<i>···</i></span><span class="app__chat">Open shifts this weekend<i>···</i></span><span class="app__chat">Missed clock-ins today<i>···</i></span><span class="app__chat">Plan outreach for Saturday<i>···</i></span>
+        </aside>
+        <div class="app__page">
+          <div class="app__head"><span class="app__title"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7Z"/></svg>Ask June</span></div>
+          <div class="app__tools" aria-hidden="true"><span>New chat<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span><span class="app__tool-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span><span class="app__mine">My Chats<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></div>
+          <div class="ai" data-hero aria-label="Ask June on a sample agency, Willowmere Home Care">
+            <div class="ai__body thread__body" aria-live="polite">
+              <div class="hello"><img src="/assets/june-face.jpg" alt="" width="28" height="28"><p>Hi Dana, I'm June. I've read Willowmere's WellSky: 64 caregivers, 81 clients and 2,410 shifts. Want me to find cover for Dolores W.'s shift on Tue, Nov 10 at 8a?</p></div>
+              <div class="starters" data-starters></div>
+            </div>
+            <form class="ai__ask" data-ask-form>
+              <label class="sr-only" for="ai-q">Ask June</label>
+              <input id="ai-q" placeholder="Ask June, / for skills, @ for a person" autocomplete="off">
+              <div class="ai__row"><span class="think">Think harder</span><button type="submit" aria-label="Send"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 13V3M3.5 7.5 8 3l4.5 4.5"/></svg></button></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="brands" aria-labelledby="brands-title">
+    <h2 id="brands-title" data-rise>Built by <img class="brands__cd" src="/assets/logos/cleardesk.png" alt="ClearDesk" width="512" height="96">, already scheduling for 450+ private &amp; franchise agencies, including</h2>
+    <ul class="brands__logos" data-rise style="--i:1">
+      <li><img src="/assets/logos/home-instead.png" alt="Home Instead" width="507" height="160" style="--h:1.3" loading="lazy"></li>
+      <li><img src="/assets/logos/visiting-angels.png" alt="Visiting Angels" width="632" height="160" style="--h:1" loading="lazy"></li>
+      <li><img src="/assets/logos/senior-helpers.png" alt="Senior Helpers" width="351" height="160" style="--h:1.15" loading="lazy"></li>
+      <li><img src="/assets/logos/comfort-keepers.png" alt="Comfort Keepers" width="518" height="160" style="--h:1.1" loading="lazy"></li>
+      <li><img src="/assets/logos/interim.png" alt="Interim HealthCare" width="210" height="160" style="--h:1.35" loading="lazy"></li>
+      <li><img src="/assets/logos/synergy.svg" alt="Synergy HomeCare" width="210" height="59" style="--h:.85" loading="lazy"></li>
+    </ul>
+    <p class="brands__then" data-rise style="--i:2">What ClearDesk's schedulers did for three of them. June does that same work, and never needs to sleep.</p>
+    <ul class="wins">
+      <li data-rise style="--i:2"><b class="wins__fig">48% to 81%</b><p>of calls answered live at Visiting Angels of Central Wisconsin, on 500 to 600 calls a week. <a class="link" href="https://www.cleardesk.com/case-studies/home-care-2">Case study</a></p></li>
+      <li data-rise style="--i:3"><b class="wins__fig">7 days</b><p>of live scheduling, 6 am to 9:30 pm, at Senior Helpers Boston &amp; South Shore. No more Monday backlog. <a class="link" href="https://www.cleardesk.com/case-studies/how-senior-helpers-boston-%26-south-shore-scaled-operations-with-strategic-remote-staffing">Case study</a></p></li>
+      <li data-rise style="--i:4"><b class="wins__fig">1 for 4</b><p>Home Instead Fort Wayne went through four schedulers in under two years. One ClearDesk scheduler has held the desk for over a year. <a class="link" href="https://www.cleardesk.com/case-studies/home-care-case-study-4">Case study</a></p></li>
+    </ul>
+    <blockquote class="letter" data-rise style="--i:5">
+      <p>Since we've hired ClearDesk, we've had better success keeping consistent seven-day-a-week working hours… it has drastically decreased the amount of calls in the middle of the night.</p>
+      <footer><b>Vice President of Care</b><span>Senior Helpers Boston &amp; South Shore</span></footer>
+    </blockquote>
+  </section>
+
+  <section class="cover" id="cover" aria-labelledby="cover-title">
+    <div class="cover__say">
+      <h2 id="cover-title" data-rise>June and your ClearDesk scheduler, one team.</h2>
+      <p data-rise style="--i:1">On the free plan June texts and sends smart blasts, and you write the replies. June Pro answers every reply herself, by text and by voice. Ask “Can you fill the shift?” and she starts, and your ClearDesk scheduler approves the yes.</p>
+    </div>
+    <div class="stage">
+      <div class="prodemo">
+      <div class="call onecall" data-ui data-speaker="none" aria-label="June on a call with Estelle about Dolores's shift">
+        <div class="call__top"><img src="/assets/people/estelle.jpg" alt="" width="36" height="36"><span><b>June is on a call with Estelle K.</b>About Dolores's shift, Tue 8a to 12p</span><em><i></i><span data-onecall-clock>0:00</span></em></div>
+        <div class="onecall__now"><span class="onecall__who">&nbsp;</span><span class="wave" aria-hidden="true"><i style="--d:0ms;--h:0.35"></i><i style="--d:280ms;--h:0.6"></i><i style="--d:560ms;--h:0.9"></i><i style="--d:70ms;--h:0.5"></i><i style="--d:350ms;--h:0.75"></i><i style="--d:630ms;--h:1"></i><i style="--d:140ms;--h:0.45"></i><i style="--d:420ms;--h:0.8"></i><i style="--d:700ms;--h:0.55"></i><i style="--d:210ms;--h:0.95"></i><i style="--d:490ms;--h:0.4"></i><i style="--d:0ms;--h:0.7"></i><i style="--d:280ms;--h:0.35"></i><i style="--d:560ms;--h:0.6"></i><i style="--d:70ms;--h:0.9"></i><i style="--d:350ms;--h:0.5"></i><i style="--d:630ms;--h:0.75"></i><i style="--d:140ms;--h:1"></i><i style="--d:420ms;--h:0.45"></i><i style="--d:700ms;--h:0.8"></i><i style="--d:210ms;--h:0.55"></i><i style="--d:490ms;--h:0.95"></i><i style="--d:0ms;--h:0.4"></i><i style="--d:280ms;--h:0.7"></i><i style="--d:560ms;--h:0.35"></i><i style="--d:70ms;--h:0.6"></i><i style="--d:350ms;--h:0.9"></i><i style="--d:630ms;--h:0.5"></i><i style="--d:140ms;--h:0.75"></i><i style="--d:420ms;--h:1"></i><i style="--d:700ms;--h:0.45"></i><i style="--d:210ms;--h:0.8"></i><i style="--d:490ms;--h:0.55"></i><i style="--d:0ms;--h:0.95"></i><i style="--d:280ms;--h:0.4"></i><i style="--d:560ms;--h:0.7"></i><i style="--d:70ms;--h:0.35"></i><i style="--d:350ms;--h:0.6"></i><i style="--d:630ms;--h:0.9"></i><i style="--d:140ms;--h:0.5"></i></span></div>
+        <ol class="onecall__log" aria-live="polite"></ol>
+      </div>
+      <div class="thread" data-ui data-play="3" aria-label="A text thread June runs after a caregiver calls out">
+        <div class="thread__top">
+          <div class="thread__face"><svg viewBox="-78 -52 160 172" aria-hidden="true"><path d="M 3,-6 C -20,-42 -66,-28 -68,10 C -70,48 -36,66 -2,110 C 40,70 74,44 72,6 C 70,-32 24,-42 3,-6 Z" fill="#E8582F"/></svg></div>
+          <div class="thread__who">June and Marisol<span>Dolores's shift, Tue 8a to 12p</span></div>
+          <div class="thread__clock" data-clock>11:42 pm</div>
+        </div>
+        <div class="thread__body" aria-live="polite">
+          <p class="msg msg--event">Marcus called out at <span data-t="0">11:42 pm</span></p>
+          <p class="msg msg--june">Hi Marisol, it's June from Willowmere Home Care. A shift opened tomorrow, 8 to noon, ten minutes from you. Want it?</p>
+          <p class="msg msg--cg">What's the client like?</p>
+          <p class="msg msg--june">Dolores is in her 80s. She needs help with personal care and walking. Two cats, no dog. It pays $20.50 an hour.</p>
+          <p class="msg msg--cg">Yes I can take it</p>
+          <p class="msg msg--june">Great, I've logged your interest with the scheduler. I'll text you once it's confirmed.</p>
+          <p class="msg msg--event">Daisy, your ClearDesk scheduler, approved Marisol at <span data-t="3">11:45 pm</span></p>
+          <p class="msg msg--june">You're booked for Tuesday, 8 to noon. Here are Dolores's address and care notes.</p>
+          <p class="msg msg--done">Booked in WellSky at <span data-t="4">11:46 pm</span></p>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="price" id="price" aria-labelledby="price-title">
+    <div class="price__say">
+      <h2 id="price-title">Start free. Add June Pro later.</h2>
+      <p>Ask June is free for every agency on WellSky. June Pro is there when you want June to answer, call and act on her own.</p>
+    </div>
+    <div class="plans">
+      <article class="plan plan--free" data-rise>
+        <h3 class="plan__name">Ask June</h3>
+        <p class="plan__fig plan__price">$0<small>free forever</small></p>
+        <ul class="stack">
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-2.9 3-2.9 3M12 17h.01"/></svg><b>Ask Anything</b><span>Read and change WellSky in plain words. Cancel or move many shifts at once.</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg><b>Smart Blasts</b><span>Text the right caregivers and clients in one go. You write the replies.</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 22h14M5 2h14M17 22v-4.2a2 2 0 0 0-.6-1.4L12 12l-4.4 4.4a2 2 0 0 0-.6 1.4V22M7 2v4.2a2 2 0 0 0 .6 1.4L12 12l4.4-4.4a2 2 0 0 0 .6-1.4V2"/></svg><b>Hourly Sync</b><span>WellSky synced every hour.</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg><b>Rapid Refresh</b><span>WellSky pulled fresh the moment you ask, 30 times a month.</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg><b>HIPAA Covered</b><span>HIPAA secure, with a BAA included.</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12c-2-2.7-4-4-6-4a4 4 0 0 0 0 8c2 0 4-1.3 6-4zm0 0c2 2.7 4 4 6 4a4 4 0 0 0 0-8c-2 0-4 1.3-6 4z"/></svg><b>Free Forever</b><span>Unlike a free trial, it never ends.</span></li>
+        </ul>
+        <a class="btn" href="/signup">Get Ask June free</a>
+      </article>
+      <article class="plan" data-rise style="--i:1">
+        <h3 class="plan__name">June Pro</h3>
+        <p class="plan__fig plan__price">$1,350<small>a month, to start</small></p>
+        <ul class="stack">
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><b>Always-On Inbox</b><span>June answers every text herself, caregivers and clients alike, day or night.</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg><b>June on the Phone</b><span>When a text is not enough, June calls by voice.</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M9 16l2 2 4-4"/></svg><b>Shift Autopilot</b><span>June fills open shifts on her own, within your rules.</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><b>Clock-In Chaser</b><span>Missed clock-ins and clock-outs: June reaches the caregiver and fixes the visit in WellSky.</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg><b>On-Call Hero</b><span>June picks up after hours, and wakes the person on call only when it needs one.</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 0 1-15 6.7L3 16M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5M3 21v-5h5"/></svg><b>Live WellSky</b><span>Changes show up as they happen, with unlimited rapid refreshes.</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="19" r="3"/><circle cx="18" cy="5" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/></svg><b>Done-With-You Rollout</b><span>A custom implementation timeline, set with your team.</span></li>
+        </ul>
+        <a class="btn btn--line" href="mailto:support@junecare.ai?subject=June%20Pro">Talk to a person</a>
+      </article>
+    </div>
+  </section>
+
+
+  <section class="faq" aria-labelledby="faq-title">
+    <h2 id="faq-title">Questions agencies ask.</h2>
+    <div class="drawer" id="drawer">
+      <div class="qcard is-open" style="--step:0"><span class="qcard__tab">Setup</span><div class="qcard__body"><button aria-expanded="true" aria-controls="a1">How long does setup take?</button><div class="qcard__a" id="a1"><div><p>Ask June is live the day you connect WellSky. June Pro rolls out on a timeline you set with us, one step at a time: June watches first, then asks before she acts, then acts on her own.</p></div></div></div></div>
+      <div class="qcard" style="--step:1"><span class="qcard__tab">HIPAA</span><div class="qcard__body"><button aria-expanded="false" aria-controls="a2">Is June HIPAA secure?</button><div class="qcard__a" id="a2"><div><p>Yes. We sign a BAA with every agency, and every vendor that sees care details signs one with us. SOC 2 is in progress.</p></div></div></div></div>
+      <div class="qcard" style="--step:2"><span class="qcard__tab">WellSky</span><div class="qcard__body"><button aria-expanded="false" aria-controls="a3">Does June change anything in WellSky?</button><div class="qcard__a" id="a3"><div><p>Only what you ask. When you connect, June adds herself as a WellSky user. On the free plan she changes a shift only after you press. With June Pro she can act on her own, within the rules you set. Turn off her user and she is gone.</p></div></div></div></div>
+      <div class="qcard" style="--step:4"><span class="qcard__tab">Caregivers</span><div class="qcard__body"><button aria-expanded="false" aria-controls="a5">What does June tell caregivers about clients?</button><div class="qcard__a" id="a5"><div><p>Only what they need to decide: rough age, care basics, the area and the pay. Diagnoses and the exact address come once they are booked. Caregivers need no app. June texts and calls.</p></div></div></div></div>
+    </div>
+  </section>
+
+  <section class="close" aria-labelledby="close-title">
+    <div class="close__say">
+      <h2 id="close-title">Get Ask June free.</h2>
+      <p>Live from day one. Connect WellSky and June reads your agency before your first question.</p>
+    </div>
+    <div class="dialog pledge" data-ui>
+      <div class="pledge__link" aria-hidden="true"><img src="/assets/june-face.jpg" alt="" width="44" height="44"><span><i></i><i></i><i></i></span><b>WellSky</b></div>
+      <h3>June uses your WellSky login once</h3>
+      <ul class="pledge__list">
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span><b>Secure</b>Your password travels encrypted and is used once, to add June.</span></li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M10.6 10.6a2 2 0 0 0 2.8 2.8M9.9 5.1A10 10 0 0 1 12 5c6 0 9.5 7 9.5 7a17 17 0 0 1-2.6 3.4M6.6 6.6A17 17 0 0 0 2.5 12S6 19 12 19a9.6 9.6 0 0 0 4.4-1"/></svg><span><b>Private</b>It is never stored, and nobody at June ever sees it.</span></li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg><span><b>Covered</b>You sign a BAA with us before June reads a single shift.</span></li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v9M6.3 7.3a8 8 0 1 0 11.4 0"/></svg><span><b>Yours</b>June changes nothing until you turn it on. Turn her WellSky user off and she is gone.</span></li>
+      </ul>
+      <a class="btn" href="/signup">Get started, free forever</a>
+      <p class="talk">Rather talk first? <a class="link" href="mailto:support@junecare.ai?subject=Talk%20to%20a%20person%20about%20June">Talk to a person</a></p>
+    </div>
+  </section>
+</main>
+
+<footer class="mark">
+  <div class="mark__logo"><img src="/assets/june-logo-light.svg" alt="June" width="420" height="292"></div>
+  <nav aria-label="Footer">
+    <a href="/how-it-works">How it works</a>
+    <a href="/demo">Watch demo</a>
+    <a href="/signup">Get started free</a>
+    <a href="/june-vs-phoebe">June vs Phoebe</a>
+    <a href="/terms">Terms</a>
+    <a href="/privacy">Privacy</a>
+  </nav>
+  <div class="sms">
+    <p><b>Text messages.</b> June texts and calls caregivers and clients on behalf of the home care agency that uses June, about shifts, schedules and visits. Message frequency varies. Message and data rates may apply. Reply STOP to opt out, or HELP for help. Mobile information is never shared with third parties or affiliates for marketing or promotional purposes. See our <a href="/privacy">Privacy Policy</a> and <a href="/terms">Terms of Service</a>.</p>
+  </div>
+  <div class="mark__end"><span>© 2026 JuneAI LLC · HIPAA secure · SOC 2 in progress · (877) 563-9814</span><a href="mailto:support@junecare.ai">support@junecare.ai</a></div>
+</footer>
+
+<script type="module" src="/assets/site.js"></script>
+<script type="module">
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// the bar casts its shadow and shrinks once it sits over content
+const bar = document.querySelector(".bar");
+const lift = () => bar.classList.toggle("is-floating", scrollY > 8);
+addEventListener("scroll", lift, { passive: true });
+lift();
+
+// each thread runs on the visitor's own clock
+const fmt = (d) => d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }).toLowerCase();
+const now = new Date();
+document.querySelectorAll("[data-clock]").forEach((el) => { el.textContent = fmt(now); });
+document.querySelectorAll("[data-t]").forEach((el) => { el.textContent = fmt(new Date(now.getTime() + Number(el.dataset.t) * 60000)); });
+
+// a thread plays its messages in turn, the first few already there, then starts over
+const play = (thread) => {
+  const body = thread.querySelector(".thread__body");
+  const msgs = [...body.children];
+  const first = Number(thread.dataset.play);
+  const typing = Object.assign(document.createElement("p"), { className: "msg msg--typing", innerHTML: "<i></i><i></i><i></i>" });
+  typing.setAttribute("aria-hidden", "true");
+  const left = (m) => m.classList.contains("msg--cg") || m.classList.contains("msg--ai");
+  const quiet = (m) => m.classList.contains("msg--done") || m.classList.contains("msg--event");
+  let step = 0, timer;
+  const next = () => {
+    if (thread.dataset.live) return;
+    if (step === 0) { msgs.forEach((m) => m.remove()); body.append(...msgs.slice(0, first)); step = first; timer = setTimeout(next, 1600); return; }
+    if (step >= msgs.length) { if (thread.dataset.play !== "1") timer = setTimeout(() => { step = 0; next(); }, 6000); return; }
+    const m = msgs[step];
+    typing.style.alignSelf = left(m) ? "flex-start" : "flex-end";
+    if (!quiet(m)) { body.append(typing); body.scrollTop = body.scrollHeight; }
+    timer = setTimeout(() => { typing.remove(); body.append(m); body.scrollTop = body.scrollHeight; step += 1; timer = setTimeout(next, 1500); }, quiet(m) ? 500 : 1300);
+  };
+  // a visitor's own press ends the demo: what is left shows at once, nothing lands after their question
+  thread.finish = () => {
+    clearTimeout(timer); typing.remove();
+    if (step === 0) msgs.forEach((m) => m.remove());
+    while (step < msgs.length) body.append(msgs[step++]);
+  };
+  // starts once seen, so the second thread is not halfway through when it scrolls in
+  new IntersectionObserver((es, io) => { if (es[0].isIntersecting) { io.disconnect(); next(); } }).observe(thread);
+  document.addEventListener("visibilitychange", () => { clearTimeout(timer); if (!document.hidden && step) next(); });
+};
+if (!reduce) document.querySelectorAll("[data-play]").forEach(play);
+
+// s1: the hero is ask june itself, on a sample agency: a press asks, june answers with the app's own cards
+const CHECK = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg>';
+const PIN = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 14s4.5-4 4.5-7.5a4.5 4.5 0 0 0-9 0C3.5 10 8 14 8 14Z"/><circle cx="8" cy="6.5" r="1.5"/></svg>';
+const face = (file) => `<img src="/assets/people/${file}.jpg" alt="" width="20" height="20">`;
+const person = (name, file) => `<span class="who">${face(file)}${name}</span>`;
+const PEOPLE = {
+  marisol: { name: "Marisol R.", fit: 94, dist: "3 mi · 8 min", reads: [["Distance", "3 mi (8 min)", "+20"], ["Needs covered", "covers 5 needs", "+46"], ["Knows Dolores", "6 past visits", "+18"], ["Reliability", "fast to respond", "+10"], ["Hours", "43.5 h with this shift", "over 40", 1]] },
+  estelle: { name: "Estelle K.", fit: 88, dist: "5 mi · 12 min", reads: [["Distance", "5 mi (12 min)", "+16"], ["Needs covered", "covers 5 needs", "+46"], ["Knows Dolores", "1 past visit", "+8"], ["Reliability", "fast to respond", "+10"], ["Wants hours", "wants 10h more", "+8"]] },
+  grace: { name: "Grace O.", fit: 81, dist: "7 mi · 15 min", reads: [["Distance", "7 mi (15 min)", "+14"], ["Needs covered", "covers 5 needs", "+46"], ["Home", "fine with cats", "+6"], ["Reliability", "usually responds", "+7"], ["Wants hours", "wants 12h more", "+8"]] },
+  tom: { name: "Tom B.", fit: 76, dist: "11 mi · 21 min", reads: [["Distance", "11 mi (21 min)", "+8"], ["Needs covered", "covers 4 needs", "+38"], ["Reliability", "says yes to most offers", "+12"], ["Wants hours", "wants 20h more", "+10"], ["Knows Dolores", "never met", "0", 1]] },
+};
+// a caregiver row opens to how june reads them on the shift, as the shift page shows it
+const fitRow = (key) => {
+  const c = PEOPLE[key];
+  const id = `why-${key}-${Math.random().toString(36).slice(2, 7)}`;
+  const rows = c.reads.map(([l, v, pts, warn]) => `<tr${warn ? ' class="warn"' : ""}><td>${l}</td><td>${v}</td><td>${pts}</td></tr>`).join("");
+  return `<li class="fit">
+    <button type="button" class="fit__row" aria-expanded="false" aria-controls="${id}">${person(c.name, key)}<span class="pills"><span class="pill pill--fit">${c.fit}%</span><span class="pill">${PIN}${c.dist}</span><i class="chev" aria-hidden="true"></i></span></button>
+    <div class="fit__why" id="${id}"><div><p class="fit__head">How June reads ${c.name.split(" ")[0]} on it <b>${c.fit}</b></p><table>${rows}</table></div></div>
+  </li>`;
+};
+const shiftCard = (client, file, when, kind) => `<div class="shiftcard"><div><b>${when}</b><span>${kind}</span></div><div class="shiftcard__who"><span class="label">Client</span>${person(client, file)}<span class="badge">Open</span></div></div>`;
+const FRANK = ["Tue, Nov 10 · 6p to 10p", "Thu, Nov 12 · 6p to 10p", "Sat, Nov 14 · 10a to 2p", "Tue, Nov 17 · 6p to 10p", "Thu, Nov 19 · 6p to 10p", "Sat, Nov 21 · 10a to 2p"];
+const Q = {
+  ot: "Who is close to overtime this week?",
+  open: "Any open shifts tomorrow?",
+  free: "Who is free for Dolores's shift?",
+  cancel: "Cancel all of Frank F.'s shifts. He no longer needs care.",
+  plan: "Plan outreach for Dolores's shift",
+  work: "What should I work on today?",
+  week: "Chart this week's open shifts by day.",
+  fill: "Can you fill Dolores's shift?",
+};
+const hours = (key, h) => `<li>${person(PEOPLE[key].name, key)}<span class="meter"><i style="--v:${(h / 40).toFixed(3)}"></i></span><b>${h} h</b></li>`;
+const SAMPLE = {
+  [Q.ot]: () => `
+    <p class="step">${CHECK}Read this week's shifts in WellSky</p>
+    <p>Three caregivers are close to 40 hours.</p>
+    <div class="card-ui"><div class="card-ui__head"><b>Overtime watch</b><span>This week</span></div>
+      <ul class="hours">${hours("marisol", 39.5)}${hours("estelle", 38)}${hours("grace", 36.5)}</ul></div>
+    <p>Marisol passes 40 with her Thursday shift.</p>`,
+  [Q.open]: () => `
+    <p class="step">${CHECK}Checked tomorrow's schedule</p>
+    <p>Two shifts are open tomorrow.</p>
+    <div class="shifts">${shiftCard("Dolores W.", "dolores", "Tue, Nov 10 · 8a to 12p", "Personal care")}${shiftCard("Frank F.", "frank", "Tue, Nov 10 · 6p to 10p", "Companion care")}</div>`,
+  [Q.free]: () => `
+    <p class="step">${CHECK}Checked availability, skills and drive time</p>
+    <p>Four caregivers are free and fit. Marisol knows Dolores best. Open anyone to see why.</p>
+    <div class="card-ui"><div class="card-ui__head cand__head"><span class="who">${face("dolores")}<b>Dolores W. · Tue, Nov 10 · 8a to 12p</b></span><span class="cand__right"><span>4 free</span><button type="button" class="xs" data-ask="${Q.fill}">Start the ask</button></span></div>
+      <ul class="fits">${["marisol", "estelle", "grace", "tom"].map(fitRow).join("")}</ul>
+      <details class="held"><summary>2 kept out</summary>
+        <div class="held__row">${person("Ana M.", "ana")}<span>Not trained for transfers</span></div>
+        <div class="held__row">${person("Kwame A.", "kwame")}<span>Booked Tue 7a to 1p</span></div>
+      </details></div>`,
+  [Q.work]: () => `
+    <p class="step">${CHECK}Read today's board</p>
+    <p>Two things need you today. Dolores W.'s shift tomorrow is still open, and Anand P. never clocked in at Frank F.'s.</p>
+    <div class="shifts">${shiftCard("Dolores W.", "dolores", "Tue, Nov 10 · 8a to 12p", "Personal care")}</div>
+    <div class="card-ui"><div class="card-ui__head"><b>Missed clock-in</b><span class="badge badge--late">22 min late</span></div><div class="shiftcard__who"><span class="label">Caregiver</span>${person("Anand P.", "anand")}</div><div class="shiftcard__who"><span class="label">Client</span>${person("Frank F.", "frank")}</div></div>`,
+  [Q.week]: () => `
+    <p class="step">${CHECK}Counted open shifts this week</p>
+    <p>Saturday is your hardest day: 8 open shifts.</p>
+    <div class="card-ui"><div class="card-ui__head"><b>Open shifts by day</b><span>This week</span></div>
+      <div class="chart" role="img" aria-label="Open shifts by day: Mon 3, Tue 5, Wed 2, Thu 4, Fri 6, Sat 8, Sun 3">${[["Mon", 3], ["Tue", 5], ["Wed", 2], ["Thu", 4], ["Fri", 6], ["Sat", 8], ["Sun", 3]].map(([d, n]) => `<span style="--h:${n / 8}"><i></i><b>${n}</b><em>${d}</em></span>`).join("")}</div></div>`,
+  [Q.cancel]: () => `
+    <p class="step">${CHECK}Found Frank F.'s upcoming shifts</p>
+    <p>Here is the close-out. Nothing changes in WellSky until you press.</p>
+    <div class="card-ui closeout" data-confirm>
+      <div class="card-ui__head"><b>Close out Frank F.</b><span>6 dates</span></div>
+      <p class="plan__sub">No longer needs care</p>
+      <p class="plan__h">Dates</p>
+      <ul class="plan__dates">${FRANK.map((d, i) => `<li><span>${d}</span><span>${["Anand P.", "Anand P.", "Grace O.", "Anand P.", "Anand P.", "Grace O."][i]}</span></li>`).join("")}</ul>
+      <p class="plan__h">Steps</p>
+      <ol class="plan__steps"><li>Cancel each date in WellSky</li><li>Note the reason on each date</li><li>Show who loses hours: Anand P. 16 h, Grace O. 8 h</li></ol>
+      <div class="acts"><button type="button" class="go" data-yes>Close out</button><button type="button" class="no" data-no>Not now</button></div>
+    </div>`,
+  [Q.plan]: () => `
+    <p class="step">${CHECK}Ranked 42 caregivers for Dolores's shift</p>
+    <div class="card-ui"><div class="card-ui__head"><b>Outreach Wave 1</b><span>2 to ask · they know Dolores</span></div><ul class="fits">${fitRow("marisol")}${fitRow("estelle")}</ul></div>
+    <div class="card-ui"><div class="card-ui__head"><b>Outreach Wave 2</b><span>if nobody says yes in 20 min</span></div><ul class="fits">${fitRow("grace")}${fitRow("tom")}</ul></div>
+    <div class="acts"><button type="button" class="go" data-ask="${Q.fill}">Send with June Pro</button></div>`,
+  [Q.fill]: () => `
+    <p class="step">${CHECK}Started a fill with June Pro</p>
+    <p>On it. Texting the first wave now. You approve before anyone is booked.</p>
+    <div class="card-ui fill" data-fill>
+      <div class="card-ui__head"><b>Filling Dolores W.</b><span class="pro">June Pro</span></div>
+      <p class="fill__status" aria-live="polite">Texting wave 1</p>
+      <ul class="feed"></ul>
+    </div>`,
+};
+const NEXT = [Q.free, Q.week, Q.cancel, Q.plan, Q.fill, Q.work, Q.ot, Q.open];
+const STARTERS = [[Q.work, "What should I work on?", "2 need you today"], [Q.free, "Who could take Dolores's", "Tue, Nov 10 at 8a"], [Q.week, "This week by day", "Open shifts, drawn"], [Q.ot, "Who is close to overtime?", "3 near 40 hours"]];
+
+// a fill run live: june texts, replies land, the scheduler approves the yes
+const FEED = [
+  { who: "june", text: "Texted Marisol R. and Estelle K.", status: "Waiting for replies" },
+  { who: "estelle", text: "Sorry, I can't Tuesday.", tag: ["no", "Declined"] },
+  { who: "marisol", text: "What's the client like?" },
+  { who: "june", text: "Dolores is in her 80s. Personal care and walking. Two cats. $20.50 an hour." },
+  { who: "marisol", text: "Yes I can take it", tag: ["yes", "Said yes"], status: "Marisol said yes" },
+];
+const runFill = (card) => {
+  const feed = card.querySelector(".feed");
+  const status = card.querySelector(".fill__status");
+  FEED.forEach((ev, i) => setTimeout(() => {
+    const li = document.createElement("li");
+    li.className = ev.who === "june" ? "feed__june" : "feed__cg";
+    li.innerHTML = ev.who === "june"
+      ? `<img src="/assets/june-face.jpg" alt="" width="20" height="20"><p><b>June</b>${ev.text}</p>`
+      : `<img src="/assets/people/${ev.who}.jpg" alt="" width="20" height="20"><p><b>${PEOPLE[ev.who].name}</b>${ev.text}</p>${ev.tag ? `<span class="tag-${ev.tag[0]}">${ev.tag[1]}</span>` : ""}`;
+    feed.append(li);
+    if (ev.status) status.textContent = ev.status;
+    if (i === FEED.length - 1) {
+      const acts = Object.assign(document.createElement("div"), { className: "acts", innerHTML: '<button type="button" class="go">Approve and book Marisol</button>' });
+      acts.querySelector("button").addEventListener("click", (e) => {
+        e.currentTarget.textContent = "Booking…"; e.currentTarget.disabled = true;
+        setTimeout(() => {
+          acts.outerHTML = `<p class="done">${CHECK}Marisol R. booked in WellSky. She has the address and care notes.</p>`;
+          status.textContent = "Filled";
+          toBottom();
+        }, reduce ? 0 : 900);
+      });
+      card.append(acts);
+    }
+    toBottom();
+  }, reduce ? 0 : 900 + i * 1400));
+};
+
+const hero = document.querySelector("[data-hero]");
+const heroBody = hero.querySelector(".thread__body");
+const asked = new Set();
+const toBottom = () => heroBody.scrollTo({ top: heroBody.scrollHeight, behavior: reduce ? "auto" : "smooth" });
+const chips = () => {
+  const box = Object.assign(document.createElement("div"), { className: "chips" });
+  box.append(Object.assign(document.createElement("span"), { className: "chips__try", textContent: "Try:" }));
+  NEXT.filter((q) => !asked.has(q)).slice(0, 3).forEach((q) => {
+    box.append(Object.assign(document.createElement("button"), { type: "button", textContent: q, onclick: () => ask(q) }));
+  });
+  return box;
+};
+const answer = (html) => {
+  const m = Object.assign(document.createElement("div"), { className: "msg msg--ai" });
+  const words = Object.assign(document.createElement("div"), { className: "ans", innerHTML: html });
+  m.append(Object.assign(document.createElement("img"), { src: "/assets/june-face.jpg", alt: "", width: 28, height: 28 }), words);
+  // the confirm card is the write: nothing changes until the owner presses
+  const card = words.querySelector("[data-confirm]");
+  if (card) {
+    card.querySelector("[data-yes]").addEventListener("click", (e) => {
+      const acts = e.currentTarget.parentElement;
+      acts.remove();
+      const steps = [...card.querySelectorAll(".plan__steps li")];
+      steps.forEach((li, i) => setTimeout(() => {
+        li.classList.add("done");
+        if (i === steps.length - 1) {
+          card.querySelector(".plan__sub").textContent = "6 dates cancelled for the client";
+          card.classList.add("card-ui--done");
+        }
+      }, reduce ? 0 : 500 + i * 700));
+    });
+    card.querySelector("[data-no]").addEventListener("click", () => { card.outerHTML = `<p class="reason">Okay. Nothing changed in WellSky.</p>`; });
+  }
+  const fill = words.querySelector("[data-fill]");
+  if (fill) setTimeout(() => runFill(fill), 0);
+  words.append(chips());
+  return m;
+};
+const OWN = `
+    <p>I can answer that on your own agency. Connect WellSky and ask me again. It takes about a minute.</p>
+    <div class="acts"><a class="go" href="/signup">Get Ask June free</a></div>`;
+let touched = false;
+const ask = (q) => {
+  touched = true;
+  heroBody.querySelectorAll(".chips, [data-starters]").forEach((c) => c.remove());
+  asked.add(q);
+  heroBody.append(Object.assign(document.createElement("p"), { className: "msg msg--you", textContent: q }));
+  const typing = Object.assign(document.createElement("p"), { className: "msg msg--typing", innerHTML: "<i></i><i></i><i></i>" });
+  heroBody.append(typing);
+  toBottom();
+  setTimeout(() => { typing.remove(); heroBody.append(answer((SAMPLE[q] || (() => OWN))())); toBottom(); }, reduce ? 0 : 900);
+};
+// the welcome, as the app opens: four starters under june's hello
+const starters = hero.querySelector("[data-starters]");
+STARTERS.forEach(([q, title, sub]) => {
+  const b = Object.assign(document.createElement("button"), { type: "button", className: "starter", onclick: () => ask(q) });
+  b.innerHTML = `<b>${title}</b><span>${sub}</span><i aria-hidden="true">→</i>`;
+  starters.append(b);
+});
+hero.querySelector("[data-ask-form]").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const input = e.currentTarget.querySelector("input");
+  const q = input.value.trim();
+  if (!q) return;
+  input.value = "";
+  const known = Object.keys(SAMPLE).find((k) => k.toLowerCase().startsWith(q.toLowerCase().slice(0, 12)));
+  ask(known && !asked.has(known) ? known : q);
+});
+heroBody.addEventListener("click", (e) => {
+  const send = e.target.closest("[data-ask]");
+  if (send) { if (!asked.has(send.dataset.ask)) { send.disabled = true; ask(send.dataset.ask); } return; }
+  const row = e.target.closest(".fit__row");
+  if (row) row.setAttribute("aria-expanded", String(row.getAttribute("aria-expanded") !== "true"));
+});
+// once seen, june answers the first starter herself, unless the visitor got there first
+new IntersectionObserver((es, io) => {
+  if (!es[0].isIntersecting) return;
+  io.disconnect();
+  if (!reduce) setTimeout(() => { if (!touched) ask(Q.ot); }, 1800);
+}).observe(hero);
+
+// one call to follow: each line lasts as long as it takes to say, stays in the transcript, and the call ends with what June did
+const CALL = [
+  ["june", "Hi Estelle, it's June from Willowmere Home Care. Do you have a minute?"],
+  ["cg", "Sure, what's up?"],
+  ["june", "A shift opened tomorrow, 8 to noon, about ten minutes from you."],
+  ["cg", "Who's the client?"],
+  ["june", "Dolores W. She's in her 80s and needs help with personal care and walking."],
+  ["cg", "Is that the one with the two cats?"],
+  ["june", "That's her. It pays $20.50 an hour."],
+  ["cg", "Okay, I'll take it."],
+  ["june", "Great. I'll send your scheduler the yes and text you the details."],
+];
+const oneCall = document.querySelector(".onecall");
+if (oneCall) {
+  const log = oneCall.querySelector(".onecall__log");
+  const who = oneCall.querySelector(".onecall__who");
+  const clock = oneCall.querySelector("[data-onecall-clock]");
+  let t = 0;
+  setInterval(() => { t += 1; clock.textContent = `${Math.floor(t / 60)}:${String(t % 60).padStart(2, "0")}`; }, 1000);
+  const add = (cls, label, words) => {
+    const li = Object.assign(document.createElement("li"), { className: cls });
+    if (label) li.append(Object.assign(document.createElement("b"), { textContent: label }));
+    li.append(words);
+    log.append(li);
+    log.scrollTo({ top: log.scrollHeight, behavior: reduce ? "auto" : "smooth" });
+  };
+  const say = (i) => {
+    if (i >= CALL.length) {
+      oneCall.dataset.speaker = "none";
+      who.textContent = "Call ended";
+      add("done", "", "Estelle said yes. Sent to your scheduler to approve ✓");
+      setTimeout(() => { prefill(); t = 0; say(OPEN); }, 5000);
+      return;
+    }
+    const [speaker, words] = CALL[i];
+    oneCall.dataset.speaker = speaker;
+    who.textContent = speaker === "june" ? "June" : "Estelle";
+    add(speaker === "june" ? "june" : "cg", speaker === "june" ? "June" : "Estelle", words);
+    const speaking = reduce ? 1800 : 900 + words.length * 45;
+    setTimeout(() => { oneCall.dataset.speaker = "none"; }, speaking);
+    setTimeout(() => say(i + 1), speaking + 600);
+  };
+  // the call opens mid-conversation so the card is never empty, then plays on once seen
+  const OPEN = 3;
+  const prefill = () => {
+    log.replaceChildren();
+    CALL.slice(0, OPEN).forEach(([s, w]) => add(s === "june" ? "june" : "cg", s === "june" ? "June" : "Estelle", w));
+  };
+  prefill();
+  new IntersectionObserver((es, io) => { if (es[0].isIntersecting) { io.disconnect(); say(OPEN); } }, { threshold: 0.4 }).observe(oneCall);
+}
+
+
+
+// one question open at a time
+const cards = [...document.querySelectorAll(".qcard")];
+cards.forEach((c) => c.querySelector("button").addEventListener("click", () => {
+  cards.forEach((o) => {
+    const open = o === c;
+    o.classList.toggle("is-open", open);
+    o.querySelector("button").setAttribute("aria-expanded", String(open));
+  });
+}));
+</script>
+</body>
+</html>

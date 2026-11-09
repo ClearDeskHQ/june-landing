@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>June shift coverage</title>
+<meta name="description" content="For home care agencies. When a caregiver calls out, June texts and calls your qualified caregivers, books whoever says yes in WellSky, and brings in your scheduler when a person is needed.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+/* hero: two tones, the words left and a live readout right */
+.hero { min-height: 100svh; display: grid; grid-template-columns: 1.2fr 1fr; }
+.hero__say { display: flex; flex-direction: column; gap: 48px; padding: 28px var(--margin) 48px; }
+.hero__see { position: relative; background: var(--panel); display: grid; place-items: center; padding: 96px var(--margin) 48px; }
+.hero__demo { position: absolute; top: 40px; right: var(--margin); font-size: 15px; }
+.hero__say > div { margin-block: auto; }
+.hero h1 { font-size: clamp(2.25rem, 1.1rem + 2.2vw, 3.25rem); font-weight: 600; }
+.mask { display: block; overflow: hidden; padding-bottom: .08em; }
+.mask > span { display: block; }
+.hero__sub { margin-top: 20px; max-width: 46ch; }
+.hero__form { margin-top: 32px; width: min(100%, 520px); display: flex; gap: 6px; padding: 6px; background: var(--ui); border: 1px solid var(--ui-line); border-radius: 999px; }
+.hero__form:focus-within { border-color: var(--accent); }
+.hero__form input { flex: 1; min-width: 0; border: 0; background: transparent; padding: 0 8px 0 20px; font: inherit; font-size: 16px; color: var(--ink); }
+.hero__form input::placeholder { color: var(--ink-2); }
+.hero__form input:focus { outline: none; }
+.hero__team { margin-top: 14px; font-size: var(--step-small); color: var(--ink-2); }
+.steps { margin: 36px 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 640px; font-size: 15px; line-height: 1.4; }
+.steps li { display: grid; grid-template-columns: 16px 1fr; gap: 8px; align-items: baseline; }
+.steps b { color: var(--accent); font-weight: 600; font-size: 15px; }
+
+/* the readout: the visitor's own clock, and what June does with a callout now */
+.now { width: min(100%, 440px); padding: 22px; display: grid; gap: 16px; }
+.now__top { display: flex; justify-content: space-between; align-items: start; gap: 16px; }
+.now__clock { font-size: 40px; font-weight: 600; letter-spacing: -0.03em; line-height: 1; }
+.now__day { display: block; font-size: 13px; color: var(--ui-ink-2); margin-top: 6px; }
+.now__office { font-size: 13px; font-weight: 600; padding: 5px 10px; border-radius: 999px; background: #fde0d5; color: #9d3414; white-space: nowrap; }
+.now__office.is-open { background: #e3f3e8; color: #1d6b3d; }
+.now__line { font-size: 15px; padding: 12px 14px; background: var(--ui-2); border-radius: 10px; }
+.now__if { font-size: 13px; color: var(--ui-ink-2); }
+.now__log { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.now__log li { display: grid; grid-template-columns: 64px 1fr; gap: 12px; font-size: 15px; line-height: 1.4; transition: opacity .4s var(--ease), transform .4s var(--ease); }
+.now__log time { color: var(--ui-ink-2); font-size: 13px; padding-top: 2px; }
+.now__log li.is-wait { opacity: 0; transform: translateY(6px); }
+.now__log li:last-child span { font-weight: 600; color: #1d6b3d; }
+.now__foot { font-size: 13px; color: var(--ui-ink-2); }
+
+/* sections share one left edge */
+.part { margin-top: clamp(96px, 10vw, 140px); padding: 12px var(--margin) 0; }
+.part > h2 { font-size: clamp(2rem, 1.5rem + 1.2vw, 2.5rem); max-width: 22ch; }
+.part__lede { margin-top: 16px; max-width: 52ch; }
+
+/* the short version */
+.short { margin: 40px 0 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
+.short div { display: grid; gap: 8px; align-content: start; }
+.short dt { font-size: 15px; color: var(--ink-2); }
+.short dd { margin: 0; font-size: 20px; font-weight: 500; line-height: 1.35; }
+
+/* what June does: staggered cells, text and fragment trading places */
+.cells { margin-top: 56px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.cell { height: 440px; background: var(--panel); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; }
+.cell__text { padding: 24px; display: grid; gap: 8px; }
+.cell h3 { font-size: 20px; font-weight: 600; letter-spacing: -0.01em; }
+.cell__text p { font-size: 15px; color: var(--ink-2); line-height: 1.5; }
+.cell__frag { flex: 1; min-height: 0; display: flex; overflow: hidden; }
+.cell--low .cell__frag { align-items: flex-end; padding: 0 0 0 24px; }
+.cell--high { flex-direction: column-reverse; }
+.cell--high .cell__frag { align-items: flex-start; padding: 0 24px 0 0; }
+.cell__frag > * { width: 100%; }
+.cell--low .cell__frag > [data-ui], .cell--low .cell__frag > .shot { border-radius: 14px 0 0 0; }
+.cell--high .cell__frag > [data-ui], .cell--high .cell__frag > .shot { border-radius: 0 0 14px 0; }
+.cell .shot img, .cell .shot video { width: 100%; height: 100%; object-fit: cover; object-position: left top; }
+.cell .shot { height: 100%; }
+.sched { padding: 18px; display: grid; gap: 8px; font-size: 14px; align-content: start; }
+.sched__title { display: flex; justify-content: space-between; font-weight: 600; font-size: 15px; padding: 2px 2px 6px; }
+.sched__title span { font-weight: 400; color: var(--ui-ink-2); font-size: 13px; }
+.sched__row { display: grid; grid-template-columns: 76px 1fr auto; gap: 10px; align-items: center; padding: 10px 12px; background: var(--ui-2); border-radius: 8px; }
+.sched__row b { font-weight: 600; }
+.sched__row small { display: block; color: var(--ui-ink-2); font-size: 13px; }
+.sched__row.is-hot { background: #fde0d5; }
+.sched__row.is-done { background: #e3f3e8; }
+.tag { font-size: 13px; font-weight: 600; padding: 3px 8px; border-radius: 999px; background: #e3f3e8; color: #1d6b3d; white-space: nowrap; }
+.tag--warn { background: #fde4dc; color: #a2341a; }
+.tag--wait { background: #f3ecd9; color: #6e5313; }
+.reads { padding: 18px; display: grid; gap: 8px; align-content: start; }
+.read { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; padding: 10px 12px; background: var(--ui-2); border-radius: 8px; font-size: 14px; }
+.read small { display: block; color: var(--ui-ink-2); font-size: 13px; }
+.thr { padding: 18px; display: grid; gap: 8px; font-size: 14px; align-content: start; }
+.thr__top { display: flex; justify-content: space-between; font-weight: 600; font-size: 15px; padding-bottom: 4px; }
+.thr__top span { font-weight: 400; color: var(--ui-ink-2); font-size: 13px; }
+.msg { max-width: 86%; padding: 9px 12px; border-radius: 14px; line-height: 1.45; }
+.msg--june { justify-self: end; background: var(--accent); color: #fff; border-bottom-right-radius: 4px; }
+.msg--cg { justify-self: start; background: var(--ui-2); border-bottom-left-radius: 4px; }
+.hand { padding: 12px; background: #fde0d5; border-radius: 10px; display: grid; gap: 2px; }
+.hand span { color: var(--ui-ink-2); font-size: 13px; }
+
+/* one callout, start to finish: statements scroll, the fragment holds */
+.walk { margin-top: 56px; display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 24px; }
+.walk__says { grid-column: 1 / span 5; }
+.say { min-height: 64vh; display: flex; flex-direction: column; justify-content: center; gap: 12px; }
+.say:first-child { min-height: 52vh; justify-content: flex-start; padding-top: 8vh; }
+.say h3 { font-size: clamp(1.5rem, 1.1rem + 1vw, 2rem); color: var(--ink-2); transition: color .3s var(--ease); }
+.say.is-on h3 { color: var(--ink); }
+.say h3 em { font-style: normal; color: var(--accent); }
+.say p { max-width: 40ch; }
+.walk__stage { grid-column: 7 / -1; position: sticky; top: 14vh; align-self: start; height: 72vh; background: var(--panel); border-radius: 14px; display: grid; place-items: center; padding: 32px; }
+.walk__stage > [data-ui] { width: min(100%, 460px); }
+.state { display: none; }
+.walk__stage[data-on="0"] .state--0, .walk__stage[data-on="1"] .state--1, .walk__stage[data-on="2"] .state--2 { display: grid; }
+
+.mid { margin-top: 64px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px 32px; }
+.mid p { font-size: 20px; font-weight: 500; }
+
+/* the team behind June */
+.team { margin-top: 56px; display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 24px; row-gap: 40px; }
+.team__about { grid-column: 1 / span 5; display: grid; gap: 24px; align-content: start; }
+.team__about img { border-radius: 14px; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; object-position: center 30%; }
+.team__figs { grid-column: 7 / -1; }
+.team__figs table { width: 100%; border-collapse: collapse; font-size: 17px; }
+.team__figs td, .team__figs th { padding: 14px 16px; text-align: left; vertical-align: baseline; }
+.team__figs th { font-weight: 600; width: 32%; white-space: nowrap; }
+.team__figs tr:nth-child(odd) { background: var(--panel); }
+.team__figs caption { text-align: left; font-size: 15px; color: var(--ink-2); padding-bottom: 12px; }
+.quotes { grid-column: 7 / -1; display: grid; gap: 20px; }
+.quote { display: grid; gap: 8px; }
+.quote p { font-size: 17px; }
+.quote span { font-size: 15px; color: var(--ink-2); }
+
+/* what it costs: a menu */
+.menu { margin-top: 56px; display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 24px; row-gap: 32px; }
+.menu__pic { grid-column: 1 / span 4; display: grid; gap: 12px; align-content: start; }
+.menu__pic .shot img { height: auto; aspect-ratio: 4 / 3; object-fit: cover; object-position: left center; }
+.menu__list { grid-column: 6 / -1; }
+.menu__list h3 { font-size: 20px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 20px; }
+.item { padding: 11px 0; }
+.item__row { display: flex; justify-content: space-between; gap: 24px; font-size: 20px; font-variant-numeric: tabular-nums; }
+.item__row b { font-weight: 600; }
+.item p { font-size: 15px; color: var(--ink-2); max-width: 40ch; margin-top: 2px; }
+
+/* questions as reading text */
+.faq { margin-top: 48px; columns: 2; column-gap: 56px; max-width: 1080px; }
+.faq p { break-inside: avoid; margin-bottom: 20px; font-size: 17px; line-height: 1.55; }
+.faq b { font-weight: 600; }
+
+/* the close: one sentence, one action */
+.close { padding: 30svh var(--margin) 0; }
+.close p { font-size: 20px; max-width: 34ch; }
+.close .hero__form { margin-top: 24px; }
+
+@media (max-width: 1100px) {
+  .cells { grid-template-columns: 1fr 1fr; }
+  .short { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 860px) {
+  .hero { grid-template-columns: 1fr; min-height: 0; }
+  .hero__say { gap: 40px; padding-bottom: 32px; }
+  .hero__see { padding: 32px 20px; }
+  .hero__demo { position: static; justify-self: start; margin-bottom: 20px; }
+  .walk__says, .walk__stage, .team__about, .team__figs, .quotes, .menu__pic, .menu__list { grid-column: 1 / -1; }
+  .walk { display: grid; grid-template-columns: 1fr; row-gap: 20px; }
+  .walk__says, .walk__stage { display: contents; }
+  .say, .say:first-child { min-height: 0; padding-top: 32px; }
+  .say h3 { color: var(--ink); }
+  .walk__stage .state { display: grid; background: var(--ui); }
+  .say[data-step="0"] { order: 0; } .state--0 { order: 1; }
+  .say[data-step="1"] { order: 2; } .state--1 { order: 3; }
+  .say[data-step="2"] { order: 4; } .state--2 { order: 5; }
+  .faq { columns: 1; }
+}
+@media (max-width: 640px) {
+  .hero__say { padding-top: 16px; }
+  .hero__say > div { margin-block: auto; }
+.hero h1 { font-size: 8vw; }
+  .mask { display: inline; overflow: visible; }
+  .mask > span { display: inline; }
+  .hero__form { flex-direction: column; border-radius: 22px; padding: 8px; }
+  .hero__form input { min-height: 50px; padding: 0 12px; }
+  .hero__form .btn { width: 100%; }
+  .steps { grid-template-columns: 1fr; gap: 10px; margin-top: 28px; }
+  .cells { grid-template-columns: 1fr; gap: 6px; }
+  .cell { height: auto; }
+  .cell--high { flex-direction: column; }
+  .cell__frag { height: 280px; flex: none; }
+  .cell:nth-child(odd) .cell__frag { padding: 0 0 0 24px; }
+  .cell:nth-child(even) .cell__frag { padding: 0 24px 0 0; }
+  .cell:nth-child(odd) .cell__frag > * { border-radius: 14px 0 0 0; }
+  .cell:nth-child(even) .cell__frag > * { border-radius: 0 14px 0 0; }
+  .short { grid-template-columns: 1fr; }
+  .close { padding-top: 112px; }
+  .item__row { flex-wrap: wrap; gap: 0 16px; }
+  .foot { margin-top: 112px; }
+}
+
+/* the one loud moment: the headline rises line by line */
+@keyframes rise-line { from { transform: translateY(105%); } to { transform: none; } }
+@keyframes fade-up { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: no-preference) and (min-width: 641px) {
+  .mask > span { animation: rise-line .9s cubic-bezier(.16, 1, .3, 1) both; }
+  .mask:nth-child(2) > span { animation-delay: .11s; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero__follow { animation: fade-up .7s var(--ease) .55s both; }
+}
+</style>
+</head>
+<body>
+
+<main>
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero__say">
+      <a class="bar__logo" href="/" aria-label="June home"><img src="/assets/june-logo.svg" alt="June" width="92" height="64"></a>
+      <div>
+        <h1 id="hero-title"><span class="mask"><span>June fills the shift </span></span><span class="mask"><span>when a caregiver calls out.</span></span></h1>
+        <div class="hero__follow">
+          <p class="hero__sub">For home care agencies. June texts and calls your qualified caregivers, books whoever says yes in WellSky, and brings in your scheduler when a person is needed.</p>
+          <form class="hero__form" action="/early-access" method="get">
+            <label class="sr-only" for="h-email">Work email</label>
+            <input id="h-email" name="email" type="email" autocomplete="email" placeholder="Your work email" required>
+            <button class="btn" type="submit">Join early access</button>
+          </form>
+          <p class="hero__team">Built by ClearDesk, the scheduling team behind 450+ home care agencies.</p>
+          <ol class="steps">
+            <li><b>1</b><span>A caregiver calls out</span></li>
+            <li><b>2</b><span>June texts and calls your bench</span></li>
+            <li><b>3</b><span>The shift is booked in WellSky</span></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero__see">
+      <a class="link hero__demo" href="/demo">Watch the demo</a>
+      <div class="now" data-ui aria-label="What June would do with a callout right now, on your clock">
+        <div class="now__top">
+          <div><span class="now__clock" id="now-clock">11:42 pm</span><span class="now__day" id="now-day">Monday, your time</span></div>
+          <span class="now__office" id="now-office">Office closed</span>
+        </div>
+        <p class="now__line" id="now-line">Your scheduler is off for the night. June is on.</p>
+        <p class="now__if">If a caregiver called out right now</p>
+        <ol class="now__log" id="now-log">
+          <li><time data-m="0">11:42 pm</time><span>Marcus calls out of Dolores's 8a visit</span></li>
+          <li><time data-m="1">11:43 pm</time><span>June texts Marisol, Gloria and Estelle</span></li>
+          <li><time data-m="4">11:46 pm</time><span>Marisol: "Yes I can take it"</span></li>
+          <li><time data-m="4">11:46 pm</time><span>Booked in WellSky</span></li>
+        </ol>
+        <p class="now__foot">Times from your device clock. Sample agency.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="part" aria-labelledby="short-title">
+    <h2 id="short-title">Who June is for, and what it costs.</h2>
+    <dl class="short">
+      <div data-rise><dt>Who it's for</dt><dd>Home care agency owners and schedulers</dd></div>
+      <div data-rise style="--i:1"><dt>What it replaces</dt><dd>Phone tag on callouts, nights and weekends</dd></div>
+      <div data-rise style="--i:2"><dt>Works with</dt><dd>WellSky. June books the caregiver and writes it back.</dd></div>
+      <div data-rise style="--i:3"><dt>Price</dt><dd>Early access, from $1,350 a month</dd></div>
+    </dl>
+  </section>
+
+  <section class="part" aria-labelledby="does-title">
+    <h2 id="does-title">What June does with an open shift.</h2>
+    <div class="cells">
+      <article class="cell cell--low" data-rise>
+        <div class="cell__text"><h3>Spots the callout</h3><p>A callout, a missed confirmation or a missed clock in opens the shift for outreach right away.</p></div>
+        <div class="cell__frag">
+          <div class="sched" data-ui>
+            <div class="sched__title">Tomorrow <span>Willowmere Home Care</span></div>
+            <div class="sched__row"><span>7a to 11a</span><span><b>Harold B.</b><small>Estelle R. · confirmed</small></span><span class="tag">On</span></div>
+            <div class="sched__row is-hot"><span>8a to 12p</span><span><b>Dolores W.</b><small>Marcus T. · called out</small></span><span class="tag tag--warn">Open</span></div>
+            <div class="sched__row"><span>9a to 1p</span><span><b>Ruth K.</b><small>Gloria F. · not confirmed</small></span><span class="tag tag--wait">Waiting</span></div>
+            <div class="sched__row"><span>1p to 5p</span><span><b>Ruth K.</b><small>Anand R. · confirmed</small></span><span class="tag">On</span></div>
+          </div>
+        </div>
+      </article>
+      <article class="cell cell--high" data-rise style="--i:1">
+        <div class="cell__text"><h3>Asks the right caregivers first</h3><p>People who know the client go first, then reliable ones nearby. Anyone who doesn't fit the visit is never asked.</p></div>
+        <div class="cell__frag"><div class="shot"><img src="/assets/app-plan.jpg" width="690" height="590" alt="June's plan for Dolores's shift: caregivers in waves, each with the reason they fit" loading="lazy"></div></div>
+      </article>
+      <article class="cell cell--low" data-rise style="--i:2">
+        <div class="cell__text"><h3>Texts and calls</h3><p>Text first when there's time. Text and call together when it's close. A call first when the visit starts soon.</p></div>
+        <div class="cell__frag"><div class="shot"><video src="/assets/call.mp4" poster="/assets/call.jpg" autoplay muted loop playsinline aria-label="June on a phone call with a caregiver about a shift"></video></div></div>
+      </article>
+      <article class="cell cell--high" data-rise>
+        <div class="cell__text"><h3>Reads every reply</h3><p>A clear yes is booked. A maybe is held for your scheduler. A question gets an answer.</p></div>
+        <div class="cell__frag">
+          <div class="reads" data-ui>
+            <div class="read"><span>"Yes I can take it"<small>Accepted</small></span><span class="tag">Booked</span></div>
+            <div class="read"><span>"maybe if my sister can drive me"<small>Not sure of the read</small></span><span class="tag tag--wait">Held</span></div>
+            <div class="read"><span>"which client is it?"<small>A question</small></span><span class="tag tag--warn">Answered</span></div>
+          </div>
+        </div>
+      </article>
+      <article class="cell cell--low" data-rise style="--i:1">
+        <div class="cell__text"><h3>Brings in your scheduler</h3><p>When nobody is left to ask, or a caregiver wants a person, your scheduler gets the shift with the whole thread.</p></div>
+        <div class="cell__frag">
+          <div class="thr" data-ui>
+            <div class="thr__top">Yolanda C. <span>text · 6:58 am</span></div>
+            <p class="msg msg--cg">I can but my car is in the shop. Can someone pick me up?</p>
+            <p class="msg msg--june">Let me get Daisy for that. She'll text you in a minute.</p>
+            <div class="hand"><b>Handed to Daisy, your scheduler</b><span>The whole thread is attached</span></div>
+          </div>
+        </div>
+      </article>
+      <article class="cell cell--high" data-rise style="--i:2">
+        <div class="cell__text"><h3>Books it in WellSky</h3><p>The caregiver who said yes is booked and written back. They get a text with the client, address and time.</p></div>
+        <div class="cell__frag"><div class="shot"><img src="/assets/app-thread-pane.jpg" width="718" height="497" alt="June's text thread with Marisol, ending with her booked on the shift" loading="lazy"></div></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="part" aria-labelledby="walk-title">
+    <h2 id="walk-title">One callout, start to finish.</h2>
+    <div class="walk">
+      <div class="walk__says">
+        <div class="say is-on" data-step="0"><h3>At <em>11:42 pm</em> Marcus calls out of Tuesday's 8a visit.</h3><p>Dolores's shift is open. Your office is closed. June starts on it at once.</p></div>
+        <div class="say" data-step="1"><h3>June texts Marisol first.</h3><p>She has worked with Dolores before and lives ten minutes away. She asks about the client and June answers.</p></div>
+        <div class="say" data-step="2"><h3>At <em>11:46 pm</em> the shift is booked in WellSky.</h3><p>Marisol gets the details by text. Your scheduler sees a filled shift in the morning.</p></div>
+      </div>
+      <div class="walk__stage" id="stage" data-on="0" aria-hidden="true">
+        <div class="sched state state--0" data-ui>
+          <div class="sched__title">Tuesday <span>11:42 pm</span></div>
+          <div class="sched__row"><span>7a to 11a</span><span><b>Harold B.</b><small>Estelle R. · confirmed</small></span><span class="tag">On</span></div>
+          <div class="sched__row is-hot"><span>8a to 12p</span><span><b>Dolores W.</b><small>Marcus T. · called out 11:42 pm</small></span><span class="tag tag--warn">Open</span></div>
+          <div class="sched__row"><span>1p to 5p</span><span><b>Ruth K.</b><small>Anand R. · confirmed</small></span><span class="tag">On</span></div>
+        </div>
+        <div class="thr state state--1" data-ui>
+          <div class="thr__top">Marisol R. <span>text · 11:43 pm</span></div>
+          <p class="msg msg--june">Hi Marisol, it's June from Willowmere Home Care. A shift opened tomorrow, 8 to noon, ten minutes from you. Want it?</p>
+          <p class="msg msg--cg">What's the client like?</p>
+          <p class="msg msg--june">Dolores is 84 and six weeks out of a hip replacement. Personal care, two cats, no dog. It pays $20.50 an hour.</p>
+          <p class="msg msg--cg">Yes I can take it</p>
+        </div>
+        <div class="sched state state--2" data-ui>
+          <div class="sched__title">Tuesday <span>11:46 pm</span></div>
+          <div class="sched__row"><span>7a to 11a</span><span><b>Harold B.</b><small>Estelle R. · confirmed</small></span><span class="tag">On</span></div>
+          <div class="sched__row is-done"><span>8a to 12p</span><span><b>Dolores W.</b><small>Marisol R. · booked in WellSky</small></span><span class="tag">Filled</span></div>
+          <div class="sched__row"><span>1p to 5p</span><span><b>Ruth K.</b><small>Anand R. · confirmed</small></span><span class="tag">On</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="mid" data-rise>
+      <p>Want June on your next callout?</p>
+      <a class="btn" href="/early-access">Join early access</a>
+    </div>
+  </section>
+
+  <section class="part" aria-labelledby="team-title">
+    <h2 id="team-title">The team behind June.</h2>
+    <div class="team">
+      <div class="team__about" data-rise>
+        <img src="/assets/cleardesk-room.jpg" width="900" height="1154" alt="The ClearDesk team at work" loading="lazy">
+        <p>June is built by ClearDesk. ClearDesk staffs and runs back office teams for home care agencies across the country, schedulers among them. June is that same work, with software doing the parts that never needed a person awake.</p>
+      </div>
+      <div class="team__figs" data-rise style="--i:1">
+        <table>
+          <caption>ClearDesk, in figures</caption>
+          <tbody>
+            <tr><th scope="row">500+</th><td>Active clients</td></tr>
+            <tr><th scope="row">450+</th><td>Home care agencies supported</td></tr>
+            <tr><th scope="row">4.9 of 5</th><td>Client satisfaction after placement</td></tr>
+            <tr><th scope="row">Forbes</th><td>Where our approach was featured</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="quotes" data-rise style="--i:2">
+        <div class="quote"><p>"Our scheduler has consistently outperformed just about everyone we had doing this work before."</p><span>Tom M., Owner, Interim HealthCare. ClearDesk client, on a ClearDesk scheduler.</span></div>
+        <div class="quote"><p>"A wonderful pairing. Thorough, polite and genuinely caring."</p><span>Rachel M., Director of Operations, Senior Helpers. ClearDesk client, on a ClearDesk scheduler.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="part" aria-labelledby="cost-title">
+    <h2 id="cost-title">What it costs.</h2>
+    <div class="menu">
+      <div class="menu__pic" data-rise>
+        <a class="shot" href="/demo"><img src="/assets/june-demo-cover.jpg" width="2172" height="920" alt="Opening frame of the June demo video" loading="lazy"></a>
+        <a class="link" href="/demo">Watch June fill a shift in the demo</a>
+      </div>
+      <div class="menu__list" data-rise style="--i:1">
+        <h3>Early access</h3>
+        <div class="item"><div class="item__row"><b>June shift coverage</b><b>from $1,350 a month</b></div><p>Every callout worked by text and call, day and night.</p></div>
+        <div class="item"><div class="item__row"><span>Texts and calls, 24/7/365</span><span>Included</span></div><p>Nights, weekends and holidays covered the same way.</p></div>
+        <div class="item"><div class="item__row"><span>WellSky booking</span><span>Included</span></div><p>The caregiver who says yes is written back to WellSky.</p></div>
+        <div class="item"><div class="item__row"><span>Handoff to your scheduler</span><span>Included</span></div><p>Anything unusual goes to a person with the whole thread.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="part" aria-labelledby="faq-title">
+    <h2 id="faq-title">Questions owners ask.</h2>
+    <div class="faq">
+      <p><b>Who is June for?</b> Home care agency owners and schedulers who lose shifts to callouts, most of all at night, on weekends and on holidays.</p>
+      <p><b>Do caregivers need an app?</b> No. June reaches them by text and by phone call, the way your office already does.</p>
+      <p><b>What system does June work with?</b> WellSky. June books the caregiver who says yes and writes the assignment back. If you schedule somewhere else, tell us on the early access form.</p>
+      <p><b>In what order are caregivers asked?</b> People who have worked with the client and show up go first. Reliable caregivers new to the client come next. Everyone else hears only if those groups don't pan out.</p>
+      <p><b>Who is never asked?</b> Anyone missing a certification, a language or a client preference, or who would go past an authorized hours limit.</p>
+      <p><b>What if a reply is unclear?</b> The shift doesn't lock. It's held for your scheduler to confirm, so a misread never turns into an uncovered visit.</p>
+      <p><b>What happens when June can't fill a shift?</b> It goes to your scheduler with the whole thread attached, word for word.</p>
+      <p><b>Can my scheduler take over?</b> Yes, with one click, whatever state the shift is in.</p>
+      <p><b>What does it cost?</b> From $1,350 a month during early access.</p>
+      <p><b>How do I start?</b> Leave your work email. We're opening a small group of pilot teams and will reach out as spots open.</p>
+    </div>
+  </section>
+
+  <section class="close" aria-labelledby="close-title">
+    <h2 id="close-title" class="sr-only">Join early access</h2>
+    <p>Leave your work email and we'll set June up on your callouts as pilot spots open.</p>
+    <form class="hero__form" action="/early-access" method="get">
+      <label class="sr-only" for="c-email">Work email</label>
+      <input id="c-email" name="email" type="email" autocomplete="email" placeholder="Your work email" required>
+      <button class="btn" type="submit">Join early access</button>
+    </form>
+  </section>
+</main>
+
+<footer class="foot">
+  <span>Round the clock shift coverage for home care</span>
+  <nav aria-label="Footer">
+    <a href="/how-it-works">How it works</a>
+    <a href="/demo">Watch demo</a>
+    <a href="/early-access">Early access</a>
+    <a href="/terms">Terms</a>
+  </nav>
+  <span class="foot__end"><span>© 2026 June</span><a href="/privacy">Privacy</a></span>
+</footer>
+
+<script type="module" src="/assets/site.js"></script>
+<script type="module">
+// the readout runs on the visitor's clock: office open 8a to 5p weekdays
+const fmt = (d) => d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }).toLowerCase();
+const log = [...document.querySelectorAll("#now-log li")];
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function paint() {
+  const now = new Date();
+  document.getElementById("now-clock").textContent = fmt(now);
+  document.getElementById("now-day").textContent = now.toLocaleDateString("en-US", { weekday: "long" }) + ", your time";
+  const day = now.getDay(), h = now.getHours();
+  const open = day > 0 && day < 6 && h >= 8 && h < 17;
+  const office = document.getElementById("now-office");
+  office.textContent = open ? "Office open" : "Office closed";
+  office.classList.toggle("is-open", open);
+  document.getElementById("now-line").textContent = open
+    ? "Your scheduler stays on today's work. June takes the callout."
+    : "Your scheduler is off for the night. June is on.";
+  log.forEach((li) => {
+    const t = li.querySelector("time");
+    t.textContent = fmt(new Date(now.getTime() + Number(t.dataset.m) * 60000));
+  });
+}
+
+function replay() {
+  if (reduce) return;
+  log.forEach((li) => li.classList.add("is-wait"));
+  log.forEach((li, i) => setTimeout(() => li.classList.remove("is-wait"), 700 + i * 1100));
+}
+
+paint();
+replay();
+setInterval(paint, 30000);
+setInterval(replay, 12000);
+
+// the statement nearest the middle drives the stage
+const stage = document.getElementById("stage");
+const says = [...document.querySelectorAll(".say")];
+const io = new IntersectionObserver((entries) => {
+  for (const e of entries) {
+    if (!e.isIntersecting) continue;
+    says.forEach((s) => s.classList.toggle("is-on", s === e.target));
+    stage.dataset.on = e.target.dataset.step;
+  }
+}, { rootMargin: "-45% 0px -45% 0px" });
+says.forEach((s) => io.observe(s));
+</script>
+</body>
+</html>

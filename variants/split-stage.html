@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>June, open caregiver shifts filled 24/7/365</title>
+<meta name="description" content="For home care agencies. When a caregiver calls out, June texts and calls your qualified caregivers, books whoever says yes in WellSky, and brings in your scheduler when a person is needed.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+/* the split: reading column left, the product on a night stage right */
+.split { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); column-gap: 24px; padding-inline: var(--margin); }
+.split > .hero, .split > .ch { grid-column: 1; }
+.stage-wrap { grid-column: 2; grid-row: 1 / span 6; }
+.stage { position: sticky; top: 96px; height: calc(100svh - 112px); min-height: 560px; background: var(--night); border-radius: 28px; overflow: hidden; }
+.stage-pic { position: absolute; inset: 0; display: grid; place-items: center; padding: clamp(20px, 2.2vw, 32px); opacity: 0; transition: opacity 1.2s var(--ease); }
+.stage-pic.is-on { opacity: 1; }
+.stage-pic > * { width: min(100%, 560px); }
+.ch__pic { display: none; }
+
+/* hero card */
+.hero { background: var(--panel); border-radius: 28px; min-height: calc(100svh - 112px); padding: clamp(32px, 4.4vw, 64px); display: grid; align-content: center; }
+.hero h1, .ch h2 { font-size: clamp(2.125rem, 0.9rem + 2.5vw, 3.25rem); }
+.hero h1 { max-width: 22ch; }
+.hero__sub { margin-top: 24px; max-width: 46ch; }
+.hero__form { margin-top: 32px; width: min(100%, 540px); display: flex; gap: 6px; padding: 6px; background: var(--ui); border-radius: 999px; }
+.hero__form:focus-within { outline: 2px solid var(--accent); outline-offset: 3px; }
+.hero__form input { flex: 1; min-width: 0; border: 0; background: transparent; padding: 0 8px 0 22px; font: inherit; font-size: 16px; color: var(--ink); }
+.hero__form input::placeholder { color: var(--ink-2); }
+.hero__form input:focus { outline: none; }
+.steps { margin: 36px 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; font-size: 1rem; line-height: 1.4; }
+.steps li { display: grid; gap: 10px; align-content: start; }
+.steps b { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--ink); color: var(--ground); font-size: 14px; font-weight: 600; }
+.steps li:last-child b { background: var(--accent); }
+
+/* reading chapters */
+.ch { padding: clamp(96px, 12vw, 160px) clamp(0px, 4.4vw, 64px) 0; min-height: 86svh; }
+.ch h2 { max-width: 18ch; }
+.ch > p, .ch__lede { margin-top: 24px; max-width: 46ch; }
+.facts { margin: 40px 0 0; display: grid; max-width: 640px; }
+.facts div { display: grid; grid-template-columns: 9.5em 1fr; gap: 24px; padding: 18px 20px; border-radius: 14px; }
+.facts div:nth-child(odd) { background: var(--panel); }
+.facts dt { font-weight: 600; }
+.facts dd { margin: 0; }
+.order { margin: 40px 0 0; padding: 0; list-style: none; counter-reset: o; display: grid; gap: 28px; max-width: 46ch; }
+.order li { counter-increment: o; display: grid; grid-template-columns: 48px 1fr; gap: 16px; }
+.order li::before { content: counter(o); font-size: var(--step-lead); font-weight: 600; color: var(--accent); line-height: 1.2; }
+.order b { display: block; font-weight: 600; }
+.order span { color: var(--ink-2); }
+.ch__rule { margin-top: 32px; max-width: 46ch; padding: 18px 20px; border-radius: 14px; background: #f4d6c6; }
+.big { margin-top: 40px; font-size: var(--step-display); font-weight: 600; letter-spacing: -0.04em; line-height: 1; color: var(--accent); }
+.asks { margin: 28px 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 10px; max-width: 52ch; }
+.asks li { padding: 8px 16px; border-radius: 999px; background: var(--panel); font-size: 1rem; }
+.ch .link { display: inline-block; margin-top: 28px; }
+.dots2 { margin: 36px 0 0; padding: 0; list-style: none; display: grid; gap: 14px; max-width: 46ch; }
+.dots2 li { padding-left: 24px; position: relative; }
+.dots2 li::before { content: ""; position: absolute; left: 0; top: .62em; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); }
+.ch__act { margin-top: 40px; display: flex; flex-wrap: wrap; align-items: center; gap: 20px 28px; }
+.demo-card { margin-top: 56px; display: grid; grid-template-columns: 200px 1fr; gap: 20px; align-items: center; max-width: 520px; text-decoration: none; color: var(--ink); }
+.demo-card .shot { border-radius: 14px; }
+.demo-card b { display: block; font-weight: 600; }
+.demo-card span { color: var(--ink-2); font-size: 1rem; }
+.demo-card:hover b { color: var(--accent); }
+
+/* stage fragments */
+.thread { width: min(100%, 400px) !important; aspect-ratio: 1 / 1; display: flex; flex-direction: column; overflow: hidden; }
+.thread__top { display: flex; align-items: center; gap: 12px; padding: 16px 18px 14px; background: var(--ui-2); }
+.thread__face { width: 34px; height: 34px; border-radius: 50%; background: #fde9e2; display: grid; place-items: center; flex: none; }
+.thread__face svg { width: 18px; }
+.thread__who { font-size: 14px; font-weight: 600; line-height: 1.25; }
+.thread__who span { display: block; font-weight: 400; color: var(--ui-ink-2); font-size: 13px; }
+.thread__clock { margin-left: auto; white-space: nowrap; font-size: 13px; color: var(--ui-ink-2); font-variant-numeric: tabular-nums; }
+.thread__body { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; gap: 8px; padding: 14px 16px 16px; overflow: hidden; }
+.msg { max-width: 84%; padding: 9px 12px; border-radius: 14px; font-size: 13.5px; line-height: 1.4; }
+.msg--june { align-self: flex-end; background: #c94b22; color: #fff; border-bottom-right-radius: 4px; }
+.msg--cg { align-self: flex-start; background: var(--ui-2); border-bottom-left-radius: 4px; }
+.msg--event { align-self: center; max-width: none; padding: 4px 10px; font-size: 13px; color: var(--ui-ink-2); background: none; }
+.msg--done { align-self: center; max-width: none; font-size: 13px; font-weight: 600; color: #1d6b3d; background: #e3f3e8; border-radius: 999px; }
+.msg--typing { align-self: flex-start; background: var(--ui-2); display: inline-flex; gap: 4px; padding: 12px 14px; }
+.msg--typing i { width: 6px; height: 6px; border-radius: 50%; background: #a39a93; animation: dot 1s infinite var(--ease); }
+.msg--typing i:nth-child(2) { animation-delay: .15s; } .msg--typing i:nth-child(3) { animation-delay: .3s; }
+@keyframes dot { 0%, 100% { opacity: .3; transform: none; } 50% { opacity: 1; transform: translateY(-2px); } }
+.js .thread .msg { animation: pop .45s var(--ease) both; }
+@keyframes pop { from { opacity: 0; transform: translateY(10px) scale(.98); } }
+.sched { padding: 18px; display: grid; gap: 10px; font-size: 14px; }
+.sched__title { display: flex; justify-content: space-between; gap: 12px; font-weight: 600; font-size: 15px; padding: 2px 2px 6px; }
+.sched__title span { font-weight: 400; color: var(--ui-ink-2); font-size: 13px; }
+.sched__row { display: grid; grid-template-columns: 76px 1fr auto; gap: 12px; align-items: center; padding: 12px; background: var(--ui-2); border-radius: 8px; }
+.sched__row b { font-weight: 600; }
+.sched__row small { display: block; color: var(--ui-ink-2); font-size: 13px; }
+.sched__row.is-hot { background: #fde0d5; }
+.tag { font-size: 13px; font-weight: 600; padding: 4px 8px; border-radius: 999px; background: #e3f3e8; color: #1d6b3d; white-space: nowrap; }
+.tag--warn { background: #fde4dc; color: #a2341a; }
+.tag--wait { background: #f3ecd9; color: #6e5313; }
+.esc { padding: 18px; display: grid; gap: 10px; font-size: 14px; }
+.esc .msg { font-size: 14px; }
+.esc__hand { margin-top: 6px; padding: 14px; background: #fff1ec; border-radius: 8px; display: grid; gap: 4px; }
+.esc__hand b { font-weight: 600; }
+.esc__hand span { color: var(--ui-ink-2); font-size: 13px; }
+
+/* pace: two fields, one slider */
+.pace { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr auto; min-height: 88svh; margin-top: var(--gap); padding-top: 12px; }
+.pace__say { padding: 56px var(--margin); }
+.pace__say h2 { font-size: var(--step-section); max-width: 14ch; }
+.pace__say p { margin-top: 28px; max-width: 36ch; }
+.pace__see { background: var(--night); display: grid; place-items: center; padding: 56px var(--margin); }
+.log { width: min(100%, 460px); padding: 18px; display: grid; gap: 10px; font-size: 14px; }
+.log__row { display: grid; grid-template-columns: 64px 1fr auto; gap: 12px; align-items: center; padding: 12px; background: var(--ui-2); border-radius: 8px; transition: opacity .3s var(--ease); }
+.log__row small { display: block; color: var(--ui-ink-2); font-size: 13px; }
+.log__row b { font-weight: 600; }
+.log__when { color: var(--ui-ink-2); font-variant-numeric: tabular-nums; }
+.log.is-out .log__row { opacity: 0; }
+.pace__rail { grid-column: 1 / -1; padding: 28px var(--margin) 0; }
+.pace__track { position: relative; height: 32px; }
+.pace__track::before { content: ""; position: absolute; left: 0; right: 0; top: 12px; height: 8px; border-radius: 4px; background: var(--panel-2); }
+.pace__fill { position: absolute; left: 0; top: 12px; height: 8px; border-radius: 4px; width: calc(var(--fill, 0) * (100% - 32px) + 16px); background: var(--ink); transition: width .4s var(--ease); }
+.pace__rail input { position: relative; width: 100%; margin: 0; height: 32px; background: transparent; appearance: none; -webkit-appearance: none; cursor: pointer; }
+.pace__rail input::-webkit-slider-runnable-track { height: 8px; background: transparent; }
+.pace__rail input::-moz-range-track { height: 8px; background: transparent; }
+.pace__rail input::-webkit-slider-thumb { -webkit-appearance: none; width: 32px; height: 32px; margin-top: -12px; background: var(--accent); border: 0; border-radius: 50%; transition: transform .15s var(--ease); }
+.pace__rail input::-moz-range-thumb { width: 32px; height: 32px; background: var(--accent); border: 0; border-radius: 50%; }
+.pace__rail input:active::-webkit-slider-thumb { transform: scale(1.12); }
+.pace__names { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 12px; padding: 0; list-style: none; font-size: 1rem; }
+.pace__names li:nth-child(2) { text-align: center; } .pace__names li:last-child { text-align: right; }
+.pace__names button { all: unset; cursor: pointer; color: var(--ink-2); transition: color .2s var(--ease); }
+.pace__names button[aria-pressed="true"] { color: var(--ink); font-weight: 600; }
+.pace__names button:hover { color: var(--accent); }
+.pace__names button:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.say-swap { transition: opacity .25s var(--ease); }
+.say-swap.is-out { opacity: 0; }
+
+/* the team behind june */
+.team { margin-top: var(--gap); padding: 12px var(--margin) 0; display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 24px; align-items: end; }
+.team h2 { grid-column: 1 / span 7; font-size: var(--step-section); }
+.team h2 span { display: block; padding-left: 2em; }
+.team__lede { grid-column: 1 / span 6; margin-top: 28px; max-width: 44ch; }
+.team__pic { grid-column: 9 / -1; grid-row: 1 / span 2; border-radius: 28px; overflow: hidden; aspect-ratio: 4 / 5; }
+.team__pic img { width: 100%; height: 100%; object-fit: cover; object-position: 60% 50%; }
+.team table { grid-column: 1 / -1; margin-top: 72px; width: 100%; border-collapse: collapse; }
+.team td { padding: 14px 16px; vertical-align: baseline; }
+.team tr:nth-child(odd) td { background: var(--panel); }
+.team td:first-child { width: 22%; font-size: var(--step-lead); font-weight: 600; border-radius: 14px 0 0 14px; }
+.team td:last-child { text-align: right; color: var(--ink-2); border-radius: 0 14px 14px 0; }
+
+/* letter */
+.letter { width: min(100% - 2 * var(--margin), 560px); margin: var(--gap) auto 0; }
+.letter__face { width: 52px; height: 52px; border-radius: 50%; background: #fde9e2; display: grid; place-items: center; }
+.letter__face svg { width: 26px; }
+.letter h2 { margin-top: 24px; font-size: var(--step-lead); letter-spacing: -0.01em; }
+.letter p { margin-top: 20px; }
+.letter mark { background: #f4d6c6; color: inherit; padding: 0 .15em; }
+.letter__sign { margin-top: 32px; font-size: 22px; font-style: italic; font-weight: 500; }
+.letter__role { font-size: 14px; color: var(--ink-2); }
+.quote { margin: 48px 0 0; padding: 24px; border-radius: 14px; background: var(--panel); }
+.quote p { margin: 0; font-size: var(--step-lead); line-height: 1.35; letter-spacing: -0.01em; }
+.quote footer { margin-top: 14px; font-size: 14px; color: var(--ink-2); }
+.quote footer b { color: var(--ink); font-weight: 600; }
+
+/* close: the first step, already open */
+.close { margin: var(--gap) var(--margin) 0; border-radius: 28px; min-height: 90svh; background: var(--accent); color: var(--accent-ink); display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 24px; padding: 40px; align-items: center; }
+.close__say { grid-column: 1 / span 5; align-self: end; }
+.close__say h2 { font-size: var(--step-section); line-height: 1; max-width: 11ch; }
+.close__say p { margin-top: 20px; max-width: 34ch; }
+.dialog { grid-column: 7 / span 5; justify-self: center; width: 440px; max-width: 100%; padding: 28px; box-shadow: 0 24px 60px rgba(40, 12, 4, .28); /* taste-skill-ignore: an open dialog */ }
+.dialog h3 { font: 600 20px/1.3 "Poppins", system-ui, sans-serif; letter-spacing: -0.01em; }
+.dialog > p { margin-top: 6px; font-size: 14px; color: var(--ui-ink-2); }
+.dialog label { display: block; margin-top: 20px; font-size: 13px; font-weight: 500; color: var(--ui-ink-2); }
+.dialog input[type=text], .dialog input[type=email] { margin-top: 8px; width: 100%; height: 46px; padding: 0 12px; font: 400 16px "Poppins", system-ui, sans-serif; color: var(--ui-ink); background: var(--ui); border: 1px solid var(--ui-line); border-radius: 8px; }
+.dialog input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px #fbd7cb; /* taste-skill-ignore: focus ring inside the product */ }
+.seg { margin-top: 8px; display: grid; grid-template-columns: 1fr 1fr; padding: 4px; background: var(--ui-2); border-radius: 10px; }
+.seg input { position: absolute; opacity: 0; }
+.seg label { margin: 0; padding: 10px; text-align: center; border-radius: 7px; font-size: 14px; color: var(--ui-ink-2); cursor: pointer; transition: background-color .2s var(--ease), color .2s var(--ease); }
+.seg input:checked + label { background: var(--ui); color: var(--ui-ink); font-weight: 600; }
+.seg input:focus-visible + label { outline: 2px solid var(--accent); }
+.dialog .btn { margin-top: 24px; width: 100%; font-weight: 600; }
+.foot { margin-top: 30svh; }
+
+@media (max-width: 1000px) {
+  .split { grid-template-columns: 1fr; padding-inline: var(--margin); }
+  .stage-wrap { grid-column: 1; grid-row: auto; margin-top: 16px; }
+  .stage { position: static; height: auto; min-height: 0; padding: 40px 16px; }
+  .stage-pic { position: static; padding: 0; opacity: 1; transition: none; }
+  .stage-pic:not(:first-child) { display: none; }
+  .hero { min-height: 0; padding: 28px 24px 32px; }
+  .ch { min-height: 0; padding: 96px 0 0; }
+  .ch__pic { display: block; margin-top: 36px; background: var(--night); border-radius: 28px; padding: 28px 16px; }
+  .ch__pic > * { max-width: 520px; margin-inline: auto; }
+  .pace { grid-template-columns: 1fr; min-height: 0; }
+  .pace__say { order: 1; padding: 0 var(--margin); }
+  .pace__see { order: 2; min-height: 46svh; padding: 32px 16px; margin-top: 28px; }
+  .pace__rail { order: 3; padding: 20px var(--margin) 0; }
+  .pace__rail input::-webkit-slider-thumb { width: 40px; height: 40px; margin-top: -16px; }
+  .team h2, .team__lede, .team__pic { grid-column: 1 / -1; grid-row: auto; }
+  .team__pic { margin-top: 40px; aspect-ratio: 4 / 3; }
+  .close { grid-template-columns: 1fr; row-gap: 48px; min-height: 84svh; padding: 40px 16px; align-content: space-between; }
+  .close__say, .dialog { grid-column: 1; }
+  .close__say { align-self: start; }
+  .dialog { width: 100%; }
+  .dialog .btn { min-height: 52px; }
+}
+@media (max-width: 640px) {
+  .hero h1, .ch h2 { font-size: 7.2vw; }
+  .hero__form { flex-direction: column; border-radius: 24px; padding: 8px; }
+  .hero__form input { min-height: 52px; padding: 0 14px; }
+  .hero__form .btn { width: 100%; }
+  .steps { grid-template-columns: 1fr; gap: 12px; }
+  .steps li { grid-template-columns: 32px 1fr; align-items: center; gap: 12px; }
+  .facts div { grid-template-columns: 1fr; gap: 2px; padding: 14px 16px; }
+  .demo-card { grid-template-columns: 120px 1fr; }
+  .pace__say h2 { font-size: 7.2vw; }
+  .pace__names { font-size: 15px; }
+  .team h2 { font-size: 9.4vw; }
+  .team h2 span { padding-left: 0; }
+  .team table, .team tbody, .team tr, .team td { display: block; width: auto !important; }
+  .team tr { padding: 14px 16px; border-radius: 14px; }
+  .team tr:nth-child(odd) { background: var(--panel); }
+  .team tr:nth-child(odd) td { background: none; }
+  .team td { padding: 0; text-align: left !important; }
+  .team td:first-child { font-size: 22px; }
+  .close__say h2 { font-size: 9.4vw; }
+}
+</style>
+</head>
+<body>
+<header class="bar">
+  <a class="bar__logo" href="/" aria-label="June home"><img src="/assets/june-logo.svg" alt="June" width="92" height="64"></a>
+  <nav aria-label="Main">
+    <a href="/how-it-works" class="hide-sm">How it works</a>
+    <a href="/demo" class="hide-sm">Watch demo</a>
+    <a class="btn btn--sm" href="/early-access">Join early access</a>
+  </nav>
+</header>
+
+<main>
+  <div class="split">
+    <section class="hero" data-pic="0" aria-labelledby="hero-title">
+      <h1 id="hero-title">June fills shifts when caregivers call out.</h1>
+      <p class="hero__sub">For home care agencies. June texts and calls your qualified caregivers, books whoever says yes in WellSky, and brings in your scheduler when a person is needed.</p>
+      <form class="hero__form" action="/early-access" method="get">
+        <label class="sr-only" for="h-email">Work email</label>
+        <input id="h-email" name="email" type="email" autocomplete="email" placeholder="Your work email" required>
+        <button class="btn" type="submit">Join early access</button>
+      </form>
+      <ol class="steps">
+        <li><b>1</b>A caregiver calls out</li>
+        <li><b>2</b>June texts and calls your bench</li>
+        <li><b>3</b>The shift is booked in WellSky</li>
+      </ol>
+    </section>
+
+    <div class="stage-wrap">
+      <div class="stage" id="stage">
+        <div class="stage-pic is-on">
+          <div class="thread" data-ui id="thread" aria-label="A text thread June runs after a caregiver calls out">
+            <div class="thread__top">
+              <div class="thread__face"><svg viewBox="-78 -52 160 172" aria-hidden="true"><path d="M 3,-6 C -20,-42 -66,-28 -68,10 C -70,48 -36,66 -2,110 C 40,70 74,44 72,6 C 70,-32 24,-42 3,-6 Z" fill="#E8582F"/></svg></div>
+              <div class="thread__who">June and Marisol<span>Dolores's shift, Tue 8a to 12p</span></div>
+              <div class="thread__clock" id="clock">11:42 pm</div>
+            </div>
+            <div class="thread__body" id="thread-body" aria-live="polite">
+              <p class="msg msg--event">Marcus called out at <span data-t="0">11:42 pm</span></p>
+              <p class="msg msg--june">Hi Marisol, it's June from Willowmere Home Care. A shift opened tomorrow, 8 to noon, ten minutes from you. Want it?</p>
+              <p class="msg msg--cg">What's the client like?</p>
+              <p class="msg msg--june">Dolores is 84 and six weeks out of a hip replacement. Personal care, two cats, no dog. It pays $20.50 an hour.</p>
+              <p class="msg msg--cg">Yes I can take it</p>
+              <p class="msg msg--done">Booked in WellSky at <span data-t="4">11:46 pm</span></p>
+            </div>
+          </div>
+        </div>
+        <div class="stage-pic" aria-hidden="true">
+          <div class="sched" data-ui>
+            <div class="sched__title">Tomorrow <span>Willowmere Home Care</span></div>
+            <div class="sched__row"><span>7a to 11a</span><span><b>Harold B.</b><small>Estelle R. · confirmed</small></span><span class="tag">On</span></div>
+            <div class="sched__row is-hot"><span>8a to 12p</span><span><b>Dolores W.</b><small>Marcus T. · called out 11:42 pm</small></span><span class="tag tag--warn">Open</span></div>
+            <div class="sched__row"><span>9a to 1p</span><span><b>Harold B.</b><small>Gloria F. · not confirmed yet</small></span><span class="tag tag--wait">Waiting</span></div>
+            <div class="sched__row"><span>1p to 5p</span><span><b>Ruth K.</b><small>Anand R. · confirmed</small></span><span class="tag">On</span></div>
+          </div>
+        </div>
+        <div class="stage-pic" aria-hidden="true">
+          <div class="shot"><img src="/assets/app-plan.jpg" width="690" height="590" alt="June's plan for Dolores's Tuesday shift: three caregivers asked first, each with the reason they fit" loading="lazy"></div>
+        </div>
+        <div class="stage-pic" aria-hidden="true">
+          <div class="shot"><video src="/assets/call.mp4" poster="/assets/call.jpg" width="740" height="596" muted loop playsinline preload="metadata" aria-label="June's real call with a caregiver named Elias, transcribed as it happens"></video></div>
+        </div>
+        <div class="stage-pic" aria-hidden="true">
+          <div class="esc" data-ui>
+            <div class="sched__title">Yolanda C. <span>text · 6:58 am</span></div>
+            <p class="msg msg--june">The visit starts at 8 at Dolores's home in Santee. Can you be there?</p>
+            <p class="msg msg--cg">I can but my car is in the shop. Can someone pick me up?</p>
+            <p class="msg msg--june">Let me get Daisy for that. She'll text you in a minute.</p>
+            <div class="esc__hand"><b>Handed to Daisy, your scheduler</b><span>The whole thread is attached, word for word</span></div>
+          </div>
+        </div>
+        <div class="stage-pic" aria-hidden="true">
+          <div class="shot"><img src="/assets/app-thread-pane.jpg" width="718" height="497" alt="June's text thread with Marisol, ending with her booked on Dolores's shift" loading="lazy"></div>
+        </div>
+      </div>
+    </div>
+
+    <section class="ch" data-pic="1" aria-labelledby="for-title">
+      <h2 id="for-title" data-rise>Made for home care agencies.</h2>
+      <p data-rise style="--i:1">June is a teammate for the people who keep the schedule full. It takes the callout work that eats nights and weekends.</p>
+      <dl class="facts" data-rise style="--i:2">
+        <div><dt>Who it's for</dt><dd>Home care agency owners and schedulers</dd></div>
+        <div><dt>What it replaces</dt><dd>Phone tag on callouts, nights and weekends</dd></div>
+        <div><dt>Works with</dt><dd>WellSky. Bookings are written back for you.</dd></div>
+        <div><dt>Price</dt><dd>Early access, from $1,350 a month</dd></div>
+      </dl>
+      <div class="ch__pic" aria-hidden="true">
+        <div class="sched" data-ui>
+          <div class="sched__title">Tomorrow <span>Willowmere Home Care</span></div>
+          <div class="sched__row"><span>7a to 11a</span><span><b>Harold B.</b><small>Estelle R. · confirmed</small></span><span class="tag">On</span></div>
+          <div class="sched__row is-hot"><span>8a to 12p</span><span><b>Dolores W.</b><small>Marcus T. · called out 11:42 pm</small></span><span class="tag tag--warn">Open</span></div>
+          <div class="sched__row"><span>9a to 1p</span><span><b>Harold B.</b><small>Gloria F. · not confirmed yet</small></span><span class="tag tag--wait">Waiting</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ch" data-pic="2" aria-labelledby="ask-title">
+      <h2 id="ask-title" data-rise>June asks the right caregivers first.</h2>
+      <ol class="order">
+        <li data-rise style="--i:1"><div><b>Caregivers who know the client</b><span>They've worked with this client before and they show up.</span></div></li>
+        <li data-rise style="--i:2"><div><b>Reliable caregivers new to the client</b><span>Next, if the first group can't take it.</span></div></li>
+        <li data-rise style="--i:3"><div><b>Everyone else who qualifies</b><span>Weighed by hours already worked that week and the drive.</span></div></li>
+      </ol>
+      <p class="ch__rule" data-rise style="--i:4">Anyone who fails a certification, language, client preference or hours rule is never asked.</p>
+      <div class="ch__pic" aria-hidden="true"><div class="shot"><img src="/assets/app-plan.jpg" width="690" height="590" alt="" loading="lazy"></div></div>
+    </section>
+
+    <section class="ch" data-pic="3" aria-labelledby="call-title">
+      <h2 id="call-title" data-rise>June texts and calls, day and night.</h2>
+      <p class="big" data-rise style="--i:1">24/7/365</p>
+      <p data-rise style="--i:2">Caregivers ask before they say yes. June answers on the spot, then asks for a clear yes or no.</p>
+      <ul class="asks" data-rise style="--i:3">
+        <li>The pay rate</li><li>Who the client is</li><li>What the visit needs</li><li>The drive</li><li>Pets and stairs</li>
+      </ul>
+      <a class="link" href="/demo" data-rise style="--i:4">Watch the whole call</a>
+      <div class="ch__pic" aria-hidden="true"><div class="shot"><video src="/assets/call.mp4" poster="/assets/call.jpg" width="740" height="596" muted loop playsinline preload="metadata"></video></div></div>
+    </section>
+
+    <section class="ch" data-pic="4" aria-labelledby="hand-title">
+      <h2 id="hand-title" data-rise>Your scheduler steps in when it matters.</h2>
+      <p data-rise style="--i:1">June hands the shift to a person, with every word so far attached, when:</p>
+      <ul class="dots2">
+        <li data-rise style="--i:2">Every eligible caregiver was asked and nobody said yes</li>
+        <li data-rise style="--i:3">The shift is about to start and is still open</li>
+        <li data-rise style="--i:4">A caregiver would go past an hours limit</li>
+        <li data-rise style="--i:5">A caregiver asks for a person</li>
+      </ul>
+      <div class="ch__pic" aria-hidden="true">
+        <div class="esc" data-ui>
+          <div class="sched__title">Yolanda C. <span>text · 6:58 am</span></div>
+          <p class="msg msg--cg">I can but my car is in the shop. Can someone pick me up?</p>
+          <p class="msg msg--june">Let me get Daisy for that. She'll text you in a minute.</p>
+          <div class="esc__hand"><b>Handed to Daisy, your scheduler</b><span>The whole thread is attached, word for word</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ch" data-pic="5" aria-labelledby="ws-title">
+      <h2 id="ws-title" data-rise>The booking lands in WellSky.</h2>
+      <p data-rise style="--i:1">The caregiver gets the address and visit details by text. The shift is written back to WellSky, and the whole thread stays on it.</p>
+      <div class="ch__act" data-rise style="--i:2"><a class="btn" href="/early-access">Join early access</a><a class="link" href="/how-it-works">See how June works</a></div>
+      <a class="demo-card" href="/demo" data-rise style="--i:3">
+        <span class="shot"><img src="/assets/june-demo-cover.jpg" width="400" height="225" alt="" loading="lazy"></span>
+        <span><b>Watch June fill a shift</b><span>From callout to booking, start to finish</span></span>
+      </a>
+      <div class="ch__pic" aria-hidden="true"><div class="shot"><img src="/assets/app-thread-pane.jpg" width="718" height="497" alt="" loading="lazy"></div></div>
+    </section>
+  </div>
+
+  <section class="pace" id="pace" aria-labelledby="pace-title">
+    <div class="pace__say">
+      <h2 id="pace-title" class="say-swap">Hours out, June texts first.</h2>
+      <p id="pace-text" class="say-swap">A call only goes out if nobody replies. Routine fills never ring a phone at dinner.</p>
+    </div>
+    <div class="pace__see">
+      <div class="log" data-ui id="log" aria-live="polite">
+        <div class="sched__title">Outreach for Dolores W. <span>Tue 8a to 12p</span></div>
+        <div class="log__row"><span class="log__when">11:42p</span><span><b>Text to Marisol S.</b><small>Knows Dolores, 10 min away</small></span><span class="tag">Sent</span></div>
+        <div class="log__row"><span class="log__when">11:42p</span><span><b>Text to Anand R.</b><small>Reliable, new to Dolores</small></span><span class="tag">Sent</span></div>
+        <div class="log__row"><span class="log__when">12:12a</span><span><b>Call to Anand R.</b><small>Only if no reply by then</small></span><span class="tag tag--wait">Queued</span></div>
+      </div>
+    </div>
+    <div class="pace__rail">
+      <label for="pace-range" class="sr-only">How soon the shift starts</label>
+      <div class="pace__track"><span class="pace__fill" id="pace-fill"></span>
+      <input id="pace-range" type="range" min="0" max="2" step="1" value="0" aria-valuetext="Hours out"></div>
+      <ul class="pace__names">
+        <li><button type="button" data-pace="0" aria-pressed="true">Hours out</button></li>
+        <li><button type="button" data-pace="1" aria-pressed="false">Getting close</button></li>
+        <li><button type="button" data-pace="2" aria-pressed="false">Starts soon</button></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="team" aria-labelledby="team-title">
+    <h2 id="team-title" data-rise>The team <span>behind June.</span></h2>
+    <p class="team__lede" data-rise style="--i:1">June is built by ClearDesk, which staffs and runs back office teams for home care agencies across the country. These are ClearDesk's numbers.</p>
+    <div class="team__pic" data-rise style="--i:2"><img src="/assets/cleardesk-room.jpg" width="900" height="1154" alt="The ClearDesk team in a training session" loading="lazy"></div>
+    <table data-rise style="--i:3">
+      <tbody>
+        <tr><td>500+</td><td>Active clients</td><td>ClearDesk</td></tr>
+        <tr><td>450+</td><td>Home care agencies supported</td><td>ClearDesk</td></tr>
+        <tr><td>4.9 of 5</td><td>Client satisfaction after placement</td><td>ClearDesk clients</td></tr>
+        <tr><td>Forbes</td><td>Where ClearDesk's approach was featured</td><td>Press</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="letter" aria-labelledby="letter-title">
+    <div class="letter__face" data-rise><svg viewBox="-78 -52 160 172" aria-hidden="true"><path d="M 3,-6 C -20,-42 -66,-28 -68,10 C -70,48 -36,66 -2,110 C 40,70 74,44 72,6 C 70,-32 24,-42 3,-6 Z" fill="#E8582F"/></svg></div>
+    <h2 id="letter-title" data-rise style="--i:1">Why ClearDesk built June.</h2>
+    <p data-rise style="--i:2">We run scheduling for home care agencies. The hardest part of that job is the callout: a caregiver can't make it, and someone has to find the next person who can go.</p>
+    <p data-rise style="--i:3">Most of that work is the same every time. Check who fits, text, wait, call, ask again. <mark>June does that part, day and night,</mark> so your schedulers keep the judgment calls.</p>
+    <p data-rise style="--i:4">We're opening June to a small group of agencies first, so we can set it up with each of you.</p>
+    <p class="letter__sign" data-rise style="--i:5">The ClearDesk team</p>
+    <p class="letter__role">The people behind June</p>
+    <blockquote class="quote" data-rise>
+      <p>Our scheduler has consistently outperformed just about everyone we had doing this work before.</p>
+      <footer><b>Tom M.</b>, Owner, Interim HealthCare, on his ClearDesk scheduler</footer>
+    </blockquote>
+  </section>
+
+  <section class="close" aria-labelledby="close-title">
+    <div class="close__say">
+      <h2 id="close-title">Start with your next callout.</h2>
+      <p data-rise style="--i:1">We're opening a small group of pilot teams. Leave your email and agency, and we'll reach out to set June up on your schedule.</p>
+    </div>
+    <form class="dialog" data-ui action="/early-access" method="get" data-rise style="--i:2">
+      <h3>Join early access</h3>
+      <p>Takes a minute. No spam.</p>
+      <label for="cta-email">Work email</label>
+      <input id="cta-email" name="email" type="email" autocomplete="email" required>
+      <label for="cta-company">Agency name</label>
+      <input id="cta-company" name="company" type="text" autocomplete="organization">
+      <label id="cta-ehr">You schedule in</label>
+      <div class="seg" role="radiogroup" aria-labelledby="cta-ehr">
+        <input type="radio" name="ehr" id="ehr-ws" value="WellSky" checked><label for="ehr-ws">WellSky</label>
+        <input type="radio" name="ehr" id="ehr-other" value="Another system"><label for="ehr-other">Another system</label>
+      </div>
+      <button class="btn" type="submit">Continue</button>
+    </form>
+  </section>
+</main>
+
+<footer class="foot">
+  <span>Round the clock shift coverage for home care</span>
+  <nav aria-label="Footer">
+    <a href="/how-it-works">How it works</a>
+    <a href="/demo">Watch demo</a>
+    <a href="/early-access">Early access</a>
+    <a href="/terms">Terms</a>
+  </nav>
+  <span class="foot__end"><span>© 2026 June</span><a href="/privacy">Privacy</a></span>
+</footer>
+
+<script type="module" src="/assets/site.js"></script>
+<script type="module">
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const wide = matchMedia("(min-width: 1001px)");
+
+// thread runs on the visitor's own clock
+const fmt = (d) => d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }).toLowerCase();
+const now = new Date();
+document.getElementById("clock").textContent = fmt(now);
+document.querySelectorAll("[data-t]").forEach((el) => { el.textContent = fmt(new Date(now.getTime() + Number(el.dataset.t) * 60000)); });
+const body = document.getElementById("thread-body");
+const msgs = [...body.children];
+if (!reduce) {
+  const typing = Object.assign(document.createElement("p"), { className: "msg msg--typing", innerHTML: "<i></i><i></i><i></i>" });
+  typing.setAttribute("aria-hidden", "true");
+  let step = 0, timer;
+  const play = () => {
+    if (step === 0) { msgs.forEach((m) => m.remove()); body.append(msgs[0], msgs[1], msgs[2], msgs[3]); step = 4; timer = setTimeout(play, 1600); return; }
+    if (step > msgs.length - 1) { timer = setTimeout(() => { step = 0; play(); }, 6000); return; }
+    const next = msgs[step];
+    typing.style.alignSelf = next.classList.contains("msg--cg") ? "flex-start" : "flex-end";
+    if (!next.classList.contains("msg--done")) body.append(typing);
+    timer = setTimeout(() => { typing.remove(); body.append(next); step += 1; timer = setTimeout(play, 1500); }, next.classList.contains("msg--done") ? 400 : 1300);
+  };
+  play();
+  document.addEventListener("visibilitychange", () => { clearTimeout(timer); if (!document.hidden) play(); });
+}
+
+// the stage shows the picture of whichever chapter is being read
+const pics = [...document.querySelectorAll(".stage-pic")];
+const stageClip = document.querySelector(".stage video");
+let on = 0;
+function stage(i) {
+  if (i === on) return;
+  on = i;
+  pics.forEach((p, k) => { p.classList.toggle("is-on", k === i); p.setAttribute("aria-hidden", String(k !== i)); });
+  if (i === 3 && !reduce) stageClip.play().catch(() => {}); else stageClip.pause();
+}
+if ("IntersectionObserver" in window) {
+  const io = new IntersectionObserver((es) => { for (const e of es) if (e.isIntersecting && wide.matches) stage(Number(e.target.dataset.pic)); }, { rootMargin: "-45% 0px -45% 0px" });
+  document.querySelectorAll("[data-pic]").forEach((el) => io.observe(el));
+  const mobileClip = document.querySelector(".ch__pic video");
+  new IntersectionObserver(([e]) => { e.isIntersecting && !reduce ? mobileClip.play().catch(() => {}) : mobileClip.pause(); }).observe(mobileClip);
+}
+
+// pace: slider and names set how soon the shift starts
+const pace = [
+  ["Hours out, June texts first.", "A call only goes out if nobody replies. Routine fills never ring a phone at dinner.",
+    [["11:42p", "Text to Marisol S.", "Knows Dolores, 10 min away", "Sent", ""], ["11:42p", "Text to Anand R.", "Reliable, new to Dolores", "Sent", ""], ["12:12a", "Call to Anand R.", "Only if no reply by then", "Queued", "wait"]]],
+  ["Getting close, June texts and calls.", "Both go out together, so the shift reaches caregivers wherever they are.",
+    [["5:40a", "Text to Marisol S.", "Knows Dolores, 10 min away", "Sent", ""], ["5:40a", "Call to Marisol S.", "At the same time as the text", "Ringing", "wait"], ["5:41a", "Text and call to Gloria F.", "Reliable, 14 min away", "Sent", ""]]],
+  ["Starts soon, June calls first.", "The call comes first with a text behind it. Anything but a clear yes or no puts your scheduler on the line.",
+    [["7:20a", "Call to Marisol S.", "Visit starts in 40 minutes", "Ringing", "wait"], ["7:20a", "Text to Marisol S.", "Right behind the call", "Sent", ""], ["7:22a", "Daisy, your scheduler", "On the line if nobody says yes", "Ready", "warn"]]],
+];
+const names = ["Hours out", "Getting close", "Starts soon"];
+const range = document.getElementById("pace-range");
+const ptitle = document.getElementById("pace-title");
+const ptext = document.getElementById("pace-text");
+const log = document.getElementById("log");
+const btns = [...document.querySelectorAll("[data-pace]")];
+let cur = 0;
+function setPace(i) {
+  if (i === cur) return;
+  cur = i;
+  range.value = i;
+  range.setAttribute("aria-valuetext", names[i]);
+  document.getElementById("pace-fill").style.setProperty("--fill", i / 2);
+  btns.forEach((b, k) => b.setAttribute("aria-pressed", String(k === i)));
+  [ptitle, ptext].forEach((el) => el.classList.add("is-out"));
+  log.classList.add("is-out");
+  setTimeout(() => {
+    ptitle.textContent = pace[i][0];
+    ptext.textContent = pace[i][1];
+    log.querySelectorAll(".log__row").forEach((row, k) => {
+      const [when, who, why, tag, kind] = pace[i][2][k];
+      row.innerHTML = `<span class="log__when">${when}</span><span><b>${who}</b><small>${why}</small></span><span class="tag${kind ? " tag--" + kind : ""}">${tag}</span>`;
+    });
+    [ptitle, ptext, log].forEach((el) => el.classList.remove("is-out"));
+  }, reduce ? 0 : 240);
+}
+range.addEventListener("input", () => setPace(Number(range.value)));
+btns.forEach((b) => b.addEventListener("click", () => setPace(Number(b.dataset.pace))));
+</script>
+</body>
+</html>

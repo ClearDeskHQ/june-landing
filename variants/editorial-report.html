@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>June fills shifts after a callout</title>
+<meta name="description" content="For home care agencies. June texts and calls your qualified caregivers, books whoever says yes in WellSky, and brings in your scheduler when a person is needed.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+/* the printed annual: one axis at 42%, solid blocks of colour, a board on top */
+:root { --axis: 42%; --tile: 8px; }
+.axis { display: grid; grid-template-columns: var(--axis) minmax(0, 1fr); column-gap: 48px; padding-inline: var(--margin); }
+.axis > * { grid-column: 2; }
+.axis > .aside { grid-column: 1; }
+@media (max-width: 900px) { .axis { grid-template-columns: 1fr; } .axis > *, .axis > .aside { grid-column: 1; } }
+
+/* board */
+.board { padding: var(--tile); display: grid; gap: var(--tile); grid-template-columns: 7fr 5fr; grid-template-rows: 60px minmax(0, 1fr) minmax(0, .62fr); height: 100svh; min-height: 640px; }
+.tile { border-radius: 8px; overflow: hidden; position: relative; }
+.top { grid-column: 1 / -1; display: grid; grid-template-columns: 132px 1fr auto; gap: var(--tile); }
+.top__logo { background: var(--night); display: grid; place-items: center; }
+.top__logo img { width: 72px; height: auto; }
+.top__links { background: var(--panel); display: flex; align-items: center; gap: 32px; padding-left: calc(50% - 132px); font-size: var(--step-small); }
+.top__links a { text-decoration: none; color: var(--ink); }
+.top__links a:hover { color: var(--accent); }
+.top__act { background: var(--night); display: grid; place-items: center; padding: 0 9px; }
+.lead { grid-row: 2 / span 2; background: var(--ui); padding: clamp(28px, 4vw, 56px); display: grid; align-content: center; gap: 20px; }
+.lead h1 { font-size: clamp(2.25rem, 1rem + 2.1vw, 3rem); line-height: 1.08; max-width: 19ch; }
+.lead__sub { font-size: var(--step-body); line-height: 1.45; color: var(--ink-2); max-width: 40ch; }
+.hform { display: flex; gap: 6px; padding: 6px; background: var(--ground); border-radius: 999px; max-width: 540px; margin-top: 8px; }
+.hform:focus-within { outline: 2px solid var(--accent); outline-offset: 3px; }
+.hform input { flex: 1; min-width: 0; border: 0; background: transparent; padding: 0 8px 0 20px; font: inherit; font-size: 1rem; color: var(--ink); }
+.hform input::placeholder { color: var(--ink-2); }
+.hform input:focus { outline: none; }
+.steps { list-style: none; margin: 16px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--tile); }
+.steps li { background: var(--ground); border-radius: 8px; padding: 14px 16px; display: grid; gap: 6px; font-size: 1rem; line-height: 1.35; font-weight: 500; }
+.steps b { width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; font-size: var(--step-small); font-weight: 600; }
+.pic { background: var(--night); }
+.pic img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: left top; }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: var(--tile); }
+.say { padding: 24px; font-size: var(--step-lead); line-height: 1.3; font-weight: 500; }
+.say small { display: block; margin-top: 12px; font-size: 1rem; font-weight: 400; line-height: 1.45; }
+.say--dark { background: var(--night); color: var(--night-ink); }
+.say--dark small { color: var(--night-ink-2); }
+.say--accent { background: var(--accent); color: var(--accent-ink); }
+.say--accent a { color: inherit; }
+/* shutter: the one loud moment */
+.js .pic { clip-path: inset(0 0 0 100%); }
+.js .pic img { transform: scale(1.12); }
+.js .pic.is-open { clip-path: inset(0); transition: clip-path 1.1s var(--ease); }
+.js .pic.is-open img { transform: none; transition: transform 1.4s var(--ease); }
+@media (prefers-reduced-motion: reduce) { .js .pic { clip-path: none; } .js .pic img { transform: none; } }
+
+@media (max-width: 900px) {
+  .board { grid-template-columns: 1fr; grid-template-rows: none; gap: 6px; padding: 6px; height: auto; min-height: 0; }
+  .top { grid-template-columns: 1fr auto; height: 60px; gap: 6px; }
+  .top__logo { justify-items: start; padding-left: 18px; }
+  .top__links { display: none; }
+  .lead { grid-row: auto; padding: 28px 20px 24px; align-content: start; gap: 16px; }
+  .lead h1 { font-size: clamp(1.875rem, 7.8vw, 2.5rem); }
+  .lead__sub { font-size: 1.0625rem; }
+  .hform { flex-direction: column; border-radius: 24px; padding: 8px; }
+  .hform input { min-height: 52px; padding: 0 14px; }
+  .hform .btn { width: 100%; }
+  .steps { grid-template-columns: 1fr; margin-top: 4px; }
+  .steps li { grid-template-columns: 28px 1fr; align-items: center; gap: 12px; padding: 10px 14px; }
+  .pic { aspect-ratio: 4 / 3; }
+  .say { padding: 20px; font-size: 1.125rem; }
+}
+
+/* sections */
+.page { padding-top: clamp(112px, 12vw, 176px); }
+.page h2 { font-size: var(--step-section); max-width: 18ch; }
+.page .aside { color: var(--ink-2); font-size: var(--step-small); align-self: start; padding-top: 14px; }
+
+/* showcase: one shift row, three states */
+.rows { display: grid; gap: 56px; margin-top: 64px; }
+.row-grp { display: grid; grid-template-columns: var(--axis) minmax(0, 1fr); column-gap: 48px; align-items: center; margin-inline: calc(var(--margin) * -1); padding-inline: var(--margin); }
+.row-grp .state { text-align: right; font-size: var(--step-lead); color: var(--ink-2); }
+.srow { width: min(640px, 100%); padding: 18px 20px; display: grid; grid-template-columns: 120px 1fr auto; gap: 16px; align-items: center; font-size: 15px; line-height: 1.4; }
+.srow__time { font-weight: 600; }
+.srow__who b { display: block; font-weight: 600; }
+.srow__who span { color: var(--ui-ink-2); }
+.pill { font-size: var(--step-small); font-weight: 600; padding: 4px 12px; border-radius: 999px; white-space: nowrap; }
+.pill--open { background: #fde0d5; color: #9d3414; }
+.pill--held { background: #f3ecd9; color: #6e5313; }
+.pill--ok { background: #e3f3e8; color: #1d6b3d; }
+.srow__acts { grid-column: 2 / -1; display: flex; gap: 10px; flex-wrap: wrap; }
+.uibtn { font: 500 var(--step-small) "Poppins", system-ui, sans-serif; min-height: 40px; padding: 0 16px; border-radius: 999px; border: 0; cursor: pointer; background: var(--ui-ink); color: var(--ui); transition: transform .15s var(--ease), background-color .15s var(--ease); }
+.uibtn:hover { background: #000; }
+.uibtn:active { transform: scale(.97); }
+.uibtn--soft { background: var(--ui-2); color: var(--ui-ink); }
+.uibtn--soft:hover { background: var(--ui-line); }
+.srow.is-hover { outline: 2px solid var(--accent); outline-offset: -2px; }
+.srow[data-done] .srow__acts { display: none; }
+@media (max-width: 900px) {
+  .row-grp { grid-template-columns: 1fr; row-gap: 10px; margin-inline: 0; padding-inline: 0; }
+  .row-grp .state { text-align: left; order: 2; font-size: 1.0625rem; }
+  .srow { grid-template-columns: 1fr auto; }
+  .srow__time { grid-column: 1 / -1; }
+  .srow__acts { grid-column: 1 / -1; }
+  .rows { gap: 48px; margin-top: 40px; }
+}
+
+/* features: a fixed text, live controls */
+.live { margin-top: clamp(112px, 12vw, 176px); display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto 1fr; }
+.live__title { grid-column: 2; grid-row: 1; font-size: var(--step-section); padding: 72px var(--margin) 0 clamp(32px, 5vw, 72px); }
+.live__field { grid-column: 1; grid-row: 1 / span 2; align-self: start; position: sticky; top: 0; height: 100svh; background: var(--night); display: grid; place-items: center; padding: 32px; }
+.out { width: min(420px, 100%); overflow: hidden; }
+.out__top { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 18px; background: var(--ui-2); font-size: 15px; }
+.out__top b { font-weight: 600; display: block; }
+.out__top span { color: var(--ui-ink-2); font-size: var(--step-small); }
+.out__body { padding: 18px; display: grid; gap: 10px; font-size: 15px; line-height: 1.45; min-height: 300px; align-content: start; }
+.msg { max-width: 86%; padding: 10px 13px; border-radius: 14px; transition: opacity .25s var(--ease); }
+.msg--june { justify-self: end; background: var(--accent); color: #fff; border-bottom-right-radius: 4px; }
+.msg--cg { justify-self: start; background: var(--ui-2); border-bottom-left-radius: 4px; }
+.out__end { margin-top: 6px; justify-self: start; }
+.live__read { grid-column: 2; grid-row: 2; padding: 0 var(--margin) 22svh clamp(32px, 5vw, 72px); }
+.blk { min-height: 52svh; padding-top: 22svh; display: grid; align-content: start; gap: 14px; max-width: 44ch; }
+.blk:first-of-type { padding-top: 56px; }
+.blk h3 { font-size: var(--step-lead); line-height: 1.3; }
+.blk p { color: var(--ink); }
+.seg { display: inline-flex; flex-wrap: wrap; gap: 4px; padding: 4px; background: var(--panel); border-radius: 999px; justify-self: start; margin-top: 6px; }
+.seg button { font: 500 var(--step-small) "Poppins", system-ui, sans-serif; min-height: 44px; padding: 0 18px; border: 0; border-radius: 999px; background: transparent; color: var(--ink); cursor: pointer; transition: background-color .2s var(--ease), color .2s var(--ease); }
+.seg button:hover { background: var(--panel-2); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--ground); }
+@media (max-width: 900px) {
+  .live { grid-template-columns: 1fr; grid-template-rows: none; }
+  .live__title, .live__field, .live__read { grid-column: 1; grid-row: auto; }
+  .live__title { padding: 0 20px 24px; }
+  .live__field { height: 46svh; z-index: 2; padding: 16px; align-items: start; overflow: hidden; }
+  .out__body { min-height: 0; }
+  .live__read { padding: 16px 20px 64px; }
+  .blk { min-height: 0; padding-top: 48px; }
+  .seg { display: flex; }
+  .seg button { flex: 1; }
+}
+
+/* how it works: what comes in, what June sends back */
+.calls { margin-top: 56px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 88px; min-width: 0; }
+.ex { max-width: 560px; min-width: 0; }
+.ex { display: grid; gap: 16px; }
+.ex__say { font-size: var(--step-lead); font-weight: 500; line-height: 1.3; }
+.ex__in { background: var(--panel); border-radius: 8px; padding: 20px; display: grid; gap: 4px; }
+.ex__in span { font-size: var(--step-small); color: var(--ink-2); }
+.ex__out { margin-left: 56px; padding: 16px; display: grid; gap: 10px; font-size: 15px; line-height: 1.45; }
+.ex__out .msg { max-width: 100%; }
+.ex__note { font-size: var(--step-small); color: var(--ui-ink-2); }
+.ex--wide { max-width: none; }
+.ex--wide .shot { width: 100%; max-width: 760px; }
+@media (max-width: 900px) {
+  .ex__out { margin-left: 0; }
+  .calls { gap: 64px; }
+}
+
+/* mid action */
+.ask { margin: clamp(112px, 12vw, 176px) var(--tile) 0; background: var(--panel); border-radius: 8px; padding: clamp(48px, 6vw, 88px) var(--margin); display: grid; grid-template-columns: var(--axis) minmax(0, 1fr); column-gap: 48px; row-gap: 20px; align-items: end; }
+.ask h2 { font-size: var(--step-section); }
+.ask p { color: var(--ink); max-width: 40ch; }
+.ask .hform { background: var(--ui); }
+@media (max-width: 900px) { .ask { grid-template-columns: 1fr; margin-inline: 6px; padding-inline: 20px; } }
+
+/* letter and the team */
+.letter { max-width: 38ch; }
+.letter__open { font-size: var(--step-lead); font-weight: 500; line-height: 1.35; margin-top: 48px; }
+.letter__by { margin-top: 40px; font-size: 1rem; }
+.letter__by span { display: block; color: var(--ink-2); }
+.team { margin-top: 72px; }
+.team p { max-width: 52ch; }
+.figs__label { margin-top: 28px; font-weight: 500; }
+.figs { margin: 16px 0 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 32px; }
+.figs dt { font-size: var(--step-section); font-weight: 600; letter-spacing: -0.03em; line-height: 1.1; }
+.figs dd { margin: 4px 0 0; color: var(--ink-2); font-size: 1rem; }
+
+/* price table */
+.price { margin-top: 56px; margin-inline: var(--margin); overflow-x: auto; }
+.price table { width: 100%; border-collapse: collapse; font-size: var(--step-lead); line-height: 1.35; }
+.price th, .price td { text-align: left; vertical-align: top; padding: 20px 24px; }
+.price thead th { font-size: var(--step-section); font-weight: 600; letter-spacing: -0.03em; line-height: 1.1; padding-top: 32px; }
+.price thead th small { display: block; font-size: var(--step-lead); font-weight: 400; letter-spacing: 0; margin-top: 8px; }
+.price tbody th { font-weight: 500; width: 30%; }
+.price td { width: 35%; }
+.price tbody tr:nth-child(odd) { background: var(--panel); }
+.price .is-june { background: var(--accent); color: var(--accent-ink); }
+.price tbody tr:nth-child(odd) .is-june { background: #b0401c; }
+.price .last td, .price .last th { background: transparent; }
+.price .last .is-june { background: var(--accent); padding-bottom: 32px; }
+.price .corner { font-size: var(--step-lead); font-weight: 500; letter-spacing: 0; vertical-align: bottom; }
+.fine { margin: 20px var(--margin) 0; font-size: var(--step-small); color: var(--ink-2); max-width: 70ch; }
+@media (max-width: 1100px) { .price thead th { font-size: var(--step-lead); } }
+@media (max-width: 760px) {
+  .price table, .price tbody, .price tr, .price th, .price td { display: block; width: auto !important; }
+  .price thead { display: none; }
+  .price table { font-size: 1.0625rem; }
+  .price tbody tr { background: none !important; padding: 18px 0; }
+  .price tbody th { padding: 0 0 8px; color: var(--ink-2); }
+  .price td { padding: 10px 16px; border-radius: 8px; }
+  .price td + td { margin-top: 6px; background: var(--panel); }
+  .price td::before { content: attr(data-label); display: block; font-size: var(--step-small); font-weight: 600; }
+  .price .last th { display: none; }
+}
+
+/* questions: a band each */
+.faq { margin-top: clamp(112px, 12vw, 176px); }
+.faq__head { min-height: 40svh; background: var(--accent); color: var(--accent-ink); display: flex; align-items: flex-end; padding: 0 var(--margin) 40px; }
+.faq__head h2 { font-size: var(--step-display); line-height: 1.04; }
+.qa { display: grid; grid-template-columns: 5fr 1fr 6fr; padding: 56px var(--margin); }
+.qa:nth-child(even) { background: var(--panel); }
+.qa h3 { font-size: var(--step-lead); line-height: 1.3; }
+.qa p { grid-column: 3; max-width: 52ch; }
+@media (max-width: 760px) {
+  .faq__head { min-height: 30svh; }
+  .qa { grid-template-columns: 1fr; gap: 12px; padding: 32px 20px; }
+  .qa p { grid-column: 1; }
+}
+
+/* close: three pictures, then the field */
+.strip { margin-top: clamp(112px, 12vw, 176px); display: grid; grid-template-columns: repeat(3, 1fr); }
+.strip > * { width: 100%; height: 40svh; object-fit: cover; object-position: left top; }
+.close { background: var(--night); color: var(--night-ink); padding: clamp(56px, 7vw, 104px) var(--margin); display: grid; grid-template-columns: var(--axis) minmax(0, 1fr); column-gap: 48px; row-gap: 20px; align-items: end; }
+.close h2 { font-size: var(--step-section); }
+.close p { color: var(--night-ink-2); max-width: 40ch; }
+.close .hform { background: var(--ui); }
+@media (max-width: 760px) {
+  .strip { grid-template-columns: 1fr 1fr; }
+  .strip > :first-child { grid-column: 1 / -1; height: auto; aspect-ratio: 4 / 3; }
+  .strip > * { height: auto; aspect-ratio: 1; }
+  .close { grid-template-columns: 1fr; }
+}
+
+/* footer: the address is the headline */
+.contact { background: var(--accent); color: var(--accent-ink); min-height: 56svh; padding: 40px var(--margin) 28px; display: grid; grid-template-rows: auto 1fr auto auto; gap: 24px; }
+.contact__top { display: flex; justify-content: space-between; gap: 24px; font-size: var(--step-small); }
+.contact__top p { max-width: 52ch; }
+.contact a { color: inherit; }
+.contact__mail { align-self: end; font-size: clamp(2.5rem, 0.4rem + 7.6vw, 8rem); font-weight: 600; letter-spacing: -0.04em; line-height: 1; text-decoration: none; overflow-wrap: anywhere; }
+.contact__mail:hover { text-decoration: underline; text-decoration-thickness: 4px; text-underline-offset: 8px; }
+.contact__meta { display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; font-size: var(--step-small); }
+.contact__meta nav { display: flex; gap: 20px; flex-wrap: wrap; }
+.contact__meta a { text-decoration: none; }
+.contact__meta a:hover { text-decoration: underline; }
+.contact__meta span:last-child { justify-self: end; }
+@media (max-width: 760px) {
+  .contact { min-height: 0; }
+  .contact__top { flex-direction: column; }
+  .contact__mail { font-size: 11vw; }
+  .contact__meta { grid-template-columns: 1fr; }
+  .contact__meta span:last-child { justify-self: start; }
+}
+</style>
+</head>
+<body>
+<header class="board">
+  <div class="top">
+    <a class="tile top__logo" href="/" aria-label="June home"><img src="/assets/june-logo-light.svg" alt="June" width="92" height="64"></a>
+    <nav class="tile top__links" aria-label="Main">
+      <a href="/how-it-works">How it works</a>
+      <a href="/demo">Watch demo</a>
+      <a href="#price">Pricing</a>
+      <a href="#faq">Questions</a>
+    </nav>
+    <div class="tile top__act"><a class="btn btn--sm" href="/early-access">Join early access</a></div>
+  </div>
+
+  <div class="tile lead">
+    <h1>June fills shifts after a callout.</h1>
+    <p class="lead__sub">For home care agencies. June texts and calls your qualified caregivers, books whoever says yes in WellSky, and brings in your scheduler when a person is needed.</p>
+    <form class="hform" action="/early-access" method="get">
+      <label class="sr-only" for="e-hero">Work email</label>
+      <input id="e-hero" name="email" type="email" autocomplete="email" placeholder="Your work email" required>
+      <button class="btn" type="submit">Join early access</button>
+    </form>
+    <ol class="steps" aria-label="How it works in three steps">
+      <li><b>1</b>A caregiver calls out</li>
+      <li><b>2</b>June texts and calls your bench</li>
+      <li><b>3</b>The shift is booked in WellSky</li>
+    </ol>
+  </div>
+
+  <div class="tile pic" id="shutter"><img src="/assets/app-plan.jpg" width="1380" height="1180" alt="June's plan for Dolores's Tuesday shift: the caregivers it asks first, each with the reason they fit and the drive"></div>
+
+  <div class="split">
+    <p class="tile say say--dark">For agency owners and schedulers.<small>It replaces the phone tag after every callout, nights and weekends included.</small></p>
+    <p class="tile say say--accent">Early access from $1,350 a month.<small>Works with WellSky. <a href="#price">See pricing</a></small></p>
+  </div>
+</header>
+
+<main>
+  <section class="page axis" aria-labelledby="show-title">
+    <p class="aside">Tuesday, 8 am to noon. Dolores W., personal care.</p>
+    <h2 id="show-title">One open shift, start to finish.</h2>
+    <div class="rows" style="grid-column:1 / -1">
+      <div class="row-grp" data-rise>
+        <span class="state">Called out</span>
+        <div class="srow" data-ui>
+          <span class="srow__time">Tue 8a to 12p</span>
+          <span class="srow__who"><b>Dolores W.</b><span>Marcus T. called out at 11:42 pm</span></span>
+          <span class="pill pill--open">Open</span>
+        </div>
+      </div>
+      <div class="row-grp" data-rise style="--i:1">
+        <span class="state">Held for you</span>
+        <div class="srow is-hover" data-ui id="live-row">
+          <span class="srow__time">Tue 8a to 12p</span>
+          <span class="srow__who"><b>Dolores W.</b><span id="live-line">Marisol R. wrote "yeah maybe if my sister can drive me"</span></span>
+          <span class="pill pill--held" id="live-pill">Held</span>
+          <span class="srow__acts"><button class="uibtn" type="button" id="live-book">Confirm Marisol</button><button class="uibtn uibtn--soft" type="button" id="live-skip">Keep asking</button></span>
+        </div>
+      </div>
+      <div class="row-grp" data-rise style="--i:2">
+        <span class="state">Booked</span>
+        <div class="srow" data-ui>
+          <span class="srow__time">Tue 8a to 12p</span>
+          <span class="srow__who"><b>Dolores W.</b><span>Marisol R. booked at 11:46 pm, written to WellSky</span></span>
+          <span class="pill pill--ok">Booked</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="live" aria-labelledby="live-title">
+    <h2 id="live-title" class="live__title">How June asks a caregiver.</h2>
+    <div class="live__field">
+      <div class="out" data-ui aria-live="polite">
+        <div class="out__top"><span><b>June and Marisol</b><span id="o-chan">Text first</span></span><span id="o-when">Tomorrow, 8a</span></div>
+        <div class="out__body">
+          <p class="msg msg--june" id="o-ask">Hi Marisol, it's June from Willowmere Home Care. A shift opened tomorrow, 8 to noon, ten minutes from you. Want it?</p>
+          <p class="msg msg--cg" id="o-reply">Yes I can take it</p>
+          <span class="pill pill--ok out__end" id="o-end">Booked in WellSky</span>
+        </div>
+      </div>
+    </div>
+    <div class="live__read">
+      <div class="blk" data-rise>
+        <h3>June matches the pace to the clock.</h3>
+        <p>A shift twelve hours out gets a text first. One starting soon gets a call first, with a text as backup.</p>
+        <div class="seg" role="group" aria-label="When the shift starts" data-seg="pace">
+          <button type="button" aria-pressed="true" data-v="hours">Hours out</button>
+          <button type="button" aria-pressed="false" data-v="close">Getting close</button>
+          <button type="button" aria-pressed="false" data-v="soon">Starts soon</button>
+        </div>
+      </div>
+      <div class="blk" data-rise>
+        <h3>June writes in the caregiver's language.</h3>
+        <p>Each caregiver hears from June in the language they use, by text and on the phone.</p>
+        <div class="seg" role="group" aria-label="Language" data-seg="lang">
+          <button type="button" aria-pressed="true" data-v="en">English</button>
+          <button type="button" aria-pressed="false" data-v="es">Spanish</button>
+        </div>
+      </div>
+      <div class="blk" data-rise>
+        <h3>June reads every reply before it books.</h3>
+        <p>A clear yes is booked. A maybe is held for your scheduler. A question gets an answer.</p>
+        <div class="seg" role="group" aria-label="What Marisol replies" data-seg="reply">
+          <button type="button" aria-pressed="true" data-v="yes">Clear yes</button>
+          <button type="button" aria-pressed="false" data-v="maybe">A maybe</button>
+          <button type="button" aria-pressed="false" data-v="ask">A question</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page axis" id="how" aria-labelledby="how-title">
+    <p class="aside">Every message here is the kind June sends and reads on a real night.</p>
+    <h2 id="how-title">How a callout gets covered.</h2>
+    <div class="calls">
+      <div class="ex" data-rise>
+        <p class="ex__say">First, a caregiver calls out.</p>
+        <div class="ex__in"><span>Marcus texts June at 11:42 pm</span>Hey I'm sick, can't make it tomorrow 8am at Dolores. Sorry</div>
+        <div class="ex__out" data-ui>
+          <p class="msg msg--june">Sorry you're sick, Marcus. Rest up. I'll find someone for Dolores.</p>
+          <span class="ex__note">Shift opened. June starts asking the caregivers who fit.</span>
+        </div>
+      </div>
+      <div class="ex" data-rise>
+        <p class="ex__say">Then, June answers what caregivers ask.</p>
+        <div class="ex__in"><span>Marisol replies at 11:44 pm</span>What's the client like?</div>
+        <div class="ex__out" data-ui>
+          <p class="msg msg--june">Dolores is 84 and six weeks out of a hip replacement. Personal care, two cats, no dog. It pays $20.50 an hour.</p>
+        </div>
+      </div>
+      <div class="ex ex--wide" data-rise>
+        <p class="ex__say">Finally, the shift is booked in WellSky.</p>
+        <div class="ex__in"><span>Marisol replies at 11:46 pm</span>Yes I can take it</div>
+        <div class="shot"><img src="/assets/app-thread-pane.jpg" width="1436" height="994" alt="June's text thread with Marisol in the webapp, ending with her booked on Dolores's shift" loading="lazy"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ask" aria-labelledby="ask-title">
+    <h2 id="ask-title">Put June on your next callout.</h2>
+    <div style="display:grid;gap:20px">
+      <p>We're opening a small group of pilot agencies next month. Leave your email and we'll reach out.</p>
+      <form class="hform" action="/early-access" method="get">
+        <label class="sr-only" for="e-mid">Work email</label>
+        <input id="e-mid" name="email" type="email" autocomplete="email" placeholder="Your work email" required>
+        <button class="btn" type="submit">Join early access</button>
+      </form>
+    </div>
+  </section>
+
+  <section class="page axis" aria-labelledby="team-title">
+    <p class="aside">ClearDesk staffs scheduling teams for home care agencies. June is built by that team.</p>
+    <h2 id="team-title">Built by the ClearDesk team.</h2>
+    <div class="letter" data-rise>
+      <p class="letter__open">Our scheduler has consistently outperformed just about everyone we had doing this work before.</p>
+      <p class="letter__by">Tom M.<span>Owner, Interim HealthCare, a ClearDesk client</span></p>
+    </div>
+    <div class="team" data-rise style="--i:1">
+      <div>
+        <p>ClearDesk staffs and runs back office teams for home care agencies across the country, schedulers and recruiters among them. June is that same work, with software doing the parts that never needed a person awake.</p>
+        <p class="figs__label">The team behind June, in numbers</p>
+        <dl class="figs">
+          <div><dt>500+</dt><dd>Active clients</dd></div>
+          <div><dt>450+</dt><dd>Home care agencies supported</dd></div>
+          <div><dt>4.9 of 5</dt><dd>Client satisfaction after placement</dd></div>
+          <div><dt>Forbes</dt><dd>Where our approach was featured</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="page" id="price" aria-labelledby="price-title">
+    <h2 id="price-title" class="sr-only">What June costs</h2>
+    <div class="price" data-rise>
+      <table>
+        <thead><tr><th scope="col" class="corner">What June costs</th><th scope="col" class="is-june">June<small>From $1,350 a month</small></th><th scope="col">Phoebe<small>From $2,350 to $3,500</small></th></tr></thead>
+        <tbody>
+          <tr><th scope="row">What it does</th><td data-label="June" class="is-june">Fills open shifts, with a person in the loop when it matters</td><td data-label="Phoebe">A suite of assistants for reception, scheduling, timekeeping and engagement</td></tr>
+          <tr><th scope="row">How caregivers hear</th><td data-label="June" class="is-june">Text first for routine fills, text and call when time is short, call first when the shift is about to start</td><td data-label="Phoebe">Qualified caregivers at the same time, by text, call or both</td></tr>
+          <tr><th scope="row">When a person steps in</th><td data-label="June" class="is-june">Bench used up, shift close to starting, hours limits, or a caregiver asking for a person</td><td data-label="Phoebe">Autonomy thresholds you configure</td></tr>
+          <tr><th scope="row">Behind it</th><td data-label="June" class="is-june">ClearDesk, scheduling for home care agencies</td><td data-label="Phoebe">Venture backed</td></tr>
+          <tr class="last"><th scope="row"><span class="sr-only">Next step</span></th><td class="is-june"><a class="btn btn--ink" href="/early-access">Join early access</a></td><td><a class="link" href="/june-vs-phoebe">Read the full comparison</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="fine">Phoebe details are drawn from publicly available information on their website and may change. Phoebe is a trademark of its respective owner. This page is not affiliated with or endorsed by them.</p>
+  </section>
+
+  <section class="faq" id="faq" aria-labelledby="faq-title">
+    <div class="faq__head"><h2 id="faq-title">Questions owners ask</h2></div>
+    <div>
+      <div class="qa" data-rise><h3>Who is June for?</h3><p>Home care agency owners and schedulers. If callouts land on your scheduler's phone at night and on weekends, June takes them.</p></div>
+      <div class="qa" data-rise><h3>What does June replace?</h3><p>The phone tag after a callout: working down a list, texting one caregiver at a time, waiting, then calling the next. June starts the moment the shift opens, at any hour.</p></div>
+      <div class="qa" data-rise><h3>Does it work with my scheduling system?</h3><p>June works with WellSky. It reads your schedule and writes the booking back. Using something else? Tell us when you join early access.</p></div>
+      <div class="qa" data-rise><h3>What does it cost?</h3><p>Early access starts from $1,350 a month. We'll walk through your own week of callouts with you before you decide.</p></div>
+      <div class="qa" data-rise><h3>Will June text my caregivers without asking me?</h3><p>Not until you say so. An agency starts with June reading only, then working alongside your scheduler, then with your scheduler approving each outreach, and only then on its own.</p></div>
+      <div class="qa" data-rise><h3>What if June can't fill a shift?</h3><p>It hands the shift to your scheduler with the whole thread attached, word for word, so nobody starts over.</p></div>
+    </div>
+  </section>
+
+  <div class="strip" aria-hidden="true">
+    <video src="/assets/call.mp4" poster="/assets/call.jpg" muted loop playsinline autoplay preload="none"></video>
+    <img src="/assets/june-demo-cover.jpg" width="2172" height="920" alt="" loading="lazy">
+    <img src="/assets/cleardesk-room.jpg" width="900" height="1154" alt="" loading="lazy">
+  </div>
+  <section class="close" aria-labelledby="close-title">
+    <h2 id="close-title">Join early access.</h2>
+    <div style="display:grid;gap:20px">
+      <p>Pilot spots open next month for home care agencies on WellSky. Leave your email and we'll walk through your own callouts with you.</p>
+      <form class="hform" action="/early-access" method="get">
+        <label class="sr-only" for="e-close">Work email</label>
+        <input id="e-close" name="email" type="email" autocomplete="email" placeholder="Your work email" required>
+        <button class="btn" type="submit">Join early access</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="contact">
+  <div class="contact__top">
+    <p>June fills open shifts for home care agencies, round the clock. Built by ClearDesk.</p>
+    <a href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false">Back to top</a>
+  </div>
+  <span></span>
+  <a class="contact__mail" href="mailto:support@junecare.ai">support@<wbr>junecare.ai</a>
+  <div class="contact__meta">
+    <nav aria-label="Footer"><a href="/how-it-works">How it works</a><a href="/demo">Watch demo</a><a href="/early-access">Early access</a><a href="/terms">Terms</a><a href="/privacy">Privacy</a></nav>
+    <span>© 2026 June</span>
+    <span>Shift coverage for home care</span>
+  </div>
+</footer>
+
+<script type="module" src="/assets/site.js"></script>
+<script type="module">
+// shutter: the plan opens once the page is drawn
+const sh = document.getElementById("shutter");
+requestAnimationFrame(() => requestAnimationFrame(() => sh.classList.add("is-open")));
+
+// the held row: confirming or passing changes its state
+const row = document.getElementById("live-row");
+const line = document.getElementById("live-line");
+const pill = document.getElementById("live-pill");
+document.getElementById("live-book").addEventListener("click", () => {
+  line.textContent = "Marisol R. confirmed by Daisy at 11:51 pm, written to WellSky";
+  pill.textContent = "Booked"; pill.className = "pill pill--ok";
+  row.classList.remove("is-hover"); row.dataset.done = "";
+});
+document.getElementById("live-skip").addEventListener("click", () => {
+  line.textContent = "June is asking Yolanda C. and Anand R. next";
+  pill.textContent = "Asking"; pill.className = "pill pill--open";
+  row.classList.remove("is-hover"); row.dataset.done = "";
+});
+
+// the fixed text follows the controls
+const state = { pace: "hours", lang: "en", reply: "yes" };
+const copy = {
+  en: {
+    hours: ["Text first", "Tomorrow, 8a", "A shift opened tomorrow, 8 to noon, ten minutes from you. Want it?"],
+    close: ["Text and call together", "In 3 hours", "A shift starts at 8 this morning, ten minutes from you. Can you take it?"],
+    soon: ["Call first, text as backup", "In 40 min", "A shift starts in 40 minutes, ten minutes from you. Can you go?"],
+    hi: "Hi Marisol, it's June from Willowmere Home Care. ",
+    yes: ["Yes I can take it", "Booked in WellSky", "pill--ok"],
+    maybe: ["yeah maybe if my sister can drive me", "Held for Daisy to confirm", "pill--held"],
+    ask: ["which client is it?", "June answers, then asks again", "pill--open"],
+  },
+  es: {
+    hours: ["Text first", "Tomorrow, 8a", "Se abrió un turno mañana, de 8 a 12, a diez minutos de ti. ¿Lo quieres?"],
+    close: ["Text and call together", "In 3 hours", "Hay un turno hoy a las 8, a diez minutos de ti. ¿Puedes tomarlo?"],
+    soon: ["Call first, text as backup", "In 40 min", "Hay un turno en 40 minutos, a diez minutos de ti. ¿Puedes ir?"],
+    hi: "Hola Marisol, soy June de Willowmere Home Care. ",
+    yes: ["Sí, lo puedo tomar", "Booked in WellSky", "pill--ok"],
+    maybe: ["tal vez si mi hermana me lleva", "Held for Daisy to confirm", "pill--held"],
+    ask: ["¿cuál cliente es?", "June answers, then asks again", "pill--open"],
+  },
+};
+const $ = (id) => document.getElementById(id);
+function draw() {
+  const c = copy[state.lang];
+  const [chan, when, ask] = c[state.pace];
+  const [reply, end, tone] = c[state.reply];
+  $("o-chan").textContent = chan;
+  $("o-when").textContent = when;
+  $("o-ask").textContent = c.hi + ask;
+  $("o-reply").textContent = reply;
+  $("o-end").textContent = end;
+  $("o-end").className = "pill out__end " + tone;
+}
+document.querySelectorAll("[data-seg]").forEach((g) => {
+  g.addEventListener("click", (e) => {
+    const b = e.target.closest("button");
+    if (!b) return;
+    g.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+    state[g.dataset.seg] = b.dataset.v;
+    draw();
+  });
+});
+</script>
+</body>
+</html>

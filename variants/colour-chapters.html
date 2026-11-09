@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>June, filled by morning</title>
+<meta name="description" content="June texts and calls your caregivers the moment one calls out, and books the shift in WellSky before your scheduler wakes up.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+/* chapters: the night a caregiver calls out, then the morning it is filled */
+:root {
+  --c-night: #17191c;
+  --c-orange: #bd451e;
+  --c-paper: #f5f5f4;
+  --c-peach: #f4d6c6;
+  --c-green: #1d4a33;
+    --chapter-head: clamp(2.75rem, 1rem + 6.2vw, 7rem);
+}
+body { background: var(--c-night); }
+.ch { position: relative; min-height: 90svh; padding: clamp(96px, 12vw, 160px) var(--margin); display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; align-content: center; }
+.ch h2 { grid-column: 1 / -1; font-size: var(--chapter-head); line-height: 1; letter-spacing: -0.045em; padding-top: 12px; }
+.ch--night { background: var(--c-night); color: var(--night-ink); }
+.ch--orange { background: var(--c-orange); color: #fff; }
+.ch--paper { background: var(--c-paper); color: var(--ink); }
+.ch--peach { background: var(--c-peach); color: var(--ink); }
+.ch--green { background: var(--c-green); color: #f1f5f2; min-height: 0; }
+
+/* header takes the ink of the chapter under it */
+.top { position: fixed; inset: 0 0 auto 0; z-index: 30; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 14px var(--margin); color: var(--night-ink); background: var(--c-night); transition: color .3s var(--ease), background-color .3s var(--ease); }
+.top__logo { position: relative; width: 92px; height: 64px; flex: none; }
+.top__logo img { position: absolute; inset: 0; transition: opacity .3s var(--ease); }
+.top__logo .ink { opacity: 0; }
+.top nav { display: flex; align-items: center; gap: clamp(16px, 2.4vw, 36px); font-size: var(--step-small); }
+.top nav a:not(.btn) { text-decoration: none; color: inherit; padding: 8px 0; }
+.top nav a:not(.btn):hover { text-decoration: underline; text-underline-offset: 4px; }
+.top .btn { white-space: nowrap; transition: background-color .3s var(--ease), color .3s var(--ease), transform .18s var(--ease); }
+.top[data-on="orange"] { background: var(--c-orange); }
+.top[data-on="green"] { background: var(--c-green); }
+.top[data-on="paper"] { background: var(--c-paper); }
+.top[data-on="peach"] { background: var(--c-peach); }
+.top:is([data-on="paper"], [data-on="peach"]) { color: var(--ink); }
+.top:is([data-on="paper"], [data-on="peach"]) .top__logo .ink { opacity: 1; }
+.top:is([data-on="paper"], [data-on="peach"]) .top__logo .lit { opacity: 0; }
+.top[data-on="orange"] .btn, .top[data-on="green"] .btn { background: #fff; color: var(--ink); }
+@media (max-width: 640px) { .top nav a.hide-sm { display: none; } }
+
+/* hero: what June does on the night field, how to start on the orange one */
+.hero { display: grid; grid-template-rows: auto 1fr; background: var(--c-orange); color: #fff; }
+.hero__night { background: var(--c-night); color: var(--night-ink); padding: 132px var(--margin) clamp(36px, 5vh, 56px); display: grid; justify-items: center; text-align: center; }
+.hero__night h1 { font-size: clamp(2.125rem, 0.9rem + 3.9vw, 5rem); line-height: 1.04; letter-spacing: -0.04em; max-width: 21ch; }
+.hero__low { padding: clamp(32px, 4.5vh, 48px) var(--margin) clamp(56px, 7vh, 80px); display: grid; justify-items: center; align-content: start; text-align: center; }
+.hero__low > p:first-child { font-size: 1.25rem; line-height: 1.5; max-width: 52ch; }
+.mail { margin-top: 26px; width: min(100%, 520px); display: flex; gap: 6px; padding: 6px; background: #fff; border-radius: 999px; }
+.mail:focus-within { outline: 2px solid var(--c-night); outline-offset: 3px; }
+.mail input { flex: 1; min-width: 0; border: 0; background: transparent; padding: 0 8px 0 22px; font: inherit; font-size: 16px; color: var(--ink); }
+.mail input::placeholder { color: var(--ink-2); }
+.mail input:focus { outline: none; }
+.btn--night { background: var(--c-night); color: #fff; }
+.btn--night:hover { background: #2c2f34; }
+.steps { margin: 30px 0 0; padding: 0; list-style: none; display: flex; justify-content: center; gap: 12px 36px; flex-wrap: wrap; font-size: 17px; font-weight: 500; }
+.steps li { display: flex; align-items: center; gap: 12px; }
+.steps i { font-style: normal; width: 30px; height: 30px; flex: none; display: grid; place-items: center; border-radius: 50%; background: var(--c-night); color: #fff; font-size: 15px; font-weight: 600; }
+
+/* chapter: the buyer's questions, answered */
+.facts { grid-column: 1 / -1; margin-top: 56px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.fact { margin: 0; border-radius: 14px; background: #ecc6b2; padding: 24px; display: grid; gap: 16px; align-content: space-between; min-height: 200px; font-size: var(--step-lead); font-weight: 500; line-height: 1.35; letter-spacing: -0.01em; }
+.fact--price { background: var(--c-night); color: var(--night-ink); }
+.fact--price .btn { justify-self: start; margin-top: 8px; }
+
+/* chapter 1: the four stages as one bar */
+.bar4 { grid-column: 1 / -1; margin-top: 64px; display: flex; gap: 6px; height: 22vh; min-height: 150px; }
+.seg { flex: var(--g) 1 0; min-width: 12%; border: 0; border-radius: 14px; padding: 20px; text-align: left; font: inherit; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between; transition: flex-grow .5s var(--ease), transform .18s var(--ease); }
+.seg:active { transform: scale(.985); }
+.seg b { font-size: clamp(1.25rem, 0.9rem + 1vw, 1.875rem); font-weight: 600; letter-spacing: -0.02em; line-height: 1.15; }
+.seg span { font-size: 15px; }
+.seg--0 { background: var(--c-night); color: var(--night-ink); }
+.seg--1 { background: var(--c-orange); color: #fff; }
+.seg--2 { background: var(--c-peach); color: var(--ink); }
+.seg--3 { background: var(--c-green); color: #f1f5f2; }
+.seg[aria-pressed="true"] { outline: 3px solid var(--ink); outline-offset: 4px; }
+.clauses { grid-column: 1 / -1; display: flex; gap: 6px; margin: 18px 0 0; padding: 0; list-style: none; }
+.clauses li { flex: var(--g) 1 0; min-width: 12%; font-size: 17px; line-height: 1.45; padding-right: 12px; max-width: none; }
+.stage-say { grid-column: 1 / span 5; margin-top: 72px; align-self: center; }
+.stage-say h3 { font-size: var(--step-section); letter-spacing: -0.035em; }
+.stage-say p { margin-top: 16px; font-size: var(--step-body); max-width: 34ch; }
+.stage-pics { grid-column: 7 / -1; margin-top: 72px; position: relative; aspect-ratio: 4 / 3.3; }
+.stage-pic { position: absolute; inset: 0; display: grid; align-items: center; opacity: 0; transition: opacity .45s var(--ease); }
+.stage-pic.is-on { opacity: 1; }
+.stage-pic > * { width: 100%; }
+.sched { padding: 18px; display: grid; gap: 10px; font-size: 14px; }
+.sched__title { display: flex; justify-content: space-between; font-weight: 600; font-size: 15px; padding: 2px 2px 6px; }
+.sched__title span { font-weight: 400; color: var(--ui-ink-2); font-size: 13px; }
+.sched__row { display: grid; grid-template-columns: 88px 1fr auto; gap: 12px; align-items: center; padding: 12px; background: var(--ui-2); border-radius: 8px; }
+.sched__row b { font-weight: 600; }
+.sched__row small { display: block; color: var(--ui-ink-2); font-size: 13px; }
+.sched__row.is-hot { background: #fde0d5; }
+.tag { font-size: 13px; font-weight: 600; padding: 4px 9px; border-radius: 999px; background: #e3f3e8; color: #1d6b3d; white-space: nowrap; }
+.tag--warn { background: #fde4dc; color: #a2341a; }
+.tag--wait { background: #f3ecd9; color: #6e5313; }
+.esc { padding: 18px; display: grid; gap: 10px; font-size: 14px; }
+.msg { max-width: 84%; padding: 10px 13px; border-radius: 14px; font-size: 14px; line-height: 1.45; }
+.msg--june { justify-self: end; background: #c94b22; color: #fff; border-bottom-right-radius: 4px; }
+.msg--cg { justify-self: start; background: var(--ui-2); border-bottom-left-radius: 4px; }
+.esc__hand { margin-top: 6px; padding: 14px; background: #fff1ec; border-radius: 8px; display: grid; gap: 4px; }
+.esc__hand b { font-weight: 600; }
+.esc__hand span { color: var(--ui-ink-2); font-size: 13px; }
+
+/* chapter 2: the call */
+.call__say { grid-column: 1 / span 5; align-self: center; margin-top: 48px; }
+.call__say p { font-size: var(--step-lead); line-height: 1.5; max-width: 30ch; }
+.tiers { margin: 32px 0 0; padding: 0; list-style: none; display: grid; gap: 14px; font-size: 17px; }
+.tiers b { display: block; font-weight: 600; color: #fff; }
+.tiers span { color: var(--night-ink); }
+.call__see { grid-column: 7 / -1; margin-top: 48px; border-radius: 14px; overflow: hidden; background: #000; }
+.call__see video { width: 100%; height: auto; }
+
+/* chapter 3: the board of marks */
+.board { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.tile { border-radius: 14px; background: #ecc6b2; padding: 24px; aspect-ratio: 3 / 2; display: flex; flex-direction: column; justify-content: space-between; }
+.tile b { font-size: clamp(1.75rem, 1rem + 2vw, 2.75rem); font-weight: 600; letter-spacing: -0.03em; line-height: 1.05; }
+.tile span { font-size: 17px; line-height: 1.4; }
+.tile--head { grid-column: span 2; aspect-ratio: auto; background: var(--c-orange); color: #fff; gap: 20px; }
+.tile--head h2 { font-size: clamp(2.25rem, 1rem + 3vw, 3.75rem); line-height: 1.02; letter-spacing: -0.04em; padding-top: 6px; }
+.tile--head p { font-size: 17px; max-width: 40ch; }
+.tile--photo { grid-column: span 2; grid-row: span 2; aspect-ratio: auto; padding: 0; overflow: hidden; }
+.tile--photo img { width: 100%; height: 100%; object-fit: cover; }
+
+/* chapter: wellsky */
+.ws__say { grid-column: 1 / span 5; margin-top: 48px; align-self: center; }
+.ws__say p { font-size: var(--step-lead); line-height: 1.5; max-width: 32ch; }
+.ws__say p + p { margin-top: 16px; font-size: var(--step-body); }
+.ws__see { grid-column: 7 / -1; margin-top: 48px; }
+.ws__act { margin-top: 28px; }
+.tile--quote { grid-column: span 2; aspect-ratio: auto; gap: 16px; margin: 0; }
+.tile--quote figcaption { font-size: 15px; }
+.tile--wide { grid-column: 1 / -1; }
+.tile--quote p { font-size: var(--step-body); line-height: 1.5; }
+
+/* chapter 5: the action tile, cropped from a longer row */
+.close { display: grid; align-content: center; padding: clamp(96px, 12vw, 160px) 0 clamp(72px, 8vw, 112px); background: var(--c-paper); overflow: hidden; }
+.close__row { display: grid; grid-template-columns: 1.4fr 5fr 1.4fr; gap: 12px; margin-inline: -6vw; }
+.close__row > * { height: 400px; border-radius: 14px; }
+.close__photo { overflow: hidden; }
+.close__photo img { width: 100%; height: 100%; object-fit: cover; object-position: 30% 50%; }
+.close__flat { background: var(--c-peach); }
+.close__tile { background: var(--c-orange); color: #fff; padding: 40px clamp(28px, 4vw, 64px); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-content: center; align-items: center; column-gap: 48px; row-gap: 14px; }
+.close__tile h2, .close__tile p { grid-column: 1; }
+.close__tile .mail { grid-column: 2; grid-row: 1 / span 2; }
+.close__tile h2 { font-size: clamp(2rem, 1rem + 2vw, 3rem); line-height: 1.05; letter-spacing: -0.04em; }
+.close__tile p { font-size: 17px; max-width: 46ch; }
+.close__tile .mail { width: 100%; }
+
+/* footer: the name built from blocks */
+.end { background: var(--c-night); color: var(--night-ink); padding: clamp(48px, 5vw, 72px) var(--margin) 28px; }
+.blocks { width: 100%; height: auto; }
+.blocks text { font: 700 210px/1 "Poppins", sans-serif; letter-spacing: -0.05em; fill: var(--c-night); }
+.end__cols { margin-top: 56px; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; row-gap: 32px; font-size: 15px; }
+.end__cols nav { grid-column: span 2; display: grid; gap: 10px; align-content: start; }
+.end__cols nav b, .end__contact b { font-weight: 600; color: #fff; }
+.end__cols a { color: var(--night-ink-2); text-decoration: none; }
+.end__cols a:hover { color: #fff; }
+.end__contact { grid-column: 9 / -1; display: grid; gap: 10px; align-content: start; color: var(--night-ink-2); }
+.end__last { margin-top: 56px; display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 14px; color: var(--night-ink-2); }
+
+@media (max-width: 960px) {
+  .close__tile { grid-template-columns: minmax(0, 1fr); }
+  .close__tile .mail { grid-column: 1; grid-row: auto; margin-top: 8px; }
+  .stage-say, .stage-pics, .call__say, .call__see { grid-column: 1 / -1; }
+  .stage-pics { margin-top: 32px; }
+  .board { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+  .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tile--photo { grid-row: span 1; aspect-ratio: 3 / 2; }
+  .ws__say, .ws__see { grid-column: 1 / -1; }
+  .end__cols nav { grid-column: span 6; }
+  .end__contact { grid-column: 1 / -1; }
+}
+@media (max-width: 760px) {
+  .hero__night { padding-top: 104px; }
+  .hero__night h1 { font-size: 1.875rem; }
+  .hero__low > p:first-child { font-size: 18px; max-width: 32ch; }
+  .steps { flex-direction: column; align-items: flex-start; gap: 10px; font-size: 16px; text-align: left; }
+  .facts { grid-template-columns: minmax(0, 1fr); }
+  .fact { min-height: 0; }
+  .mail { flex-direction: column; border-radius: 26px; padding: 8px; }
+  .mail input { min-height: 50px; padding: 0 14px; }
+  .mail .btn { width: 100%; }
+  .ch { min-height: 0; --chapter-head: 2.125rem; }
+  .bar4 { flex-direction: column; height: 70svh; }
+  .seg { min-width: 0; min-height: 72px; flex-basis: 0; }
+  .clauses { display: none; }
+  .seg span { font-size: 16px; }
+  .stage-say { margin-top: 40px; }
+  .close__row { grid-template-columns: 1fr 1fr; margin-inline: var(--margin); }
+  .close__tile { grid-column: 1 / -1; grid-row: 1; height: auto; padding: 32px 22px; grid-template-columns: minmax(0, 1fr); }
+  .close__tile .mail { grid-column: 1; grid-row: auto; margin-top: 8px; }
+  .close__tile h2 { font-size: 1.75rem; }
+  .close__photo, .close__flat { height: 120px; }
+}
+@media (prefers-reduced-motion: reduce) { .seg, .stage-pic, .top, .top__logo img { transition: none; } }
+</style>
+</head>
+<body>
+<header class="top" id="top" data-on="night">
+  <a class="top__logo" href="/" aria-label="June home"><img class="lit" src="/assets/june-logo-light.svg" alt="June" width="92" height="64"><img class="ink" src="/assets/june-logo.svg" alt="" width="92" height="64"></a>
+  <nav aria-label="Main">
+    <a href="/how-it-works" class="hide-sm">How it works</a>
+    <a href="/demo" class="hide-sm">Watch demo</a>
+    <a class="btn btn--sm" href="/early-access">Join early access</a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero" data-on="orange" aria-labelledby="hero-title">
+    <div class="hero__night" data-on="night">
+      <h1 id="hero-title">Caregiver calls out? June fills the shift.</h1>
+    </div>
+    <div class="hero__low">
+      <p>For home care agencies. June texts and calls your qualified caregivers, books whoever says yes in WellSky, and brings in your scheduler when a person is needed.</p>
+      <form class="mail" action="/early-access" method="get">
+        <label class="sr-only" for="h-email">Work email</label>
+        <input id="h-email" name="email" type="email" autocomplete="email" placeholder="Your work email" required>
+        <button class="btn btn--night" type="submit">Join early access</button>
+      </form>
+      <ol class="steps" aria-label="How it works">
+        <li><i>1</i>A caregiver calls out</li>
+        <li><i>2</i>June texts and calls your bench</li>
+        <li><i>3</i>The shift is booked in WellSky</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="ch ch--peach" data-on="peach" aria-labelledby="who-title">
+    <h2 id="who-title" data-rise>Built for home care agencies.</h2>
+    <div class="facts">
+      <p class="fact" data-rise>For agency owners and the schedulers who cover callouts.</p>
+      <p class="fact" data-rise style="--i:1">Replaces phone tag on callouts, nights and weekends.</p>
+      <p class="fact" data-rise style="--i:2">Works with WellSky today.</p>
+      <div class="fact fact--price" data-rise style="--i:3"><p>Early access from $1,350 a month.</p><a class="btn btn--sm" href="/early-access">Join early access</a></div>
+    </div>
+  </section>
+
+  <section class="ch ch--paper" data-on="paper" aria-labelledby="stage-title">
+    <h2 id="stage-title" data-rise>June asks the right caregivers first.</h2>
+    <div class="bar4" role="group" aria-label="Stages of an open shift">
+      <button type="button" class="seg seg--0" style="--g:5" data-stage="0" aria-pressed="false"><b>Every hour</b><span>Monitoring</span></button>
+      <button type="button" class="seg seg--1" style="--g:3" data-stage="1" aria-pressed="true"><b>Minutes</b><span>Outreach</span></button>
+      <button type="button" class="seg seg--2" style="--g:1.4" data-stage="2" aria-pressed="false"><b>When it matters</b><span>Escalated</span></button>
+      <button type="button" class="seg seg--3" style="--g:1.4" data-stage="3" aria-pressed="false"><b>Seconds</b><span>Resolved</span></button>
+    </div>
+    <ol class="clauses">
+      <li style="--g:5">First, June keeps watch on every assigned shift, day and night.</li>
+      <li style="--g:3">Then she texts and calls the best fits, in order.</li>
+      <li style="--g:1.4">If needed, a person steps in.</li>
+      <li style="--g:1.4">Last, it's booked and written back.</li>
+    </ol>
+    <div class="stage-say" aria-live="polite">
+      <h3 id="stage-name">She asks the best fits, in order.</h3>
+      <p id="stage-text">Caregivers who know the client and show up hear first. Each is checked against certifications, language, preferences and hours limits before a single text goes out.</p>
+    </div>
+    <div class="stage-pics">
+      <div class="stage-pic" aria-hidden="true">
+        <div class="sched" data-ui>
+          <div class="sched__title">Tomorrow <span>Willowmere Home Care</span></div>
+          <div class="sched__row"><span>7a to 11a</span><span><b>Harold B.</b><small>Estelle R. · confirmed</small></span><span class="tag">On</span></div>
+          <div class="sched__row is-hot"><span>8a to 12p</span><span><b>Dolores W.</b><small>Marcus T. · called out 11:42 pm</small></span><span class="tag tag--warn">Open</span></div>
+          <div class="sched__row"><span>9a to 1p</span><span><b>Harold B.</b><small>Gloria F. · not confirmed yet</small></span><span class="tag tag--wait">Waiting</span></div>
+          <div class="sched__row"><span>1p to 5p</span><span><b>Ruth K.</b><small>Anand R. · confirmed</small></span><span class="tag">On</span></div>
+        </div>
+      </div>
+      <div class="stage-pic is-on" aria-hidden="false">
+        <div class="shot"><img src="/assets/app-plan.jpg" width="690" height="590" alt="June's plan for Dolores's Tuesday shift: three caregivers in the first wave, each with the reason they fit" loading="lazy"></div>
+      </div>
+      <div class="stage-pic" aria-hidden="true">
+        <div class="esc" data-ui>
+          <div class="sched__title">Yolanda C. <span>text · 6:58 am</span></div>
+          <p class="msg msg--june">The visit starts at 8 at Dolores's home in Santee. Can you be there?</p>
+          <p class="msg msg--cg">I can but my car is in the shop. Can someone pick me up?</p>
+          <p class="msg msg--june">Let me get Daisy for that. She'll text you in a minute.</p>
+          <div class="esc__hand"><b>Handed to Daisy, your scheduler</b><span>The whole thread is attached, word for word</span></div>
+        </div>
+      </div>
+      <div class="stage-pic" aria-hidden="true">
+        <div class="shot"><img src="/assets/app-thread-pane.jpg" width="718" height="497" alt="June's text thread with Marisol, ending with her booked on Dolores's shift" loading="lazy"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ch ch--night" data-on="night" aria-labelledby="call-title">
+    <h2 id="call-title" data-rise>June calls caregivers too.</h2>
+    <div class="call__say" data-rise style="--i:1">
+      <p>On a call, a caregiver can ask anything about the visit. June answers in plain words, then asks for a yes or a no.</p>
+      <ul class="tiers">
+        <li><b>Hours out</b><span>Text first. A call only if there's no reply.</span></li>
+        <li><b>Getting close</b><span>Text and call go out together.</span></li>
+        <li><b>Starts soon</b><span>The call comes first, a text as backup.</span></li>
+      </ul>
+    </div>
+    <div class="call__see" data-rise style="--i:2">
+      <video src="/assets/call.mp4" poster="/assets/call.jpg" width="740" height="596" muted loop playsinline autoplay preload="metadata" aria-label="June on a call with a caregiver, answering her questions about a shift"></video>
+    </div>
+  </section>
+
+  <section class="ch ch--peach" data-on="peach" aria-labelledby="team-title">
+    <div class="board">
+      <div class="tile tile--head" data-rise>
+        <h2 id="team-title">Built by the ClearDesk team.</h2>
+        <p>The team behind June. ClearDesk staffs and runs back office teams for home care agencies across the country. June is that same work, with software doing the parts that never needed a person awake.</p>
+      </div>
+      <div class="tile tile--photo" data-rise style="--i:1"><img src="/assets/cleardesk-room.jpg" width="900" height="1154" alt="The ClearDesk team in a training session" loading="lazy"></div>
+      <div class="tile" data-rise style="--i:2"><b>500+</b><span>Active ClearDesk clients</span></div>
+      <div class="tile" data-rise style="--i:3"><b>450+</b><span>Home care agencies ClearDesk supports</span></div>
+      <div class="tile" data-rise style="--i:4"><b>4.9 of 5</b><span>ClearDesk client satisfaction after placement</span></div>
+      <div class="tile" data-rise style="--i:5"><b>Forbes</b><span>Where ClearDesk's approach was featured</span></div>
+      <figure class="tile tile--quote" data-rise style="--i:3"><p>"Our scheduler has consistently outperformed just about everyone we had doing this work before."</p><figcaption>Tom M., Owner, Interim HealthCare. A ClearDesk scheduling client.</figcaption></figure>
+      <figure class="tile tile--quote tile--wide" data-rise style="--i:4"><p>"A wonderful pairing. Thorough, polite and genuinely caring. She's become part of our family business."</p><figcaption>Rachel M., Director of Operations, Senior Helpers. A ClearDesk scheduling client.</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="ch ch--green" data-on="green" aria-labelledby="ws-title">
+    <h2 id="ws-title" data-rise>Works with WellSky.</h2>
+    <div class="ws__say" data-rise style="--i:1">
+      <p>June reads open shifts from WellSky and writes the booked caregiver back. Nobody copies anything by hand.</p>
+      <p>The whole text and call thread stays on the shift, so your scheduler can see exactly what was said.</p>
+      <a class="btn btn--ink ws__act" href="/early-access">Join early access</a>
+    </div>
+    <div class="ws__see shot" data-rise style="--i:2"><img src="/assets/app-thread.jpg" width="1180" height="780" alt="June's thread with a caregiver beside the shift it filled" loading="lazy"></div>
+  </section>
+
+  <section class="close" data-on="paper" aria-labelledby="close-title">
+    <div class="close__row">
+      <div class="close__photo" data-rise><img src="/assets/june-demo-cover.jpg" width="1086" height="460" alt="A frame from June's demo video" loading="lazy"></div>
+      <div class="close__tile" data-rise style="--i:1">
+        <h2 id="close-title">Hand June your next shift.</h2>
+        <p>We're opening a small group of pilot teams next month. Leave your email and we'll reach out as spots open.</p>
+        <form class="mail" action="/early-access" method="get">
+          <label class="sr-only" for="c-email">Work email</label>
+          <input id="c-email" name="email" type="email" autocomplete="email" placeholder="Your work email" required>
+          <button class="btn btn--night" type="submit">Join early access</button>
+        </form>
+      </div>
+      <div class="close__flat" data-rise style="--i:2"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="end" data-on="night">
+  <svg class="blocks" viewBox="0 0 1000 300" role="img" aria-label="June"><rect x="0.0" y="0" width="245.5" height="300" rx="12" style="fill:var(--c-orange)"/><text x="22.0" y="286">J</text><rect x="251.5" y="66" width="245.5" height="234" rx="12" style="fill:var(--c-peach)"/><text x="273.5" y="286">U</text><rect x="503.0" y="36" width="245.5" height="264" rx="12" style="fill:var(--c-paper)"/><text x="525.0" y="286">N</text><rect x="754.5" y="108" width="245.5" height="192" rx="12" style="fill:#4e8a69"/><text x="776.5" y="286">E</text></svg>
+  <div class="end__cols">
+    <nav aria-label="Product"><b>June</b><a href="/how-it-works">How it works</a><a href="/demo">Watch demo</a><a href="/june-vs-phoebe">June vs Phoebe</a></nav>
+    <nav aria-label="Start"><b>Start</b><a href="/early-access">Early access</a><a href="https://tryjunedemo.up.railway.app/">Try the demo</a></nav>
+    <nav aria-label="Legal"><b>Legal</b><a href="/terms">Terms</a><a href="/privacy">Privacy</a></nav>
+    <div class="end__contact"><b>Round the clock shift coverage for home care</b><span>Support: <a href="mailto:support@junecare.ai">support@junecare.ai</a></span><span>Caregiver line: <a href="tel:+18775639814">(877) 563-9814</a></span></div>
+  </div>
+  <div class="end__last"><span>© 2026 June</span><a class="btn btn--sm" href="/early-access">Join early access</a></div>
+</footer>
+
+<script type="module">
+import "/assets/site.js";
+
+// header takes the ink of whatever chapter sits under it
+const top = document.getElementById("top");
+const zones = [...document.querySelectorAll("[data-on]")].filter((el) => el !== top);
+function ink() {
+  const y = top.offsetHeight / 2;
+  let on = "night";
+  for (const z of zones) {
+    const r = z.getBoundingClientRect();
+    if (r.top <= y && r.bottom > y) on = z.dataset.on;
+  }
+  if (top.dataset.on !== on) top.dataset.on = on;
+}
+addEventListener("scroll", ink, { passive: true });
+addEventListener("resize", ink);
+ink();
+
+// the bar is the control: pick a stage, its picture and words follow
+const STAGES = [
+  ["June watches every shift.", "A shift is assigned. Nothing happens until a caregiver calls out, misses a confirmation or misses a clock in."],
+  ["She asks the best fits, in order.", "Caregivers who know the client and show up hear first. Each is checked against certifications, language, preferences and hours limits before a single text goes out."],
+  ["Your scheduler steps in when it matters.", "A bench run dry, a shift about to start, or a caregiver who asks for a person. Your scheduler gets the whole thread, word for word."],
+  ["The shift is booked in WellSky.", "The caregiver gets the client, address and time. The assignment lands in WellSky and the thread stays on the shift."],
+];
+const segs = document.querySelectorAll(".seg");
+const pics = document.querySelectorAll(".stage-pic");
+segs.forEach((b) => b.addEventListener("click", () => {
+  const n = Number(b.dataset.stage);
+  segs.forEach((s, i) => s.setAttribute("aria-pressed", String(i === n)));
+  pics.forEach((p, i) => { p.classList.toggle("is-on", i === n); p.setAttribute("aria-hidden", String(i !== n)); });
+  document.getElementById("stage-name").textContent = STAGES[n][0];
+  document.getElementById("stage-text").textContent = STAGES[n][1];
+}));
+</script>
+</body>
+</html>

@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>June, open caregiver shifts filled 24/7/365</title>
+<meta name="description" content="June texts and calls the caregivers who fit an open shift, day or night, until someone says yes. Built by ClearDesk for home care agencies.">
+<meta name="theme-color" content="#f5f5f4">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+/* the product performs: every picture is june at work */
+:root { --col: var(--margin); --r: 8px; }
+@media (min-width: 1100px) { :root { --col: 27vw; } }
+.btn { border-radius: var(--r); }
+[data-ui], .shot { border-radius: 12px; }
+
+/* hero: one column on one line, the live log peeking in below */
+.hero { padding: 0 var(--margin); min-height: 100svh; display: grid; grid-template-rows: auto 1fr; }
+.hero__lead { display: grid; grid-template-columns: minmax(0, 640px) minmax(0, 620px); justify-content: space-between; align-items: center; column-gap: 64px; padding: 24px 0 72px; }
+@media (max-width: 1099px) { .hero__lead { grid-template-columns: minmax(0, 1fr); row-gap: 48px; padding-top: 12svh; align-items: start; } }
+.top { display: flex; justify-content: space-between; align-items: center; padding-top: 40px; }
+.top img { width: 84px; height: auto; }
+.top a:not(.top__logo) { font-size: var(--step-small); text-decoration: none; color: var(--ink); padding: 10px 0; }
+.top a:not(.top__logo):hover { color: var(--accent); }
+.hero__col { width: 100%; max-width: 640px; }
+.hero h1 { font-size: clamp(2rem, 1.3rem + 1.6vw, 2.75rem); line-height: 1.15; font-weight: 600; }
+.hero__sub { margin-top: 16px; font-size: 1rem; line-height: 1.55; color: var(--ink-2); }
+.ask { margin-top: 28px; display: flex; gap: 8px; }
+.ask input { flex: 1; min-width: 0; min-height: 52px; padding: 0 16px; border: 0; border-radius: var(--r); background: var(--ui); font: 400 1rem "Poppins", system-ui, sans-serif; color: var(--ink); }
+.ask input::placeholder { color: var(--ink-2); }
+.ask input:focus { outline: 2px solid var(--accent); outline-offset: 0; }
+.ask .btn { flex: none; }
+.steps { list-style: none; margin: 28px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; font-size: var(--step-small); line-height: 1.4; }
+.steps li { display: grid; gap: 8px; align-content: start; }
+.steps b { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--ink); color: var(--night-ink); font-size: 13px; font-weight: 600; }
+
+.log { position: relative; width: 100%; padding: 6px 0 10px; font-size: 14px; }
+.log__head { display: flex; align-items: center; gap: 14px; padding: 14px 20px 12px; }
+.log__head b { font-size: 15px; font-weight: 600; }
+.log__head small { color: var(--ui-ink-2); font-size: 13px; }
+.log__state { margin-left: auto; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; background: #fde4dc; color: #a2341a; transition: background-color .4s var(--ease), color .4s var(--ease); }
+.log__state.is-done { background: #e3f3e8; color: #1d6b3d; }
+.log__rows { list-style: none; margin: 0; padding: 0 8px; }
+.log__rows li { display: grid; grid-template-columns: 76px 88px 1fr; gap: 14px; align-items: center; padding: 11px 12px; border-radius: 8px; }
+.log__rows li:first-child { background: var(--ui-2); }
+.log__rows time { color: var(--ui-ink-2); font-size: 13px; font-variant-numeric: tabular-nums; }
+.chan { justify-self: start; font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 6px; background: var(--ui-2); color: var(--ui-ink-2); }
+.chan--text { background: #fde9e2; color: #9d3414; }
+.chan--call { background: #e8eef9; color: #2a4a86; }
+.chan--ws { background: #e3f3e8; color: #1d6b3d; }
+.js .log__rows li.is-new { animation: arrive .5s var(--ease) both; }
+@keyframes arrive { from { opacity: 0; transform: translateY(8px); } }
+.pointer { position: absolute; top: 58px; left: 46%; width: 20px; pointer-events: none; }
+@media (max-width: 760px) {
+  .top { padding-top: 32px; }
+  .hero__lead { padding-top: 9svh; }
+  .hero h1 { font-size: 6.9vw; }
+  .ask { flex-direction: column; }
+  .log__rows li { grid-template-columns: 64px 1fr; row-gap: 4px; }
+  .log__rows li > span:last-child { grid-column: 1 / -1; }
+  .log__head small { display: none; }
+}
+
+/* the buyer's four questions */
+.facts { padding: 12px var(--margin) var(--gap); }
+.facts h2 { font-size: var(--step-section); max-width: 18ch; }
+.facts dl { margin: 48px 0 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.facts dl > div { background: var(--panel); border-radius: var(--r); padding: 24px; display: grid; gap: 10px; align-content: start; }
+.facts dt { font-size: var(--step-small); color: var(--ink-2); }
+.facts dd { margin: 0; font-size: 1.125rem; line-height: 1.45; }
+@media (max-width: 960px) { .facts dl { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .facts dl { grid-template-columns: minmax(0, 1fr); } .facts dd { font-size: 1rem; } }
+
+/* showcase: a dark row of screens, the centred one lit */
+.show { background: var(--night); color: var(--night-ink); min-height: 96svh; padding: 64px 0 72px; display: grid; grid-template-rows: auto 1fr; overflow: hidden; }
+.show h2 { padding-inline: var(--col) var(--margin); font-size: var(--step-section); }
+.show__stage { position: relative; display: grid; align-content: center; margin-top: 48px; }
+.reel { display: flex; align-items: center; gap: 24vw; overflow-x: auto; scroll-snap-type: x mandatory; padding: 12px calc(50vw - 320px); scrollbar-width: none; cursor: grab; }
+.reel::-webkit-scrollbar { display: none; }
+.reel.is-drag { cursor: grabbing; scroll-snap-type: none; }
+.reel:focus-visible { outline-offset: -6px; }
+.panel { flex: none; position: relative; scroll-snap-align: center; overflow: hidden; }
+.panel img, .panel video { width: 100%; height: auto; pointer-events: none; user-select: none; }
+.panel::after { content: ""; position: absolute; inset: 0; background: var(--night); opacity: .78; transition: opacity .5s var(--ease); }
+.panel.is-lit::after { opacity: 0; }
+.panel--inbox { width: 640px; } .panel--plan { width: 460px; } .panel--call { width: 520px; } .panel--pane { width: 600px; } .panel--reads { width: 420px; }
+.reads { padding: 18px; display: grid; gap: 10px; }
+.reads__title { font-weight: 600; font-size: 15px; padding: 2px 2px 4px; }
+.read { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 12px 14px; background: var(--ui-2); border-radius: 8px; font-size: 14px; }
+.read small { display: block; color: var(--ui-ink-2); font-size: 13px; }
+.tag { font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 999px; background: #e3f3e8; color: #1d6b3d; white-space: nowrap; }
+.tag--warn { background: #fde4dc; color: #a2341a; }
+.tag--wait { background: #f3ecd9; color: #6e5313; }
+.tag--plain { background: var(--ui-2); color: var(--ui-ink-2); }
+.cap { position: absolute; top: 12px; left: calc(50% + var(--half, 230px) + 40px); width: 24ch; }
+.cap h3 { font-size: 1.5rem; font-weight: 500; letter-spacing: -0.01em; }
+.cap p { margin-top: 10px; font-size: 1rem; color: var(--night-ink-2); }
+.cap__nav { margin-top: 20px; display: flex; gap: 8px; }
+.cap__nav button { all: unset; cursor: pointer; width: 44px; height: 44px; display: grid; place-items: center; border-radius: var(--r); background: #2a2d31; color: var(--night-ink); transition: background-color .2s var(--ease), transform .15s var(--ease); }
+.cap__nav button:hover { background: #393d42; }
+.cap__nav button:active { transform: scale(.95); }
+.cap__nav button:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.cap__nav svg { width: 18px; }
+.swap { transition: opacity .25s var(--ease); }
+.swap.is-out { opacity: 0; }
+@media (max-width: 1100px) {
+  .show { min-height: 0; }
+  .reel { gap: 7vw; padding-inline: 7vw; scroll-padding-inline: 7vw; }
+  .panel { width: 86vw !important; max-width: 460px; }
+  .cap { position: static; width: auto; padding: 28px var(--margin) 0; }
+}
+
+/* how it works: two fields, one slider */
+.stages { display: grid; grid-template-columns: 1fr 1fr; min-height: 88svh; position: relative; padding-top: 12px; }
+.stages__say { padding: 56px var(--margin) 168px; }
+.stages__say h2 { font-size: clamp(2rem, 1.2rem + 2.4vw, 3.25rem); max-width: 16ch; }
+.stages__say p { margin-top: 24px; max-width: 34ch; }
+.stages__see { background: var(--panel); display: grid; place-items: center; padding: 56px var(--margin) 168px; }
+.stage-pics { position: relative; width: min(100%, 460px); aspect-ratio: 4 / 3.6; }
+.stage-pic { position: absolute; inset: 0; display: grid; align-items: center; opacity: 0; transition: opacity .2s var(--ease); }
+.stage-pic.is-on { opacity: 1; }
+.stage-pic.is-slow { transition-duration: 1.6s; }
+.rail { position: absolute; left: 28px; right: 28px; bottom: 36px; }
+.rail__track { position: relative; height: 32px; }
+.rail__track::before { content: ""; position: absolute; left: 0; right: 0; top: 12px; height: 8px; background: var(--panel-2); border-radius: 2px; }
+.rail__fill { position: absolute; left: 0; top: 12px; height: 8px; border-radius: 2px; width: calc(var(--fill, 0) * (100% - 32px) + 16px); background: var(--ink); transition: width .3s var(--ease); }
+.rail input { position: relative; width: 100%; margin: 0; height: 32px; background: transparent; appearance: none; -webkit-appearance: none; cursor: pointer; }
+.rail input::-webkit-slider-runnable-track { height: 8px; background: transparent; }
+.rail input::-moz-range-track { height: 8px; background: transparent; }
+.rail input::-webkit-slider-thumb { -webkit-appearance: none; width: 32px; height: 32px; margin-top: -12px; background: var(--accent); border: 0; border-radius: 6px; transition: transform .15s var(--ease); }
+.rail input::-moz-range-thumb { width: 32px; height: 32px; background: var(--accent); border: 0; border-radius: 6px; }
+.rail input:active::-webkit-slider-thumb { transform: scale(1.1); }
+.rail ul { display: grid; grid-template-columns: repeat(4, 1fr); margin: 12px 0 0; padding: 0; list-style: none; font-size: 1rem; }
+.rail li:nth-child(2) { text-align: center; transform: translateX(-16%); } .rail li:nth-child(3) { text-align: center; transform: translateX(16%); } .rail li:last-child { text-align: right; }
+.rail li button { all: unset; cursor: pointer; color: var(--ink-2); transition: color .2s var(--ease); }
+.rail li button[aria-pressed="true"] { color: var(--ink); font-weight: 600; }
+.rail li button:hover { color: var(--accent); }
+.rail li button:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.frag { padding: 18px; display: grid; gap: 10px; font-size: 14px; }
+.frag__title { display: flex; justify-content: space-between; align-items: baseline; font-weight: 600; font-size: 15px; padding: 2px 2px 6px; }
+.frag__title span { font-weight: 400; color: var(--ui-ink-2); font-size: 13px; }
+.frag__row { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 12px; background: var(--ui-2); border-radius: 8px; }
+.frag__row b { font-weight: 600; }
+.frag__row small { display: block; color: var(--ui-ink-2); font-size: 13px; }
+.frag__row.is-hot { background: #fde0d5; }
+.frag__note { font-size: 13px; color: var(--ui-ink-2); padding: 2px; }
+.msg { max-width: 84%; padding: 10px 13px; border-radius: 14px; line-height: 1.45; font-size: 14px; }
+.msg--june { justify-self: end; background: #c94b22; color: #fff; border-bottom-right-radius: 4px; }
+.msg--cg { justify-self: start; background: var(--ui-2); border-bottom-left-radius: 4px; }
+.hand { margin-top: 4px; padding: 14px; background: #fff1ec; border-radius: 8px; display: grid; gap: 2px; }
+.hand b { font-weight: 600; }
+.hand span { color: var(--ui-ink-2); font-size: 13px; }
+@media (max-width: 860px) {
+  .stages { grid-template-columns: 1fr; min-height: 0; }
+  .stages__see { order: 1; min-height: 46svh; padding: 28px 16px; }
+  .rail { position: static; order: 2; padding: 20px var(--margin) 0; }
+  .rail input::-webkit-slider-thumb { width: 40px; height: 40px; margin-top: -16px; }
+  .stages__say { order: 3; padding: 28px var(--margin) 0; }
+  .stages__say h2 { font-size: 7vw; }
+  .rail ul { font-size: 15px; grid-template-columns: 1fr 1fr; gap: 6px 16px; }
+  .rail li:nth-child(n) { text-align: left; transform: none; }
+}
+
+/* proof: a board of tiles, the first one asks */
+.about { margin-top: var(--gap); }
+.board { padding-inline: var(--margin); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.tile { border-radius: var(--r); background: var(--panel); padding: 24px; aspect-ratio: 3 / 2; display: grid; align-content: space-between; }
+.tile b { font-size: clamp(1.75rem, 1.2rem + 1.4vw, 2.5rem); font-weight: 600; line-height: 1.1; letter-spacing: -0.02em; }
+.tile span { font-size: 1rem; color: var(--ink-2); }
+.tile--head { grid-column: span 2; aspect-ratio: auto; background: var(--ink); color: var(--night-ink); gap: 28px; }
+.tile--head h2 { font-size: clamp(1.75rem, 1rem + 2vw, 2.75rem); max-width: 16ch; }
+.tile--head p { margin-top: 10px; font-size: 1rem; color: var(--night-ink-2); }
+.tile--head .ask { margin-top: 0; }
+.tile--photo { grid-column: span 2; padding: 0; overflow: hidden; aspect-ratio: auto; position: relative; }
+.tile--photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 38%; }
+@media (max-width: 860px) {
+  .board { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+  .tile { padding: 18px; aspect-ratio: auto; min-height: 132px; }
+  .tile b { font-size: 1.5rem; }
+  .tile span { font-size: 15px; }
+  .tile--head { grid-column: 1 / -1; }
+  .tile--photo { grid-column: 1 / -1; aspect-ratio: 3 / 2; padding: 0; }
+}
+
+/* testimonial: set like a letter */
+.letter { margin-top: clamp(72px, 9vw, 128px); padding: 0 var(--margin); display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 24px; }
+.letter h3 { grid-column: 1 / span 3; font-size: var(--step-lead); max-width: 16ch; }
+.letter__body { grid-column: 5 / span 7; max-width: 46ch; }
+.letter__open { font-size: clamp(1.5rem, 1.1rem + 1vw, 2rem); font-weight: 500; line-height: 1.3; letter-spacing: -0.01em; }
+.letter__sign { margin-top: 32px; font-size: 1rem; }
+.letter__sign span { display: block; color: var(--ink-2); }
+.letter__more { margin-top: 56px; font-size: 1.1875rem; line-height: 1.55; }
+@media (max-width: 860px) {
+  .letter { grid-template-columns: 1fr; row-gap: 24px; }
+  .letter h3, .letter__body { grid-column: 1; }
+  .letter__open { font-size: 1.5rem; }
+  .letter__more { font-size: 1.0625rem; margin-top: 40px; }
+}
+
+/* close: the sentence has a blank and the blank is the form */
+.close { margin-top: var(--gap); padding: 12px var(--margin) 0 var(--col); }
+.close h2 { font-size: var(--step-section); max-width: 18ch; }
+.blank { margin-top: 32px; font-size: clamp(1.5rem, 1rem + 1.4vw, 2.25rem); font-weight: 500; line-height: 1.5; letter-spacing: -0.01em; max-width: 30em; }
+.blank input { width: 9.5em; height: 1.5em; vertical-align: baseline; padding: 0 .4em; border: 0; border-radius: var(--r); background: var(--panel); font: inherit; color: var(--ink); }
+.blank input::placeholder { color: var(--ink-2); }
+.blank input:focus { outline: 2px solid var(--accent); outline-offset: 0; }
+.blank button { height: 1.5em; padding: 0 .45em; border: 0; border-radius: var(--r); background: var(--accent); color: var(--accent-ink); font: inherit; cursor: pointer; transition: background-color .18s var(--ease), transform .18s var(--ease); }
+.blank button:hover { background: #a63c19; }
+.blank button:active { transform: scale(.98); }
+.close__note { margin-top: 18px; font-size: 1rem; color: var(--ink-2); max-width: 52ch; }
+@media (max-width: 760px) {
+  .blank { font-size: 1.5rem; }
+  .blank input { display: block; width: 100%; margin: 6px 0; }
+}
+
+/* footer: the last two rows of the board */
+.tiles { margin-top: var(--gap); padding: 0 10px 10px; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 8px; font-size: 1rem; }
+.tiles > * { border-radius: var(--r); background: var(--panel); padding: 24px; min-height: 220px; display: grid; align-content: space-between; gap: 16px; }
+.t-say { grid-column: span 4; }
+.t-say p { font-size: 1.5rem; line-height: 1.3; letter-spacing: -0.01em; max-width: 18ch; }
+.t-say small { font-size: 13px; color: var(--ink-2); }
+.t-say small a { color: var(--ink-2); }
+.t-nav { grid-column: span 3; align-content: start; }
+.t-nav a, .t-mail a { text-decoration: none; color: var(--ink); }
+.t-nav a:hover, .t-mail a:hover, .t-say small a:hover { color: var(--accent); }
+.t-nav ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.t-now { grid-column: span 2; }
+.t-now span { color: var(--ink-2); }
+.t-now b { font-size: 1.5rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+.t-mail { grid-column: span 3; }
+.t-mail span { color: var(--ink-2); }
+.t-mail a { font-size: 1.25rem; }
+.t-mark { grid-column: span 8; min-height: 320px; background: var(--ink); place-items: center; }
+.t-mark img { width: min(36vw, 420px); height: auto; }
+.t-go { grid-column: span 4; min-height: 320px; background: var(--accent); color: var(--accent-ink); text-decoration: none; transition: background-color .2s var(--ease); }
+.t-go:hover { background: #a63c19; }
+.t-go b { font-size: 1.75rem; font-weight: 600; line-height: 1.2; letter-spacing: -0.02em; max-width: 10ch; }
+.t-go svg { justify-self: end; width: 56px; transition: transform .25s var(--ease); }
+.t-go:hover svg { transform: translateX(6px); }
+@media (max-width: 860px) {
+  .tiles { grid-template-columns: 1fr 1fr; gap: 6px; padding: 0 6px 6px; }
+  .tiles > * { padding: 20px; min-height: 150px; }
+  .t-mark { order: 1; grid-column: 1 / -1; min-height: 160px; }
+  .t-mark img { width: 52vw; }
+  .t-go { order: 2; grid-column: 1 / -1; min-height: 150px; }
+  .t-nav { order: 3; grid-column: 1 / -1; min-height: 0; }
+  .t-mail { order: 4; grid-column: 1 / -1; min-height: 0; }
+  .t-mail a { font-size: 1.125rem; }
+  .t-now { order: 5; grid-column: span 1; }
+  .t-say { order: 6; grid-column: span 1; }
+  .t-say p { font-size: 1.125rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel::after, .stage-pic, .swap, .rail__fill { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<main>
+  <section class="hero" aria-labelledby="hero-title">
+    <header class="top">
+        <a class="top__logo" href="/" aria-label="June home"><img src="/assets/june-logo.svg" alt="June" width="92" height="64"></a>
+        <a href="/demo">Watch the demo</a>
+    </header>
+    <div class="hero__lead">
+      <div class="hero__col">
+        <h1 id="hero-title">June fills the shift when a caregiver calls out.</h1>
+        <p class="hero__sub">For home care agencies. June texts and calls your qualified caregivers, books whoever says yes in WellSky, and brings in your scheduler when a person is needed.</p>
+        <form class="ask" action="/early-access" method="get">
+          <label class="sr-only" for="h-email">Work email</label>
+          <input id="h-email" name="email" type="email" autocomplete="email" placeholder="Your work email" required>
+          <button class="btn" type="submit">Join early access</button>
+        </form>
+        <ol class="steps">
+          <li><b>1</b>A caregiver calls out</li>
+          <li><b>2</b>June texts and calls your bench</li>
+          <li><b>3</b>The shift is booked in WellSky</li>
+        </ol>
+      </div>
+      <div class="log" data-ui aria-label="June's log for an open shift, playing on your clock">
+        <div class="log__head"><b>Dolores W.</b><small>Tue 8a to 12p · Willowmere Home Care</small><span class="log__state" id="log-state">Open</span></div>
+        <ol class="log__rows" id="log-rows">
+          <li><time data-t="0">11:42 pm</time><span class="chan">Callout</span><span>Marcus T. called out of Dolores's Tuesday visit</span></li>
+          <li><time data-t="0">11:42 pm</time><span class="chan">Plan</span><span>Seven caregivers fit. Marisol, Analiese and Josefina hear first</span></li>
+          <li><time data-t="1">11:43 pm</time><span class="chan chan--text">Text</span><span>Marisol E. asked <q>What's the client like?</q></span></li>
+          <li><time data-t="2">11:44 pm</time><span class="chan chan--text">Text</span><span>June answered: hip recovery, two cats, $20.50 an hour</span></li>
+          <li><time data-t="3">11:45 pm</time><span class="chan chan--call">Call</span><span>Kwame A. said he can't tomorrow</span></li>
+          <li><time data-t="4">11:46 pm</time><span class="chan chan--text">Text</span><span>Marisol E. said <q>Yes I can take it</q></span></li>
+          <li><time data-t="4">11:46 pm</time><span class="chan chan--ws">WellSky</span><span>Marisol E. booked on Dolores W., Tue 8a to 12p</span></li>
+        </ol>
+        <svg class="pointer" viewBox="0 0 20 26" aria-hidden="true"><path d="M2 2 L2 21 L7 16.5 L10.5 24 L14 22.5 L10.6 15.2 L17 15 Z" fill="#1c1a18" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="facts" aria-labelledby="facts-title">
+    <h2 id="facts-title">Built for home care agencies on WellSky.</h2>
+    <dl>
+      <div data-rise><dt>Who it's for</dt><dd>Home care agency owners and the schedulers who cover callouts.</dd></div>
+      <div data-rise style="--i:1"><dt>What it replaces</dt><dd>Phone tag on every callout, and the nights and weekends someone spends on it.</dd></div>
+      <div data-rise style="--i:2"><dt>What it works with</dt><dd>WellSky today. June reads your schedule and writes the booking back.</dd></div>
+      <div data-rise style="--i:3"><dt>What it costs</dt><dd>Early access, from $1,350 a month. <a class="link" href="/june-vs-phoebe">Compare with Phoebe</a></dd></div>
+    </dl>
+  </section>
+
+  <section class="show" aria-labelledby="show-title">
+    <h2 id="show-title">You see every text and call.</h2>
+    <div class="show__stage">
+      <div class="reel" id="reel" tabindex="0" aria-label="Screens from June, swipe or use the arrows">
+        <figure class="panel panel--inbox shot" data-name="The inbox" data-text="Every caregiver June is talking to, newest first. Marisol just said yes."><img src="/assets/app-thread.jpg" width="2360" height="1560" alt="June's inbox of caregiver conversations, with Marisol's thread open ending in her booking" loading="lazy"></figure>
+        <figure class="panel panel--plan shot" data-name="The plan" data-text="Who fits the visit, in the order they will hear. Each name says why."><img src="/assets/app-plan.jpg" width="1380" height="1180" alt="June's first wave for Dolores's Tuesday shift: three caregivers with a match score, the drive and the reason" loading="lazy"></figure>
+        <figure class="panel panel--call shot" data-name="The call" data-text="When time is short June calls. She answers pay, drive and client questions, then takes the yes."><video src="/assets/call.mp4" poster="/assets/call.jpg" width="740" height="596" muted loop playsinline preload="metadata" aria-label="June's real call with a caregiver named Elias, transcribed as it happens"></video></figure>
+        <figure class="panel panel--pane shot" data-name="The thread" data-text="Every text June sends and every reply, word for word, attached to the shift."><img src="/assets/app-thread-pane.jpg" width="1436" height="994" alt="June's text thread with Marisol, ending with her booked on Dolores's shift" loading="lazy"></figure>
+        <figure class="panel panel--reads" data-name="The read" data-text="A reply that only looks like a yes is held for your scheduler. A misread never books a shift."><div class="reads" data-ui>
+          <div class="reads__title">Replies, read twice</div>
+          <div class="read"><span>"Yes I can take it"<small>Accepted, sure of the read</small></span><span class="tag">Booked</span></div>
+          <div class="read"><span>"yeah maybe if my sister can drive me"<small>Looks like a yes, not sure</small></span><span class="tag tag--wait">Held</span></div>
+          <div class="read"><span>"which client is it?"<small>Unclear</small></span><span class="tag tag--plain">Asked back</span></div>
+        </div></figure>
+      </div>
+      <div class="cap" id="cap" aria-live="polite">
+        <h3 class="swap" id="cap-name">The inbox</h3>
+        <p class="swap" id="cap-text">Every caregiver June is talking to, newest first. Marisol just said yes.</p>
+        <div class="cap__nav">
+          <button type="button" id="prev" aria-label="Previous screen"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M11 3 L5 9 L11 15" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>
+          <button type="button" id="next" aria-label="Next screen"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M7 3 L13 9 L7 15" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stages" id="how" aria-labelledby="stage-title">
+    <div class="stages__say">
+      <h2 id="stage-title" class="swap">June watches your schedule for callouts.</h2>
+      <p id="stage-text" class="swap">A shift is assigned. Nothing happens until a caregiver calls out, misses a confirmation or misses a clock in.</p>
+    </div>
+    <div class="stages__see">
+      <div class="stage-pics">
+        <div class="stage-pic is-on" aria-hidden="false">
+          <div class="frag" data-ui>
+            <div class="frag__title">Tomorrow <span>Willowmere Home Care</span></div>
+            <div class="frag__row"><span><b>Harold B.</b> 7a to 11a<small>Estelle R. · confirmed</small></span><span class="tag">On</span></div>
+            <div class="frag__row is-hot"><span><b>Dolores W.</b> 8a to 12p<small>Marcus T. · called out 11:42 pm</small></span><span class="tag tag--warn">Open</span></div>
+            <div class="frag__row"><span><b>Harold B.</b> 9a to 1p<small>Gloria F. · not confirmed yet</small></span><span class="tag tag--wait">Waiting</span></div>
+            <div class="frag__row"><span><b>Ruth K.</b> 1p to 5p<small>Anand R. · confirmed</small></span><span class="tag">On</span></div>
+          </div>
+        </div>
+        <div class="stage-pic" aria-hidden="true">
+          <div class="frag" data-ui>
+            <div class="frag__title">Wave 1 for Dolores W. <span>sent 11:42 pm</span></div>
+            <div class="frag__row is-hot"><span><b>Marisol E.</b> 94% · 1 mi<small>Covered Dolores twice this fall</small></span><span class="tag">Replied</span></div>
+            <div class="frag__row"><span><b>Analiese B.</b> 88% · 4 mi<small>Has done hip recovery visits</small></span><span class="tag tag--plain">Texted</span></div>
+            <div class="frag__row"><span><b>Josefina A.</b> 85% · 3 mi<small>Asked for more morning hours</small></span><span class="tag tag--plain">Texted</span></div>
+            <p class="frag__note">Wave 2 waits: Kwame A., Leticia O., Brianna S. and Ruth M.</p>
+          </div>
+        </div>
+        <div class="stage-pic" aria-hidden="true">
+          <div class="frag" data-ui>
+            <div class="frag__title">Yolanda C. <span>text · 6:58 am</span></div>
+            <p class="msg msg--june">The visit starts at 8 at Dolores's home in Santee. Can you be there?</p>
+            <p class="msg msg--cg">I can but my car is in the shop. Can someone pick me up?</p>
+            <p class="msg msg--june">Let me get Daisy for that. She'll text you in a minute.</p>
+            <div class="hand"><b>Handed to Daisy, your scheduler</b><span>The whole thread is attached, word for word</span></div>
+          </div>
+        </div>
+        <div class="stage-pic" aria-hidden="true">
+          <div class="frag" data-ui>
+            <div class="frag__title">Dolores W. · Tue 8a to 12p <span class="tag">Booked</span></div>
+            <div class="frag__row"><span><b>Marisol E.</b><small>Booked at 11:46 pm</small></span><span class="tag">Filled</span></div>
+            <div class="frag__row"><span><b>Written to WellSky</b><small>Caregiver set on the shift, 11:46 pm</small></span><span class="tag">Done</span></div>
+            <div class="frag__row"><span><b>Confirmation text</b><small>Address and door code, sent at 7:00 am</small></span><span class="tag">Sent</span></div>
+            <div class="frag__row"><span><b>Wave 1</b><small>Analiese and Josefina told it's filled</small></span><span class="tag">Sent</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="rail">
+      <label for="stage-range" class="sr-only">Stage of an open shift</label>
+      <div class="rail__track"><span class="rail__fill" id="stage-fill"></span>
+      <input id="stage-range" type="range" min="0" max="3" step="1" value="0" aria-valuetext="Monitoring"></div>
+      <ul>
+        <li><button type="button" data-stage="0" aria-pressed="true">Monitoring</button></li>
+        <li><button type="button" data-stage="1" aria-pressed="false">Outreach</button></li>
+        <li><button type="button" data-stage="2" aria-pressed="false">Escalated</button></li>
+        <li><button type="button" data-stage="3" aria-pressed="false">Resolved</button></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="about" aria-labelledby="board-title">
+  <div class="board">
+    <div class="tile tile--head" data-rise>
+      <div>
+        <h2 id="board-title">Built by the ClearDesk team.</h2>
+        <p>The team behind June. ClearDesk schedulers already cover shifts for home care agencies across the country, and June is built from that work.</p>
+      </div>
+      <form class="ask" action="/early-access" method="get">
+        <label class="sr-only" for="m-email">Work email</label>
+        <input id="m-email" name="email" type="email" autocomplete="email" placeholder="Your work email" required>
+        <button class="btn" type="submit">Join early access</button>
+      </form>
+    </div>
+    <div class="tile" data-rise style="--i:1"><b>500+</b><span>Active ClearDesk clients</span></div>
+    <div class="tile" data-rise style="--i:2"><b>450+</b><span>Home care agencies ClearDesk supports</span></div>
+    <div class="tile" data-rise style="--i:3"><b>4.9 of 5</b><span>ClearDesk client satisfaction after placement</span></div>
+    <div class="tile" data-rise style="--i:4"><b>Forbes</b><span>Where ClearDesk was featured</span></div>
+    <div class="tile tile--photo" data-rise style="--i:5"><img src="/assets/cleardesk-room.jpg" width="900" height="1154" alt="The ClearDesk team in a training session" loading="lazy"></div>
+  </div>
+
+  <div class="letter">
+    <h3>ClearDesk clients on their ClearDesk schedulers</h3>
+    <div class="letter__body">
+      <p class="letter__open" data-rise>Our scheduler has consistently outperformed just about everyone we had doing this work before.</p>
+      <p class="letter__sign" data-rise style="--i:1">Tom M.<span>Owner, Interim HealthCare, a ClearDesk client</span></p>
+      <p class="letter__more" data-rise style="--i:2">A wonderful pairing. Thorough, polite and genuinely caring. She's become part of our family business.</p>
+      <p class="letter__sign" data-rise style="--i:3">Rachel M.<span>Director of Operations, Senior Helpers, a ClearDesk client</span></p>
+    </div>
+  </div>
+  </section>
+
+  <section class="close" aria-labelledby="close-title">
+    <h2 id="close-title">Early access is open to a few agencies.</h2>
+    <form class="blank" action="/early-access" method="get" data-rise>
+      Leave <label class="sr-only" for="c-email">Work email</label><input id="c-email" name="email" type="email" autocomplete="email" placeholder="your work email" required> and <button type="submit">join early access</button>
+    </form>
+    <p class="close__note" data-rise style="--i:1">We're opening a small group of pilot teams next month and we'll reach out as spots open.</p>
+  </section>
+</main>
+
+<footer class="tiles">
+  <div class="t-say"><p>Round the clock shift coverage for home care.</p><small>© 2026 June · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></small></div>
+  <nav class="t-nav" aria-label="Footer"><ul><li><a href="/how-it-works">How it works</a></li><li><a href="/demo">Watch demo</a></li><li><a href="/june-vs-phoebe">June vs Phoebe</a></li><li><a href="/early-access">Early access</a></li></ul></nav>
+  <div class="t-now"><span>Where you are</span><b id="now">9:40 pm</b><span>June is working</span></div>
+  <div class="t-mail"><span>Write to us</span><a href="mailto:support@junecare.ai">support@junecare.ai</a></div>
+  <div class="t-mark"><img src="/assets/june-logo-light.svg" alt="June" width="420" height="292" loading="lazy"></div>
+  <a class="t-go" href="/early-access"><b>Join early access</b><svg viewBox="0 0 56 40" aria-hidden="true"><path d="M2 20 H50 M34 4 L52 20 L34 36" fill="none" stroke="currentColor" stroke-width="4"/></svg></a>
+</footer>
+
+<script type="module" src="/assets/site.js"></script>
+<script type="module">
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const fmt = (d) => d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }).toLowerCase();
+
+// the log plays on the visitor's own clock
+const start = new Date();
+document.querySelectorAll("[data-t]").forEach((el) => { el.textContent = fmt(new Date(start.getTime() + Number(el.dataset.t) * 60000)); });
+document.getElementById("now").textContent = fmt(start);
+const rows = [...document.getElementById("log-rows").children];
+const state = document.getElementById("log-state");
+if (!reduce) {
+  let shown = 2, timer;
+  const paint = () => {
+    rows.forEach((r, i) => { r.hidden = i >= shown; });
+    const done = shown >= rows.length;
+    state.textContent = done ? "Booked" : "Open";
+    state.classList.toggle("is-done", done);
+  };
+  const tick = () => {
+    if (shown >= rows.length) { timer = setTimeout(() => { shown = 2; paint(); timer = setTimeout(tick, 1800); }, 7000); return; }
+    rows[shown].classList.add("is-new");
+    shown += 1; paint();
+    timer = setTimeout(tick, 1800);
+  };
+  paint();
+  timer = setTimeout(tick, 1400);
+  document.addEventListener("visibilitychange", () => { clearTimeout(timer); if (!document.hidden) timer = setTimeout(tick, 1400); });
+} else { state.textContent = "Booked"; state.classList.add("is-done"); }
+
+// showcase: the centred screen is lit and named
+const reel = document.getElementById("reel");
+const panels = [...reel.querySelectorAll(".panel")];
+const capName = document.getElementById("cap-name"), capText = document.getElementById("cap-text");
+const clip = reel.querySelector("video");
+let lit = -1;
+function light() {
+  const mid = reel.getBoundingClientRect().left + reel.clientWidth / 2;
+  let best = 0, dist = Infinity;
+  panels.forEach((p, i) => { const r = p.getBoundingClientRect(); const d = Math.abs(r.left + r.width / 2 - mid); if (d < dist) { dist = d; best = i; } });
+  if (best === lit) return;
+  lit = best;
+  panels.forEach((p, i) => p.classList.toggle("is-lit", i === best));
+  document.querySelector(".show__stage").style.setProperty("--half", panels[best].offsetWidth / 2 + "px");
+  [capName, capText].forEach((el) => el.classList.add("is-out"));
+  setTimeout(() => { capName.textContent = panels[best].dataset.name; capText.textContent = panels[best].dataset.text; [capName, capText].forEach((el) => el.classList.remove("is-out")); }, reduce ? 0 : 200);
+  if (clip) { if (panels[best].contains(clip) && !reduce) clip.play().catch(() => {}); else clip.pause(); }
+}
+const go = (i) => { const p = panels[Math.max(0, Math.min(panels.length - 1, i))]; reel.scrollTo({ left: p.offsetLeft + p.offsetWidth / 2 - reel.clientWidth / 2, behavior: reduce ? "auto" : "smooth" }); };
+document.getElementById("prev").addEventListener("click", () => go(lit - 1));
+document.getElementById("next").addEventListener("click", () => go(lit + 1));
+reel.addEventListener("scroll", () => requestAnimationFrame(light), { passive: true });
+addEventListener("resize", () => { lit = -1; light(); });
+let drag = null;
+reel.addEventListener("pointerdown", (e) => { if (e.pointerType !== "mouse") return; drag = { x: e.clientX, left: reel.scrollLeft }; reel.classList.add("is-drag"); });
+addEventListener("pointermove", (e) => { if (drag) reel.scrollLeft = drag.left - (e.clientX - drag.x); });
+addEventListener("pointerup", () => { if (!drag) return; drag = null; reel.classList.remove("is-drag"); go(lit); });
+panels.forEach((p, i) => p.addEventListener("click", () => { if (i !== lit) go(i); }));
+light();
+
+// stages: the slider swaps the clause and the screen; it drifts on its own until touched
+const stages = [
+  ["June watches your schedule for callouts.", "A shift is assigned. Nothing happens until a caregiver calls out, misses a confirmation or misses a clock in."],
+  ["June asks the right caregivers first.", "Caregivers who know the client and show up go first. Anyone who fails a certification, language or hours rule is never asked."],
+  ["Your scheduler steps in when it matters.", "Something is off, so outreach pauses. Your scheduler gets the shift with every word so far attached."],
+  ["The booking is written back to WellSky.", "The caregiver gets the address and details, and the booking lands in WellSky."],
+];
+const names = ["Monitoring", "Outreach", "Escalated", "Resolved"];
+const range = document.getElementById("stage-range");
+const title = document.getElementById("stage-title"), text = document.getElementById("stage-text");
+const pics = [...document.querySelectorAll(".stage-pic")];
+const btns = [...document.querySelectorAll("[data-stage]")];
+let cur = 0, touched = false;
+function show(i, slow) {
+  if (i === cur) return;
+  cur = i;
+  range.value = i;
+  range.setAttribute("aria-valuetext", names[i]);
+  document.getElementById("stage-fill").style.setProperty("--fill", i / 3);
+  pics.forEach((p, k) => { p.classList.toggle("is-slow", !!slow); p.classList.toggle("is-on", k === i); p.setAttribute("aria-hidden", k === i ? "false" : "true"); });
+  btns.forEach((b, k) => b.setAttribute("aria-pressed", String(k === i)));
+  [title, text].forEach((el) => el.classList.add("is-out"));
+  setTimeout(() => { title.textContent = stages[i][0]; text.textContent = stages[i][1]; [title, text].forEach((el) => el.classList.remove("is-out")); }, reduce ? 0 : 200);
+}
+range.addEventListener("input", () => { touched = true; show(Number(range.value)); });
+btns.forEach((b) => b.addEventListener("click", () => { touched = true; show(Number(b.dataset.stage)); }));
+if (!reduce && "IntersectionObserver" in window) {
+  let auto;
+  new IntersectionObserver(([e]) => {
+    clearInterval(auto);
+    if (e.isIntersecting && !touched) auto = setInterval(() => { if (!touched && !document.hidden) show((cur + 1) % 4, true); }, 5500);
+  }, { threshold: 0.5 }).observe(document.getElementById("how"));
+}
+</script>
+</body>
+</html>
