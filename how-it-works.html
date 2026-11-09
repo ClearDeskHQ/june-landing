@@ -1,681 +1,159 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBkPSJNIDMsLTYgQyAtMjAsLTQyIC02NiwtMjggLTY4LDEwIEMgLTcwLDQ4IC0zNiw2NiAtMiwxMTAgQyA0MCw3MCA3NCw0NCA3Miw2IEMgNzAsLTMyIDI0LC00MiAzLC02IFoiIGZpbGw9IiNFODQ4MUYiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDQ4Ljc3LDI0Ljk3KSBzY2FsZSgwLjYxMzQpIi8+PC9zdmc+">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>How June Works — June, powered by Cleardesk</title>
-<meta name="description" content="How June detects an open shift, works the bench, and hands off to a live scheduler when it needs to — the full mechanics behind the coverage.">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How June works</title>
+<meta name="description" content="How June detects an open shift, picks who to ask, reaches them by text and call, and hands off to your scheduler when it matters.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
 <style>
-  :root{
-    --paper:#FFFDFB;
-    --paper-dim:#FFF1DC;
-    --ink:#2E1B12;
-    --ink-soft:#805B45;
-    --navy:#B23A1C;
-    --navy-deep:#8A2C14;
-    --cream-on-navy:#FFF8EF;
-    --navy-line:rgba(255,248,239,0.22);
-    --amber:#FFC22E;
-    --amber-deep:#A56A00;
-    --sage:#E8481F;
-    --sage-tint:#FFE0D2;
-    --spec-2:#D3691A;
-    --line:#F3DFC2;
-    --charcoal:#3A3A3A;
-    --max:1120px;
-  }
-  *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{
-    margin:0;
-    background:var(--paper);
-    color:var(--ink);
-    font-family:'Inter',sans-serif;
-    font-size:17px;
-    line-height:1.6;
-    -webkit-font-smoothing:antialiased;
-  }
-  h1,h2,h3{
-    font-family:'Nunito',sans-serif;
-    font-weight:800;
-    letter-spacing:-0.01em;
-    margin:0;
-  }
-  a{color:inherit;}
-  .wrap{max-width:var(--max);margin:0 auto;padding:0 32px;}
-  @media (max-width:640px){ .wrap{padding:0 20px;} }
-
-  /* ---------- Header ---------- */
-  header.site{
-    padding:28px 0;
-    border-bottom:1px solid var(--line);
-  }
-  header.site .wrap{display:flex;align-items:center;justify-content:space-between;}
-  .wordmark-group{display:flex;align-items:center;gap:10px;}
-  .wordmark-group svg.june-mark{height:54px;width:auto;display:block;}
-  .powered-by{font-size:12px;color:var(--ink-soft);white-space:nowrap;margin-top:-3px;}
-  .powered-by b{font-weight:600;color:var(--ink);}
-  header.site nav a{
-    font-size:14px;
-    text-decoration:none;
-    color:var(--ink-soft);
-    margin-left:28px;
-  }
-  header.site nav a:hover{color:var(--ink);}
-  header.site nav a[aria-current="page"]{color:var(--ink);text-decoration:underline;text-underline-offset:6px;}
-
-  /* ---------- Hero ---------- */
-  .hero{
-    padding:96px 0 72px;
-    background:linear-gradient(180deg, #FFECC7 0%, var(--paper) 60%);
-  }
-  .hero h1{
-    font-size:clamp(34px,5vw,56px);
-    line-height:1.08;
-    max-width:15ch;
-  }
-  .hero p.sub{
-    max-width:52ch;
-    font-size:19px;
-    color:var(--ink-soft);
-    margin-top:24px;
-  }
-  .hero .status{
-    display:inline-block;
-    font-size:13px;
-    font-weight:600;
-    color:var(--sage);
-    background:var(--sage-tint);
-    border-radius:100px;
-    padding:6px 16px;
-    margin-bottom:22px;
-  }
-
-  form.waitlist{
-    margin-top:36px;
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    max-width:520px;
-  }
-  form.waitlist input[type=email]{
-    flex:1 1 260px;
-    padding:14px 16px;
-    border:1px solid var(--ink);
-    border-radius:6px;
-    font-family:'Inter',sans-serif;
-    font-size:16px;
-    background:var(--paper);
-    color:var(--ink);
-  }
-  form.waitlist input[type=email]:focus{
-    outline:2px solid var(--sage);
-    outline-offset:2px;
-  }
-  button.primary{
-    padding:14px 24px;
-    background:var(--sage);
-    color:var(--cream-on-navy);
-    border:none;
-    border-radius:6px;
-    font-family:'Inter',sans-serif;
-    font-weight:700;
-    font-size:16px;
-    cursor:pointer;
-  }
-  button.primary:hover{background:var(--navy-deep);}
-  button.primary:focus-visible{outline:2px solid var(--sage);outline-offset:2px;}
-  .hero .fineprint{font-size:13px;color:var(--ink-soft);margin-top:12px;}
-
-  /* ---------- Problem strip ---------- */
-  .problem{padding:64px 0;border-top:1px solid var(--line);}
-  .problem .grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:48px;
-  }
-  @media (max-width:720px){ .problem .grid{grid-template-columns:1fr;gap:32px;} }
-  .stat{border-left:2px solid var(--amber);padding-left:20px;}
-  .stat .num{font-family:'Nunito',sans-serif;font-size:42px;font-weight:900;color:var(--amber-deep);}
-  .stat p{margin:8px 0 0;color:var(--ink-soft);max-width:36ch;}
-  .problem .lede{
-    margin-top:40px;
-    max-width:62ch;
-    font-size:18px;
-  }
-
-  /* ---------- How it works (icon row) ---------- */
-  .how{padding:80px 0;border-top:1px solid var(--line);}
-  .how h2{font-size:clamp(28px,4vw,40px);max-width:16ch;}
-  .how p.lede{max-width:60ch;margin-top:20px;font-size:18px;color:var(--ink-soft);}
-  .flow{
-    margin-top:56px;
-    display:flex;
-    flex-wrap:wrap;
-    gap:0;
-    border-top:1px solid var(--line);
-    border-bottom:1px solid var(--line);
-    padding:36px 0;
-  }
-  .flow .step{position:relative;flex:1 1 0;min-width:180px;padding-right:34px;}
-  .flow .step:not(:last-child)::after{
-    content:'\203A';
-    position:absolute;
-    top:26px;
-    right:6px;
-    width:22px;height:22px;
-    border:1.5px solid var(--amber-deep);
-    border-radius:50%;
-    display:flex;align-items:center;justify-content:center;
-    color:var(--amber-deep);
-    font-size:13px;
-    line-height:1;
-    background:var(--paper);
-    transform:translateY(-50%);
-    z-index:1;
-  }
-  .flow .step .icon{
-    width:52px;height:52px;
-    border:2px solid var(--amber-deep);
-    border-radius:50%;
-    display:flex;align-items:center;justify-content:center;
-    color:var(--amber-deep);
-  }
-  .flow .step .icon svg{width:24px;height:24px;}
-  .flow .step h3{font-size:18px;font-weight:800;margin-top:14px;}
-  .flow .step p{font-size:14px;color:var(--ink-soft);margin-top:6px;}
-  @media (max-width:860px){
-    .flow{flex-direction:column;}
-    .flow .step:not(:last-child)::after{display:none;}
-  }
-
-  /* ---------- Outcomes ---------- */
-  .outcomes{padding:72px 0;border-bottom:1px solid var(--line);}
-  .outcomes .row{
-    display:flex;
-    flex-wrap:wrap;
-  }
-  .outcomes .item{
-    flex:1 1 200px;
-    padding:0 32px;
-    border-left:1px solid var(--line);
-  }
-  .outcomes .item:first-child{border-left:none;padding-left:0;}
-  .outcomes .item .num{font-family:'Nunito',sans-serif;font-weight:900;font-size:44px;}
-  .outcomes .item:nth-child(1) .num{color:var(--sage);}
-  .outcomes .item:nth-child(2) .num{color:var(--spec-2);}
-  .outcomes .item:nth-child(3) .num{color:var(--amber-deep);}
-  .outcomes .item p{
-    margin:6px 0 0;
-    font-size:13px;
-    font-weight:600;
-    letter-spacing:0.02em;
-    text-transform:uppercase;
-    color:var(--ink-soft);
-  }
-  @media (max-width:720px){
-    .outcomes .item{border-left:none;padding-left:0;border-top:1px solid var(--line);padding-top:20px;margin-top:20px;}
-    .outcomes .item:first-child{border-top:none;margin-top:0;padding-top:0;}
-  }
-
-  /* ---------- Flywheel ---------- */
-  .flywheel{padding:88px 0;border-bottom:1px solid var(--line);}
-  .flywheel h2{font-size:clamp(26px,3.6vw,34px);max-width:20ch;}
-  .roles-accent{
-    height:4px;
-    width:64px;
-    border-radius:2px;
-    margin-top:28px;
-    background:linear-gradient(90deg, var(--sage) 0%, var(--spec-2) 50%, var(--amber) 100%);
-  }
-  .roles{
-    margin-top:48px;
-    display:flex;
-    align-items:flex-start;
-    gap:0;
-    flex-wrap:wrap;
-  }
-  .role{flex:1 1 220px;padding-right:24px;}
-  .role .tag{font-size:13px;color:var(--sage);font-weight:600;}
-  .roles .role:nth-of-type(2) .tag{color:var(--spec-2);}
-  .roles .role:nth-of-type(3) .tag{color:var(--amber-deep);}
-  .role h3{font-size:19px;font-weight:500;margin-top:8px;}
-  .role p{color:var(--ink-soft);margin-top:8px;font-size:15px;max-width:32ch;}
-  .arrow{
-    align-self:center;
-    color:var(--line);
-    font-size:22px;
-    padding:0 6px;
-    display:block;
-  }
-  @media (max-width:760px){
-    .roles{flex-direction:column;gap:28px;}
-    .arrow{display:none;}
-  }
-
-  /* ---------- Fit ---------- */
-  .fit{padding:80px 0;}
-  .fit h2{font-size:clamp(26px,3.6vw,34px);max-width:18ch;}
-  .fit .persona-list{
-    list-style:none;
-    margin:36px 0 0;
-    padding:0;
-    max-width:680px;
-  }
-  .fit .persona-list li{
-    padding:22px 0;
-    border-top:1px solid var(--line);
-  }
-  .fit .persona-list li:last-child{border-bottom:1px solid var(--line);}
-  .persona-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;}
-  .persona-name{font-family:'Nunito',sans-serif;font-size:19px;font-weight:800;}
-  .persona-tag{
-    font-size:12px;
-    font-weight:600;
-    color:var(--ink);
-    background:var(--amber);
-    border-radius:100px;
-    padding:3px 12px;
-  }
-  .fit .persona-list p{margin:8px 0 0;color:var(--ink-soft);font-size:16px;max-width:56ch;}
-
-  /* ---------- CTA band ---------- */
-  .cta{
-    background:var(--paper-dim);
-    border-top:1px solid var(--line);
-    padding:88px 0;
-  }
-  .cta h2{font-size:clamp(28px,4vw,40px);max-width:16ch;}
-  .cta p.sub{max-width:54ch;color:var(--ink-soft);margin-top:16px;font-size:18px;}
-  .cta form.waitlist-full{
-    margin-top:36px;
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:14px;
-    max-width:640px;
-  }
-  @media (max-width:640px){ .cta form.waitlist-full{grid-template-columns:1fr;} }
-  .cta form.waitlist-full input,
-  .cta form.waitlist-full select{
-    padding:14px 16px;
-    border:1px solid var(--ink);
-    border-radius:6px;
-    font-family:'Inter',sans-serif;
-    font-size:16px;
-    background:var(--paper);
-    color:var(--ink);
-  }
-  .cta form.waitlist-full input:focus,
-  .cta form.waitlist-full select:focus{outline:2px solid var(--sage);outline-offset:2px;}
-  .cta form.waitlist-full .full{grid-column:1 / -1;}
-  .confirm{
-    display:none;
-    margin-top:20px;
-    padding:16px 18px;
-    background:var(--sage);
-    color:var(--cream-on-navy);
-    border-radius:6px;
-    font-size:15px;
-    font-weight:500;
-  }
-  .confirm.show{display:block;}
-
-  /* ---------- Footer ---------- */
-  .booth-bar{
-    background:var(--charcoal);
-    color:var(--amber);
-    text-align:center;
-    font-weight:700;
-    font-size:16px;
-    padding:20px;
-  }
-  footer{padding:40px 0;border-top:1px solid var(--line);}
-  footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
-  footer p{font-size:13px;color:var(--ink-soft);margin:0;}
-
-  @media (prefers-reduced-motion: reduce){
-    html{scroll-behavior:auto;}
-  }
-  .top-accent{
-    height:5px;
-    background:linear-gradient(90deg, var(--sage) 0%, var(--spec-2) 50%, var(--amber) 100%);
-  }
-  .proof-bar{
-    background:var(--charcoal);
-    color:var(--amber);
-    text-align:center;
-    font-weight:600;
-    font-size:12px;
-    letter-spacing:.01em;
-    padding:7px 20px;
-  }
-
-  /* ---------- How-it-works detail page ---------- */
-  .states{
-    margin-top:56px;
-    display:flex;
-    flex-wrap:wrap;
-    border-top:1px solid var(--line);
-    border-bottom:1px solid var(--line);
-    padding:36px 0;
-  }
-  .states .state{position:relative;flex:1 1 0;min-width:180px;padding-right:34px;}
-  .states .state:not(:last-child)::after{
-    content:'\2192';
-    position:absolute;
-    top:14px;
-    right:6px;
-    color:var(--line);
-    font-size:20px;
-    line-height:1;
-  }
-  .states .state .dot{
-    width:14px;height:14px;
-    border-radius:50%;
-    background:var(--sage);
-  }
-  .states .state:nth-child(2) .dot{background:var(--spec-2);}
-  .states .state:nth-child(3) .dot{background:var(--amber-deep);}
-  .states .state:nth-child(4) .dot{background:#5B8A5A;}
-  .states .state h3{font-size:17px;font-weight:800;margin-top:14px;}
-  .states .state p{font-size:14px;color:var(--ink-soft);margin-top:6px;}
-  @media (max-width:860px){
-    .states{flex-direction:column;gap:24px;}
-    .states .state:not(:last-child)::after{display:none;}
-  }
-
-  .detail-block{padding:72px 0;border-bottom:1px solid var(--line);}
-  .detail-block .kicker{
-    font-size:13px;font-weight:700;letter-spacing:0.02em;text-transform:uppercase;color:var(--sage);
-  }
-  .detail-block h2{font-size:clamp(24px,3.4vw,32px);max-width:22ch;margin-top:10px;}
-  .detail-block .lede{max-width:62ch;margin-top:16px;font-size:17px;color:var(--ink-soft);}
-  .detail-grid{
-    margin-top:36px;
-    display:flex;
-    flex-wrap:wrap;
-    gap:32px;
-  }
-  .detail-grid .card{flex:1 1 260px;}
-  .detail-grid .card h4{font-size:16px;font-weight:800;}
-  .detail-grid .card p{font-size:15px;color:var(--ink-soft);margin-top:6px;}
-
-  .channel-rows{margin-top:36px;max-width:760px;}
-  .channel-row{
-    display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;
-    padding:18px 0;border-top:1px solid var(--line);
-  }
-  .channel-row:last-child{border-bottom:1px solid var(--line);}
-  .channel-row .when{font-weight:800;font-size:16px;flex:0 0 120px;}
-  .channel-row .what{color:var(--ink-soft);font-size:15px;flex:1 1 300px;}
-
-  .confidence-callout{
-    margin-top:36px;
-    background:var(--paper-dim);
-    border-radius:10px;
-    padding:28px 32px;
-    max-width:760px;
-  }
-  .confidence-callout h4{font-size:17px;font-weight:800;}
-  .confidence-callout p{font-size:15px;color:var(--ink-soft);margin-top:8px;}
-  .confidence-callout .pills{margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;}
-  .confidence-callout .pill{
-    font-size:13px;font-weight:600;padding:6px 14px;border-radius:100px;
-    background:var(--paper);border:1px solid var(--line);color:var(--ink);
-  }
-  .confidence-callout .pill.go{border-color:var(--sage);color:var(--sage);}
-  .confidence-callout .pill.wait{border-color:var(--amber-deep);color:var(--amber-deep);}
-
-  .escalation-list{list-style:none;margin:36px 0 0;padding:0;max-width:700px;}
-  .escalation-list li{
-    padding:20px 0;border-top:1px solid var(--line);display:flex;gap:16px;align-items:flex-start;
-  }
-  .escalation-list li:last-child{border-bottom:1px solid var(--line);}
-  .escalation-list .mark{
-    flex:0 0 auto;width:8px;height:8px;border-radius:50%;background:var(--sage);margin-top:8px;
-  }
-  .escalation-list h4{font-size:16px;font-weight:800;}
-  .escalation-list p{font-size:15px;color:var(--ink-soft);margin-top:4px;}
-
-  .btn-link{
-    display:inline-block;
-    margin-top:28px;
-    padding:14px 24px;
-    background:var(--sage);
-    color:var(--cream-on-navy);
-    border-radius:6px;
-    font-family:'Inter',sans-serif;
-    font-weight:700;
-    font-size:16px;
-    text-decoration:none;
-  }
-  .btn-link:hover{background:var(--navy-deep);}
+.states { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.state { padding: 24px; display: grid; gap: 10px; align-content: start; }
+.state b { font-size: 18px; font-weight: 600; }
+.state p { font-size: 15px; color: var(--ui-ink-2); line-height: 1.5; }
+.pill { justify-self: start; font-size: 13px; font-weight: 600; padding: 4px 10px; border-radius: 999px; background: var(--ui-2); color: var(--ui-ink-2); }
+.pill--live { background: #fde0d5; color: #9d3414; }
+.pill--esc { background: #f3ecd9; color: #6e5313; }
+.pill--ok { background: #e3f3e8; color: #1d6b3d; }
+.tiers { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.tier { padding: 28px; border-radius: 20px; background: var(--panel); display: grid; gap: 10px; align-content: start; }
+.tier:nth-child(2) { background: #f4d6c6; }
+.tier:nth-child(3) { background: var(--accent); color: var(--accent-ink); }
+.tier h3 { font-size: var(--step-lead); }
+.tier .when { font-size: var(--step-small); }
+.reads { padding: 20px; display: grid; gap: 10px; }
+.read { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 12px 14px; background: var(--ui-2); border-radius: 10px; font-size: 14px; }
+.read small { display: block; color: var(--ui-ink-2); font-size: 13px; }
+.esc { padding: 20px; display: grid; gap: 10px; font-size: 14px; }
+.esc__top { display: flex; justify-content: space-between; font-weight: 600; font-size: 15px; padding-bottom: 4px; }
+.esc__top span { font-weight: 400; color: var(--ui-ink-2); font-size: 13px; }
+.msg { max-width: 84%; padding: 10px 13px; border-radius: 14px; line-height: 1.45; }
+.msg--june { justify-self: end; background: var(--accent); color: #fff; border-bottom-right-radius: 4px; }
+.msg--cg { justify-self: start; background: var(--ui-2); border-bottom-left-radius: 4px; }
+.esc__hand { margin-top: 6px; padding: 14px; background: #fde0d5; border-radius: 10px; display: grid; gap: 4px; }
+.esc__hand b { font-weight: 600; }
+.esc__hand span { color: var(--ui-ink-2); font-size: 13px; }
+.states { margin-top: 24px; }
+@media (max-width: 960px) { .states { grid-template-columns: 1fr 1fr; } .tiers { grid-template-columns: 1fr; } }
+@media (max-width: 560px) { .states { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
-<div class="top-accent"></div>
-<div class="proof-bar">From the team behind 500+ active clients and 450+ home care agencies nationally</div>
-
-<header class="site">
-  <div class="wrap">
-    <div class="wordmark-group">
-      <svg class="june-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3153 2261">
-  <g transform="translate(143.30,606.71)">
-    <g transform="translate(376.13,-353.21) scale(2.6238)"><path d="M 3,-6 C -20,-42 -66,-28 -68,10 C -70,48 -36,66 -2,110 C 40,70 74,44 72,6 C 70,-32 24,-42 3,-6 Z" fill="#E8481F"/></g>
-    <g id="word" fill="#55443C" transform="matrix(1,0,0,-1,265.0,521.0)">
-    <path transform="translate(0,0)" d="M114 -35Q151 5 190.0 49.5Q229 94 265.0 138.5Q301 183 331.0 226.5Q361 270 378 309Q387 331 412 331Q429 331 439.5 319.5Q450 308 450 294Q450 286 447 279Q424 227 384.0 171.0Q344 115 297.5 59.5Q251 4 202.5 -48.5Q154 -101 114 -146Q115 -226 116.5 -303.0Q118 -380 118 -449Q118 -724 64.0 -857.0Q10 -990 -97 -990Q-134 -990 -165.0 -974.0Q-196 -958 -218.0 -928.0Q-240 -898 -252.5 -854.0Q-265 -810 -265 -754Q-265 -692 -248.5 -618.5Q-232 -545 -195.5 -463.0Q-159 -381 -101.0 -293.5Q-43 -206 39 -116Q39 -30 40.0 55.5Q41 141 43.5 219.5Q46 298 50.5 366.5Q55 435 61 488Q63 503 73.5 512.0Q84 521 99 521Q114 521 125.0 510.0Q136 499 136 483Q136 477 132.5 444.0Q129 411 125.0 347.0Q121 283 117.5 188.5Q114 94 114 -35ZM43 -443Q43 -392 42.0 -341.0Q41 -290 40 -230Q-22 -305 -65.5 -378.0Q-109 -451 -137.0 -518.0Q-165 -585 -177.5 -645.0Q-190 -705 -190 -754Q-190 -782 -186.0 -810.5Q-182 -839 -171.5 -862.5Q-161 -886 -143.0 -900.5Q-125 -915 -97 -915Q-86 -915 -71.0 -910.0Q-56 -905 -40.5 -888.5Q-25 -872 -10.0 -841.0Q5 -810 17.0 -757.5Q29 -705 36.0 -628.0Q43 -551 43 -443Z"/>
-    <path transform="translate(340,0)" d="M370 112Q335 55 288.5 22.0Q242 -11 195 -11Q157 -11 127.0 3.0Q97 17 75.0 42.5Q53 68 41.5 104.0Q30 140 30 185Q30 255 43.5 309.0Q57 363 73.0 399.5Q89 436 103.0 455.0Q117 474 117 474Q122 480 129.5 483.0Q137 486 145 486Q161 486 171.5 474.5Q182 463 182 448Q182 442 179.5 436.0Q177 430 174 424Q169 415 158.0 396.5Q147 378 135.0 348.0Q123 318 114.0 277.5Q105 237 105 185Q105 126 128.5 95.5Q152 65 195 65Q213 65 236.5 76.5Q260 88 282.5 112.0Q305 136 322.0 173.0Q339 210 344 260L359 432Q361 447 372.0 457.0Q383 467 398 467Q415 467 425.0 454.5Q435 442 435 426L422 260Q420 239 423.5 205.0Q427 171 438.0 138.0Q449 105 471.0 81.5Q493 58 529 58Q555 58 580.0 71.5Q605 85 628.0 107.0Q651 129 670.5 156.5Q690 184 706.5 212.0Q723 240 735.0 265.5Q747 291 755 309Q760 320 769.0 326.0Q778 332 789 332Q807 332 817.0 320.0Q827 308 827 294Q827 286 824 279Q820 271 808.5 245.5Q797 220 778.5 187.5Q760 155 734.0 119.0Q708 83 676.0 52.5Q644 22 606.5 2.5Q569 -17 526 -17Q467 -17 428.0 16.5Q389 50 370 112Z"/>
-    <path transform="translate(1057,0)" d="M260 90Q276 123 297.0 162.5Q318 202 342.0 242.5Q366 283 392.5 323.0Q419 363 448 399Q477 434 506.5 449.5Q536 465 562 465Q614 465 639.0 427.0Q664 389 664 333Q664 320 662.5 301.5Q661 283 659.5 262.0Q658 241 656.5 219.5Q655 198 655 179Q655 155 657.5 133.0Q660 111 667.0 94.5Q674 78 687.0 68.5Q700 59 721 59Q759 59 795.0 88.5Q831 118 861.5 158.5Q892 199 914.5 241.0Q937 283 948 309Q953 320 962.5 326.0Q972 332 983 332Q1000 332 1010.5 319.5Q1021 307 1021 293Q1021 286 1018 279Q1014 271 1002.0 246.0Q990 221 970.5 188.5Q951 156 925.0 119.5Q899 83 867.5 53.0Q836 23 799.5 3.0Q763 -17 723 -17Q678 -17 650.0 0.5Q622 18 606.0 46.5Q590 75 584.5 109.5Q579 144 579 179Q579 194 580.5 213.0Q582 232 584.5 253.0Q587 274 588.5 295.0Q590 316 590 335Q590 367 580.0 378.5Q570 390 562 390Q546 390 525.5 371.5Q505 353 482.5 323.0Q460 293 436.5 255.5Q413 218 392.5 181.0Q372 144 354.5 110.5Q337 77 327 55Q307 13 287.0 -1.5Q267 -16 246 -16Q217 -16 199.5 1.5Q182 19 182 51Q182 58 184.0 78.5Q186 99 189.0 127.5Q192 156 195.0 189.0Q198 222 201.0 254.5Q204 287 206.0 315.0Q208 343 208 362Q208 387 206.0 410.0Q204 433 198 438Q189 435 166.0 400.5Q143 366 107 279Q102 268 92.0 262.0Q82 256 71 256Q54 256 44.0 267.5Q34 279 34 294Q34 301 37 309Q82 416 121.5 466.5Q161 517 200 517Q223 517 239.0 505.5Q255 494 264.5 475.0Q274 456 278.5 433.0Q283 410 283 386Q283 368 280.5 330.0Q278 292 274.0 248.5Q270 205 266.5 162.0Q263 119 260 90Z"/>
-    <path transform="translate(1968,0)" d="M158 110Q179 81 212.0 63.5Q245 46 293 46Q342 46 382.0 69.5Q422 93 455.0 131.0Q488 169 514.0 216.0Q540 263 561 310Q566 321 575.0 326.5Q584 332 595 332Q612 332 622.5 320.0Q633 308 633 294Q633 289 632.0 285.5Q631 282 629 278Q560 126 478.5 49.0Q397 -28 294 -30Q228 -30 180.0 -4.5Q132 21 101.0 61.5Q70 102 55.0 153.0Q40 204 40 255Q40 306 52.5 349.0Q65 392 88.5 424.0Q112 456 144.5 474.0Q177 492 216 492Q239 492 261.5 482.5Q284 473 302.0 455.5Q320 438 331.0 413.0Q342 388 342 356Q342 315 328.0 279.0Q314 243 289.5 212.0Q265 181 231.0 155.0Q197 129 158 110ZM128 175Q159 188 184.5 208.0Q210 228 228.0 252.0Q246 276 256.0 302.5Q266 329 266 356Q266 386 251.0 401.5Q236 417 216 417Q189 417 170.0 402.0Q151 387 139.0 363.0Q127 339 121.5 309.5Q116 280 116 251Q116 233 119.5 213.0Q123 193 128 175Z"/>
-  </g>
-  </g>
-</svg>
-      <div class="powered-by">powered by <b>Cleardesk</b></div>
-    </div>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="how-it-works.html" aria-current="page">How It Works</a>
-      <a href="join-waitlist.html">Join Early Access</a>
-    </nav>
-  </div>
+<header class="bar">
+  <a class="bar__logo" href="/" aria-label="June home"><img src="/assets/june-logo.svg" alt="June" width="92" height="64"></a>
+  <nav aria-label="Main">
+    <a href="/how-it-works" class="hide-sm" aria-current="page">How it works</a>
+    <a href="/#price" class="hide-sm">Pricing</a>
+    <a href="/demo" class="hide-sm">Watch demo</a>
+    <a href="https://app.junecare.ai/app/">Sign in</a>
+    <a class="btn btn--sm" href="/signup">Get started free</a>
+  </nav>
 </header>
 
-<section class="hero">
-  <div class="wrap">
-    <h1>The mechanics behind the coverage.</h1>
-    <p class="sub">Every open shift moves through the same process &mdash; detected, matched, contacted, confirmed &mdash; with a person able to step in at any point along the way.</p>
-  </div>
-</section>
-
-<section class="problem">
-  <div class="wrap">
+<main>
+  <section class="head">
+    <h1>How June covers a shift.</h1>
+    <p>Every open shift moves through the same path: detected, matched, contacted, confirmed. A person can step in at any point along the way.</p>
     <div class="states">
-      <div class="state">
-        <div class="dot"></div>
-        <h3>Monitoring</h3>
-        <p>A caregiver's assigned. June watches for a callout or a missed confirmation &mdash; nothing else happens until one shows up.</p>
-      </div>
-      <div class="state">
-        <div class="dot"></div>
-        <h3>Outreach</h3>
-        <p>The gap is live. June is actively working through the bench to find a replacement.</p>
-      </div>
-      <div class="state">
-        <div class="dot"></div>
-        <h3>Escalated</h3>
-        <p>June paused outreach and handed the shift to a live scheduler, with everything that's happened so far attached.</p>
-      </div>
-      <div class="state">
-        <div class="dot"></div>
-        <h3>Resolved</h3>
-        <p>Confirmed and logged. The caregiver's notified, and the assignment is on record.</p>
-      </div>
+      <article class="state" data-ui data-rise><span class="pill">Monitoring</span><b>A shift is assigned</b><p>June watches for a callout or a missed confirmation. Nothing else happens until one shows up.</p></article>
+      <article class="state" data-ui data-rise style="--i:1"><span class="pill pill--live">Outreach</span><b>The gap is live</b><p>June works through the bench to find a qualified replacement.</p></article>
+      <article class="state" data-ui data-rise style="--i:2"><span class="pill pill--esc">Escalated</span><b>A person takes it</b><p>Outreach pauses and the shift goes to a live scheduler with everything so far attached.</p></article>
+      <article class="state" data-ui data-rise style="--i:3"><span class="pill pill--ok">Resolved</span><b>Confirmed and logged</b><p>The caregiver is notified and the assignment is on record.</p></article>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="detail-block">
-  <div class="wrap">
-    <div class="kicker">Detection</div>
-    <h2>Most gaps get caught before anyone notices.</h2>
-    <p class="lede">There are two ways a shift ends up needing coverage &mdash; and June is watching for both, not just waiting for the phone to ring.</p>
-    <div class="detail-grid">
-      <div class="card">
-        <h4>A caregiver doesn't confirm</h4>
-        <p>If an assigned caregiver hasn't confirmed by a set window before their shift, June starts lining up a backup while your scheduler follows up with the original caregiver directly.</p>
-      </div>
-      <div class="card">
-        <h4>A callout comes in</h4>
-        <p>Caregiver cancels, your team logs it, or a clock-in doesn't happen &mdash; June moves the shift into outreach immediately.</p>
-      </div>
-      <div class="card">
-        <h4>A thin bench gets flagged early</h4>
-        <p>If a client's pool of qualified caregivers drops below a safe level, June flags it before it becomes an emergency, not after.</p>
-      </div>
+  <section class="sec" aria-labelledby="detect-title">
+    <h2 id="detect-title">Caught before anyone notices.</h2>
+    <div class="trio">
+      <div data-rise><h3>A caregiver doesn't confirm</h3><p>If an assigned caregiver hasn't confirmed within your set window, June lines up a backup while your scheduler follows up directly.</p></div>
+      <div data-rise style="--i:1"><h3>A callout comes in</h3><p>A cancellation, a logged callout or a missed clock in moves the shift straight into outreach.</p></div>
+      <div data-rise style="--i:2"><h3>A thin bench gets flagged</h3><p>If a client's pool of qualified caregivers drops below a safe level, June flags it early rather than after the fact.</p></div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="detail-block">
-  <div class="wrap">
-    <div class="kicker">Matching</div>
-    <h2>Not everyone gets contacted in the same order.</h2>
-    <p class="lede">Before anyone is contacted, June checks the basics: certification, language, gender preference if the client requires it, and whether reaching out would put someone over an authorized-hours limit. Fail any one of those and a caregiver never enters the pool &mdash; no exceptions.</p>
-    <p class="lede">From there, caregivers who've worked with this client before and have a strong track record are contacted first. Caregivers who are new to the client but reliable come next. Everyone else is contacted only if the first two groups don't pan out. Within each group, June also weighs how many hours someone's already worked that week and how close they are to the client &mdash; so it's picking the best fit that's actually available, not just the fastest responder.</p>
-  </div>
-</section>
-
-<section class="detail-block">
-  <div class="wrap">
-    <div class="kicker">Outreach</div>
-    <h2>How fast it moves depends on how urgent the shift is.</h2>
-    <p class="lede">Every caregiver gets a text or a call, in an order and pace set by how soon the shift starts.</p>
-    <div class="channel-rows">
-      <div class="channel-row">
-        <div class="when">Standard</div>
-        <div class="what">Shift is hours out. Text first &mdash; a call only goes out if there's no reply.</div>
-      </div>
-      <div class="channel-row">
-        <div class="when">Urgent</div>
-        <div class="what">Shift is getting close. Text and call go out at the same time.</div>
-      </div>
-      <div class="channel-row">
-        <div class="when">Critical</div>
-        <div class="what">Shift starts soon. Call comes first, with a text as backup.</div>
-      </div>
+  <section class="sec" aria-labelledby="match-title">
+    <h2 id="match-title">Not everyone hears first.</h2>
+    <div class="sec__text">
+      <p data-rise>Before anyone is contacted, June checks the basics: certification, language, any client preference, and whether the visit would push someone past an authorized hours limit. Fail one of those and a caregiver never enters the pool.</p>
+      <p data-rise style="--i:1">Caregivers who have worked with this client before and show up go first. Reliable caregivers new to the client come next. Everyone else hears only if those groups don't pan out, weighted by hours already worked that week and the drive to the client.</p>
     </div>
-    <p class="lede">Every voice call gives the caregiver a simple choice: accept, decline, or stay on the line to talk to a person. Anything other than a clear yes or no gets a live scheduler on the phone immediately &mdash; June doesn't attempt an open-ended conversation.</p>
-  </div>
-</section>
+    <div class="sec__side shot" data-rise style="--i:2"><img src="/assets/app-plan.jpg" width="690" height="590" alt="June's plan for a Tuesday shift with Dolores: three caregivers in the first wave and two in the second, each with a match score, the drive and the reason" loading="lazy"></div>
+  </section>
 
-<section class="detail-block">
-  <div class="wrap">
-    <div class="kicker">Response handling</div>
-    <h2>Every reply gets read and double-checked.</h2>
-    <p class="lede">June reads each response back and sorts it into accepted, declined, needs clarification, or no response.</p>
-    <div class="confidence-callout">
-      <h4>Confidence-scored, not just yes or no</h4>
-      <p>If a reply looks like an acceptance but June isn't confident enough in the read, the shift doesn't lock automatically &mdash; it goes to a live scheduler to confirm first. A misread never quietly becomes an uncovered shift.</p>
-      <div class="pills">
-        <span class="pill go">Accepted &middot; High confidence &middot; Auto-confirmed</span>
-        <span class="pill wait">Looks accepted &middot; Low confidence &middot; Held for review</span>
-        <span class="pill">Unclear reply &middot; Clarification sent</span>
-      </div>
+  <section class="sec" aria-labelledby="pace-title">
+    <h2 id="pace-title">The pace follows the clock.</h2>
+    <div class="tiers">
+      <div class="tier" data-rise><span class="when">Standard</span><h3>Hours out</h3><p>Text first. A call only goes out if there's no reply.</p></div>
+      <div class="tier" data-rise style="--i:1"><span class="when">Urgent</span><h3>Getting close</h3><p>Text and call go out together.</p></div>
+      <div class="tier" data-rise style="--i:2"><span class="when">Critical</span><h3>Starts soon</h3><p>The call comes first, with a text as backup.</p></div>
     </div>
-  </div>
-</section>
+    <p class="lede" data-rise>Every call offers a simple choice: accept, decline, or stay on the line for a person. Anything other than a clear yes or no puts a live scheduler on the phone.</p>
+  </section>
 
-<section class="detail-block">
-  <div class="wrap">
-    <div class="kicker">Escalation</div>
-    <h2>When it hands off to a person.</h2>
-    <p class="lede">June doesn't wait until a shift is unfixable to ask for help.</p>
-    <ul class="escalation-list">
-      <li>
-        <div class="mark"></div>
-        <div>
-          <h4>The bench runs out</h4>
-          <p>Every eligible caregiver's been contacted and none confirmed. There's nothing left for the system to try on its own.</p>
-        </div>
-      </li>
-      <li>
-        <div class="mark"></div>
-        <div>
-          <h4>Time's getting short</h4>
-          <p>A shift is close to starting and still open, regardless of how much bench is left.</p>
-        </div>
-      </li>
-      <li>
-        <div class="mark"></div>
-        <div>
-          <h4>Replies keep coming back unclear</h4>
-          <p>Several confusing responses in a row usually means something's off with the shift details or the message itself &mdash; worth a person looking at it.</p>
-        </div>
-      </li>
-      <li>
-        <div class="mark"></div>
-        <div>
-          <h4>A caregiver would go over an authorized-hours limit</h4>
-          <p>June won't quietly skip this. It stops and flags exactly which rule would be broken.</p>
-        </div>
-      </li>
-      <li>
-        <div class="mark"></div>
-        <div>
-          <h4>A caregiver asks for a person</h4>
-          <p>Anyone who stays on the line during a call, or asks directly, gets transferred right away.</p>
-        </div>
-      </li>
-      <li>
-        <div class="mark"></div>
-        <div>
-          <h4>Your scheduler just takes over</h4>
-          <p>One click pauses June on that shift, no matter what state it's in.</p>
-        </div>
-      </li>
+  <section class="sec" aria-labelledby="reads-title">
+    <h2 id="reads-title">Every reply is read twice.</h2>
+    <div class="sec__text">
+      <p data-rise>Replies are sorted into accepted, declined, needs clarification or no response. If something looks like a yes but June isn't sure of the read, the shift doesn't lock. It's held for a scheduler to confirm.</p>
+      <p data-rise style="--i:1">A misread never quietly turns into an uncovered shift.</p>
+    </div>
+    <div class="sec__side reads" data-ui data-rise style="--i:2">
+      <div class="read"><span>"Yes I can take it"<small>Accepted, sure of the read</small></span><span class="pill pill--ok">Booked</span></div>
+      <div class="read"><span>"yeah maybe if my sister can drive me"<small>Looks like a yes, not sure</small></span><span class="pill pill--esc">Held</span></div>
+      <div class="read"><span>"which client is it?"<small>Unclear</small></span><span class="pill">Asked back</span></div>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="hand-title">
+    <h2 id="hand-title">When a person takes over.</h2>
+    <div class="sec__side esc" data-ui data-rise style="--i:2">
+      <div class="esc__top">Yolanda C. <span>text · 6:58 am</span></div>
+      <p class="msg msg--june">The visit starts at 8 at Dolores's home in Santee. Can you be there?</p>
+      <p class="msg msg--cg">I can but my car is in the shop. Can someone pick me up?</p>
+      <p class="msg msg--june">Let me get Daisy for that. She'll text you in a minute.</p>
+      <div class="esc__hand"><b>Handed to Daisy, your scheduler</b><span>The whole thread is attached, word for word</span></div>
+    </div>
+    <ul class="dots">
+      <li data-rise>Every eligible caregiver has been asked and none confirmed.</li>
+      <li data-rise style="--i:1">A shift is close to starting and still open.</li>
+      <li data-rise style="--i:2">Several unclear replies in a row suggest something is off with the shift details.</li>
+      <li data-rise style="--i:3">A caregiver would go past an authorized hours limit. June stops and names the rule.</li>
+      <li data-rise style="--i:4">A caregiver asks for a person, or stays on the line during a call.</li>
+      <li data-rise style="--i:5">Your scheduler takes over with one click, whatever state the shift is in.</li>
     </ul>
-  </div>
-</section>
+  </section>
 
-<section class="detail-block" style="border-bottom:none;">
-  <div class="wrap">
-    <div class="kicker">Resolution</div>
-    <h2>Then it closes the loop.</h2>
-    <div class="detail-grid">
-      <div class="card">
-        <h4>Logged automatically</h4>
-        <p>The confirmed caregiver gets written back to your system of record.</p>
-      </div>
-      <div class="card">
-        <h4>Caregiver gets confirmed</h4>
-        <p>A text goes out with the shift details &mdash; client, address, time, anything they need to know.</p>
-      </div>
-      <div class="card">
-        <h4>Nothing disappears</h4>
-        <p>The full outreach thread stays attached to the shift for as long as you need to look back at it.</p>
-      </div>
+  <section class="sec" aria-labelledby="close-title">
+    <h2 id="close-title">Then it closes the loop.</h2>
+    <div class="sec__side shot" style="grid-row:1" data-rise><img src="/assets/app-thread-pane.jpg" width="718" height="497" alt="June's text thread with Marisol, ending with her booked on Dolores's shift" loading="lazy"></div>
+    <div class="band">
+      <div data-rise><h3>Logged automatically</h3><p>The confirmed caregiver is written back to your system of record.</p></div>
+      <div data-rise style="--i:1"><h3>Caregiver gets confirmed</h3><p>A text goes out with the client, address, time and anything else they need.</p></div>
+      <div data-rise style="--i:2"><h3>Nothing disappears</h3><p>The full outreach thread stays attached to the shift for as long as you need it.</p></div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="cta">
-  <div class="wrap">
-    <h2>Want this running for your franchise?</h2>
-    <p class="sub">Join early access and we'll reach out as pilot spots open up.</p>
-    <a href="join-waitlist.html" class="btn-link">Join early access</a>
-  </div>
-</section>
+  <section class="cta-band" aria-labelledby="cta-title">
+    <h2 id="cta-title">Want this running for your agency?</h2>
+    <p>Connect WellSky and ask your first question in about a minute. Free forever.</p>
+    <a class="btn btn--ink" href="/signup">Get started free</a>
+  </section>
+</main>
 
-<footer>
-  <div class="wrap">
-    <p>&copy; 2026 June, powered by Cleardesk.</p>
-    <p>San Diego, CA</p>
-  </div>
+<footer class="foot">
+  <span>JuneAI LLC · (877) 563-9814 · support@junecare.ai</span>
+  <nav aria-label="Footer">
+    <a href="/how-it-works">How it works</a>
+    <a href="/demo">Watch demo</a>
+    <a href="/june-vs-phoebe">June vs Phoebe</a>
+    <a href="/signup">Get started free</a>
+    <a href="/terms">Terms</a>
+  </nav>
+  <span class="foot__end"><span>© 2026 JuneAI LLC</span><a href="/privacy">Privacy</a></span>
 </footer>
-
+<script type="module" src="/assets/site.js"></script>
 </body>
 </html>

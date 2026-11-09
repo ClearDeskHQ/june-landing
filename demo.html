@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Watch June fill a shift</title>
+<meta name="description" content="Two and a half minutes: a caregiver calls out and June fills the shift, from the outreach list to the phone call to the booking.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.reel { margin: 0 20px; border-radius: 28px; overflow: hidden; background: var(--night); }
+.reel video { width: 100%; height: auto; aspect-ratio: 2172 / 1080; background: var(--night); }
+.reel__row { display: flex; flex-wrap: wrap; gap: 16px 32px; align-items: center; justify-content: space-between; padding: 20px var(--margin); color: var(--night-ink); font-size: var(--step-small); }
+.reel__row a { color: var(--night-ink); }
+.try { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 24px; row-gap: 24px; align-items: center; background: var(--panel); border-radius: 28px; padding: clamp(32px, 5vw, 64px); }
+.try h2 { grid-column: 1 / span 6; font-size: var(--step-section); }
+.try p { grid-column: 1 / span 6; color: var(--ink-2); }
+.try__acts { grid-column: 8 / -1; grid-row: 1 / span 2; display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center; justify-content: flex-end; }
+.beats { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
+.beats time { font-size: var(--step-small); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.beats h3 { font-size: 1.375rem; letter-spacing: -0.01em; margin: 6px 0 10px; }
+.beats p { color: var(--ink-2); }
+.call-shot { grid-column: 8 / -1; grid-row: 1 / span 3; }
+.pair { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; margin-top: 24px; }
+.pair figure { margin: 0; }
+.pair figcaption { padding: 14px 16px; font-size: var(--step-small); color: var(--ui-ink-2); background: var(--ui); }
+@media (max-width: 760px) { .pair { grid-template-columns: 1fr; } }
+@media (max-width: 960px) {
+  .beats { grid-template-columns: 1fr 1fr; }
+  .try h2, .try p, .try__acts, .call-shot { grid-column: 1 / -1; grid-row: auto; justify-content: flex-start; }
+}
+@media (max-width: 560px) { .beats { grid-template-columns: 1fr; } .reel { margin-inline: 10px; } }
+</style>
+</head>
+<body>
+<header class="bar">
+  <a class="bar__logo" href="/" aria-label="June home"><img src="/assets/june-logo.svg" alt="June" width="92" height="64"></a>
+  <nav aria-label="Main">
+    <a href="/how-it-works" class="hide-sm">How it works</a>
+    <a href="/#price" class="hide-sm">Pricing</a>
+    <a href="/demo" class="hide-sm" aria-current="page">Watch demo</a>
+    <a href="https://app.junecare.ai/app/">Sign in</a>
+    <a class="btn btn--sm" href="/signup">Get started free</a>
+  </nav>
+</header>
+
+<main>
+  <section class="head">
+    <h1>Watch June fill a shift.</h1>
+    <p>A caregiver calls out and June takes it from there: the list, the call, the booking, start to finish. About two and a half minutes. Sound on, the call is the point.</p>
+  </section>
+
+  <section class="reel" aria-label="The demo video">
+    <video src="/assets/june-demo.mp4" poster="/assets/june-demo-cover.jpg" width="2172" height="1080" controls playsinline preload="metadata">
+      <a href="/assets/june-demo.mp4">Download the demo</a>
+    </video>
+    <div class="reel__row"><span>A real call June made to a caregiver, played back with its transcript</span><a href="/assets/june-demo.mp4" download>Download the demo</a></div>
+  </section>
+
+  <section class="sec" aria-labelledby="try-title">
+    <div class="try">
+      <h2 id="try-title">Try it yourself.</h2>
+      <p>The live demo opens in a new tab. June calls your own phone so you can hear her.</p>
+      <div class="try__acts">
+        <a class="btn" href="https://tryjunedemo.up.railway.app/" target="_blank" rel="noopener">Try the live demo</a>
+        <a class="link" href="/how-it-works">See how it works</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="beats-title">
+    <h2 id="beats-title">From callout to filled shift.</h2>
+    <div class="beats">
+      <div data-rise><time>0:05</time><h3>A shift opens</h3><p>A caregiver calls out of a visit scheduled for the next morning. June starts working the gap right away.</p></div>
+      <div data-rise style="--i:1"><time>0:15</time><h3>June proposes the list</h3><p>Four caregivers in match order, each with how they'll be reached: a call for most, a text for the one still on a visit until eleven.</p></div>
+      <div data-rise style="--i:2"><time>0:42</time><h3>June makes the call</h3><p>The caregiver asks about pay, the client, the drive and what the visit involves. June answers each one and keeps the call moving.</p></div>
+      <div data-rise style="--i:3"><time>2:03</time><h3>The shift is booked</h3><p>The caregiver says yes. June confirms the details back, and the scheduler signs off on the rest.</p></div>
+    </div>
+    <div class="pair">
+      <figure class="shot" data-rise><img src="/assets/app-plan.jpg" width="690" height="590" alt="June's plan for a Tuesday shift with Dolores, in waves, each caregiver with a reason" loading="lazy"><figcaption>The plan your scheduler approves</figcaption></figure>
+      <figure class="shot" data-rise style="--i:1"><img src="/assets/app-thread-pane.jpg" width="718" height="497" alt="June's text thread with a caregiver, ending with her booked" loading="lazy"><figcaption>The thread that books the shift</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="call-title">
+    <h2 id="call-title">They ask. June answers.</h2>
+    <p class="lede">Most outreach fails on detail: the rate, the drive, what the client needs. June handles those in the moment, which is why the calls convert.</p>
+    <ul class="dots">
+      <li data-rise>Pay rate, stated plainly</li>
+      <li data-rise style="--i:1">Who the client is and what the visit involves</li>
+      <li data-rise style="--i:2">How far it is from the caregiver</li>
+      <li data-rise style="--i:3">What's in the home: pets, stairs, mobility</li>
+      <li data-rise style="--i:4">A clear yes or no, and the booking that follows</li>
+    </ul>
+    <div class="call-shot shot" data-rise style="--i:2"><img src="/assets/call.jpg" width="740" height="596" alt="The transcript of June's call with a caregiver named Elias, answering his questions about pay, the client and pets" loading="lazy"></div>
+  </section>
+
+  <section class="cta-band" aria-labelledby="cta-title">
+    <h2 id="cta-title">Want this working your shifts?</h2>
+    <p>Tell us about your agency and we'll reach out as pilot spots open.</p>
+    <a class="btn btn--ink" href="/signup">Get started free</a>
+  </section>
+</main>
+
+<footer class="foot">
+  <span>JuneAI LLC · (877) 563-9814 · support@junecare.ai</span>
+  <nav aria-label="Footer">
+    <a href="/how-it-works">How it works</a>
+    <a href="/demo">Watch demo</a>
+    <a href="/june-vs-phoebe">June vs Phoebe</a>
+    <a href="/signup">Get started free</a>
+    <a href="/terms">Terms</a>
+  </nav>
+  <span class="foot__end"><span>© 2026 JuneAI LLC</span><a href="/privacy">Privacy</a></span>
+</footer>
+<script type="module" src="/assets/site.js"></script>
+</body>
+</html>

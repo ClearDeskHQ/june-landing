@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>June vs Phoebe</title>
+<meta name="description" content="June and Phoebe side by side: price, focus, how caregivers are reached, and when a person steps in.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.head__acts { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: center; }
+.cmp { grid-column: 1 / -1; overflow-x: auto; }
+.cmp table { width: 100%; min-width: 640px; border-collapse: collapse; font-size: 1rem; }
+.cmp th, .cmp td { text-align: left; vertical-align: top; padding: 20px 20px 20px 0; border-bottom: 1px solid var(--panel-2); }
+.cmp thead th { font-size: var(--step-lead); font-weight: 600; padding-bottom: 16px; }
+.cmp tbody th { font-weight: 500; width: 22%; }
+.cmp td:nth-of-type(1) { width: 40%; }
+.cmp td:nth-of-type(2) { color: var(--ink-2); }
+.cmp .price { font-size: var(--step-lead); font-weight: 600; }
+.fine { grid-column: 1 / span 8; font-size: var(--step-small); color: var(--ink-2); }
+.qs { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+@media (max-width: 960px) { .qs { grid-template-columns: 1fr; } }
+@media (max-width: 640px) {
+  .cmp table { min-width: 0; }
+  .cmp thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .cmp tr, .cmp th, .cmp td { display: block; width: auto !important; }
+  .cmp tbody th { padding: 24px 0 8px; border: 0; font-weight: 600; }
+  .cmp td { padding: 4px 0 12px; border: 0; }
+  .cmp td::before { content: attr(data-label); display: block; font-size: var(--step-small); color: var(--ink-2); }
+  .cmp tr { border-bottom: 1px solid var(--panel-2); }
+}
+.qs h3 { font-size: 1.375rem; letter-spacing: -0.01em; margin-bottom: 10px; }
+.qs p { color: var(--ink-2); }
+</style>
+</head>
+<body>
+<header class="bar">
+  <a class="bar__logo" href="/" aria-label="June home"><img src="/assets/june-logo.svg" alt="June" width="92" height="64"></a>
+  <nav aria-label="Main">
+    <a href="/how-it-works" class="hide-sm">How it works</a>
+    <a href="/#price" class="hide-sm">Pricing</a>
+    <a href="/demo" class="hide-sm">Watch demo</a>
+    <a href="https://app.junecare.ai/app/">Sign in</a>
+    <a class="btn btn--sm" href="/signup">Get started free</a>
+  </nav>
+</header>
+
+<main>
+  <section class="head">
+    <h1>June vs Phoebe</h1>
+    <p>Two to three times your billable hours, at a third to half the price.</p>
+    <div class="head__acts"><a class="btn" href="/signup">Get started free</a><a class="link" href="/how-it-works">See how June works</a></div>
+  </section>
+
+  <section class="sec" aria-labelledby="side-title">
+    <h2 id="side-title">Side by side</h2>
+    <div class="cmp">
+      <table>
+        <thead><tr><th scope="col"><span class="sr-only">Topic</span></th><th scope="col">June</th><th scope="col">Phoebe</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Starting price</th><td data-label="June" class="price">From $1,350 a month</td><td data-label="Phoebe" class="price">From $2,350 to $3,500 a month</td></tr>
+          <tr><th scope="row">Primary focus</th><td data-label="June">Scheduling, with a person in the loop when it matters.</td><td data-label="Phoebe">A broad suite of AI assistants covering reception, scheduling, timekeeping and engagement.</td></tr>
+          <tr><th scope="row">How caregivers are reached</th><td data-label="June">Tiered by urgency: text first for routine fills, text and call together when time is short, call first when a shift is about to start.</td><td data-label="Phoebe">Reaches qualified caregivers at the same time by text, call or both.</td></tr>
+          <tr><th scope="row">When a person steps in</th><td data-label="June">Clear triggers: bench exhausted, shift close to starting, hours limits, or a caregiver asking for a person. The full thread comes with it.</td><td data-label="Phoebe">Autonomy thresholds you configure decide when the agency is brought in.</td></tr>
+          <tr><th scope="row">Behind the product</th><td data-label="June">Built by ClearDesk, a team that has provided scheduling services to over 1,000 home care agencies.</td><td data-label="Phoebe">Venture backed. Recently acquired Alden.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="fine">Phoebe details are drawn from publicly available information on their website and may change. Phoebe is a trademark of its respective owner. This page is not affiliated with or endorsed by them.</p>
+  </section>
+
+  <section class="sec" aria-labelledby="line-title">
+    <h2 id="line-title">Where June takes a different line.</h2>
+    <div class="band">
+      <div data-rise><h3>One job, done properly</h3><p>June is built around one outcome: the open shift gets covered. No suite of assistants to configure, just coverage that runs on its own, day and night.</p></div>
+      <div data-rise style="--i:1"><h3>A person is always reachable</h3><p>When a shift is unusual, sensitive or not going well, June hands it to a live scheduler with the entire conversation attached, not a summary that loses the details.</p></div>
+      <div data-rise style="--i:2"><h3>Outreach that matches the urgency</h3><p>A shift twelve hours out and a shift starting in forty minutes are not treated the same. Standard, urgent and critical each get their own pace and channel.</p></div>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="ask-title">
+    <h2 id="ask-title">Three questions to ask either of us.</h2>
+    <div class="qs">
+      <div data-rise><h3>What happens when the AI can't fill a shift on its own?</h3><p>Fully autonomous coverage is excellent on the routine eighty percent. The other twenty, a difficult client, a caregiver with a complaint, a shift nobody wants, is where agencies get hurt. June's handoff is deliberate and fast, and the scheduler who picks it up reads exactly what the caregiver said, word for word.</p></div>
+      <div data-rise><h3>In what order are my caregivers contacted?</h3><p>Contacting everyone at once fills a shift quickly and teaches your bench that most messages aren't for them. June orders outreach so the caregivers most likely to say yes hear first, and everyone else hears from you only when it's relevant.</p></div>
+      <div data-rise><h3>How long does it take to get up and running?</h3><p>A suite of assistants means a longer rollout, more setup and more places for the process to drift. June does one thing, so you can judge it on one number: how many shifts got covered, and how fast.</p></div>
+    </div>
+  </section>
+
+  <section class="cta-band" aria-labelledby="cta-title">
+    <h2 id="cta-title">See it against your own open shifts.</h2>
+    <p>The fairest comparison is your own week of callouts. Start free and see it on your own agency.</p>
+    <a class="btn btn--ink" href="/signup">Get started free</a>
+  </section>
+</main>
+
+<footer class="foot">
+  <span>JuneAI LLC · (877) 563-9814 · support@junecare.ai</span>
+  <nav aria-label="Footer">
+    <a href="/how-it-works">How it works</a>
+    <a href="/demo">Watch demo</a>
+    <a href="/june-vs-phoebe">June vs Phoebe</a>
+    <a href="/signup">Get started free</a>
+    <a href="/terms">Terms</a>
+  </nav>
+  <span class="foot__end"><span>© 2026 JuneAI LLC</span><a href="/privacy">Privacy</a></span>
+</footer>
+<script type="module" src="/assets/site.js"></script>
+</body>
+</html>

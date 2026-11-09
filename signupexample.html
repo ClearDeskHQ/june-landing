@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shift alerts by text</title>
+<meta name="description" content="Caregivers: get a text when a shift opens that fits your schedule.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.alerts { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 24px; row-gap: 40px; padding: clamp(48px, 7vw, 104px) var(--margin) 0; align-items: start; }
+.alerts__say { grid-column: 1 / span 5; }
+.alerts__say h1 { font-size: clamp(2.375rem, 1rem + 3.6vw, 4.25rem); line-height: 1.04; }
+.alerts__say p { margin-top: 24px; font-size: var(--step-lead); color: var(--ink-2); max-width: 28ch; }
+.alerts__card { grid-column: 7 / -1; background: var(--panel); border-radius: 28px; padding: clamp(28px, 4vw, 48px); }
+.alerts__card form { display: grid; gap: 20px; }
+.alerts__card h2 { font-size: var(--step-lead); }
+.consent { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: start; font-size: 16px; line-height: 1.5; }
+.consent input { width: 22px; height: 22px; margin: 2px 0 0; accent-color: var(--accent); }
+.fine { font-size: var(--step-small); color: var(--ink-2); }
+.done { display: none; }
+.is-done .done { display: grid; gap: 12px; }
+.is-done form { display: none; }
+@media (max-width: 960px) { .alerts__say, .alerts__card { grid-column: 1 / -1; } }
+</style>
+</head>
+<body>
+<header class="bar">
+  <a class="bar__logo" href="/" aria-label="June home"><img src="/assets/june-logo.svg" alt="June" width="92" height="64"></a>
+  <nav aria-label="Main">
+    <a href="/how-it-works" class="hide-sm">How it works</a>
+    <a href="/demo" class="hide-sm">Watch demo</a>
+    <a class="btn btn--sm" href="/early-access">Join early access</a>
+  </nav>
+</header>
+
+<main class="alerts">
+  <section class="alerts__say" aria-labelledby="al-title">
+    <h1 id="al-title">Shift alerts by text</h1>
+    <p>We'll text you when a shift opens that fits your schedule. Reply if you want it.</p>
+  </section>
+
+  <section class="alerts__card" id="card" aria-labelledby="form-title">
+    <form id="al-form" novalidate>
+      <h2 id="form-title">Sign up for shift alerts</h2>
+      <div class="field"><label for="s-name">Your name</label><input id="s-name" name="name" autocomplete="name"></div>
+      <div class="field"><label for="s-phone">Mobile number</label><input id="s-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" aria-describedby="s-phone-hint"><span class="hint" id="s-phone-hint">US mobile numbers only.</span></div>
+      <label class="consent" for="s-consent"><input id="s-consent" name="consent" type="checkbox"><span>By providing my mobile number and checking this box, I agree to receive text messages from June about open shift offers, scheduling, and assignments. Message frequency varies. Message and data rates may apply. Reply STOP to opt out at any time. Reply HELP for help. I have read the <a class="link" href="/privacy">Privacy Policy</a> and <a class="link" href="/terms">Terms of Service</a>.</span></label>
+      <p class="fine">Reply STOP to opt out at any time. Reply HELP for help. Message frequency varies. Message and data rates may apply.</p>
+      <p class="form-error" id="s-error" role="alert"></p>
+      <button class="btn" type="submit">Sign up for shift alerts</button>
+      <p class="fine">Don't want texts? That's fine. Call us at <a class="link" href="tel:+18775639814">(877) 563-9814</a> and we'll reach you by phone instead.</p>
+    </form>
+    <div class="done" role="status">
+      <h2>You're signed up.</h2>
+      <p id="s-done"></p>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <span>Round the clock shift coverage for home care</span>
+  <nav aria-label="Footer">
+    <a href="/how-it-works">How it works</a>
+    <a href="/demo">Watch demo</a>
+    <a href="/early-access">Early access</a>
+    <a href="/terms">Terms</a>
+  </nav>
+  <span class="foot__end"><span>© 2026 June</span><a href="/privacy">Privacy</a></span>
+</footer>
+<script type="module">
+const form = document.getElementById("al-form");
+const err = document.getElementById("s-error");
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const digits = form.phone.value.replace(/\D/g, "");
+  if (!(digits.length === 10 || (digits.length === 11 && digits.startsWith("1")))) { err.textContent = "Please enter a US mobile number, like (555) 123-4567."; form.phone.focus(); return; }
+  if (!form.consent.checked) { err.textContent = "Please check the consent box so we're allowed to text you."; form.consent.focus(); return; }
+  err.textContent = "";
+  document.getElementById("s-done").textContent = "Thanks, " + (form.name.value.trim() || "there") + ". We'll text " + form.phone.value + " when a shift opens that fits your schedule.";
+  document.getElementById("card").classList.add("is-done");
+});
+</script>
+<script type="module" src="/assets/site.js"></script>
+</body>
+</html>
