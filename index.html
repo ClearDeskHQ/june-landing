@@ -552,17 +552,81 @@ main { padding-top: 88px; }
 .sms { display: grid; gap: 8px; max-width: 72ch; font-size: var(--s-small); color: var(--night-ink-2); line-height: 1.6; }
 .sms b { color: var(--night-ink); font-weight: 600; }
 .sms a { color: var(--night-ink); }
+
+/* the free app as it is now: chats in the rail, new chat and my chats above, june's heart behind the hello */
+.app__me svg { width: 14px; height: 14px; margin-left: auto; color: #8a8a8a; }
+.app__group-row { display: flex; align-items: center; justify-content: space-between; padding-right: 8px; }
+.app__group-row svg { width: 14px; height: 14px; }
+.app__chat { font-size: 12.5px; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 5px 8px; border-radius: 8px; white-space: nowrap; overflow: hidden; color: #2a2a2a; }
+.app__chat i { font-style: normal; color: #9a9a9a; letter-spacing: 1px; }
+.app__chat.on { background: #e1e1e1; }
+.app__tools { display: flex; align-items: center; gap: 10px; padding: 10px 18px 0; font-size: 13px; font-weight: 500; }
+.app__tools > span { display: inline-flex; align-items: center; gap: 4px; }
+.app__tools svg { width: 14px; height: 14px; }
+.app__tool-icon { padding: 4px; }
+.app__mine { margin-left: auto; padding: 5px 10px; border: 1px solid var(--line, #e4e4e4); border-radius: 8px; background: #fff; }
+.app .ai { position: relative; }
+.app .ai::before { content: ""; position: absolute; left: 50%; top: 12%; width: 260px; height: 240px; transform: translateX(-50%); background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-80 -52 164 174'%3E%3Cpath d='M 3,-6 C -20,-42 -66,-28 -68,10 C -70,48 -36,66 -2,110 C 40,70 74,44 72,6 C 70,-32 24,-42 3,-6 Z' fill='none' stroke='%23e8582f' stroke-width='22' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat; opacity: .08; pointer-events: none; transition: opacity .4s ease; }
+.app .ai:has(.msg--you)::before { opacity: 0; }
+.app .ai__body { position: relative; }
+.try { margin: 0 0 14px; text-align: center; font-size: var(--s-small, .875rem); font-weight: 500; color: var(--ink); }
+.chips .chips__try { align-self: center; padding: 0 2px 0 0; background: none; font-size: 12px; font-weight: 600; color: var(--accent); }
+.starter { position: relative; padding-right: 30px !important; }
+.starter i { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-style: normal; color: var(--accent); transition: transform 160ms var(--out); }
+@media (hover: hover) and (pointer: fine) { .starter:hover i { transform: translate(3px, -50%); } .starter:hover { border-color: var(--accent) !important; } }
+.chips button { border-color: #e8c9bd !important; }
+@media (hover: hover) and (pointer: fine) { .chips button:hover { border-color: var(--accent) !important; color: var(--accent); } }
+.fit__row { box-shadow: inset 0 0 0 1px transparent; }
+
+/* june pro: a live call above the texts she answers */
+.prodemo { display: grid; gap: 12px; width: min(100%, 400px); }
+.cover .thread { width: 100%; aspect-ratio: auto; height: 360px; }
+.call { display: grid; gap: 12px; padding: 16px; border-radius: 20px; }
+.call__top { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+.call__top img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
+.call__top span { display: grid; color: var(--ui-ink-2); }
+.call__top b { color: var(--ui-ink); font-weight: 600; }
+.call__top em { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font-style: normal; font-variant-numeric: tabular-nums; color: var(--ui-ink-2); }
+.call__top em i { width: 8px; height: 8px; border-radius: 50%; background: #d4252b; }
+.wave { display: flex; align-items: center; justify-content: space-between; gap: 4px; height: 48px; padding: 0 4px; }
+.wave i { max-width: 5px; }
+.wave i { flex: 1; height: 100%; border-radius: 999px; background: var(--accent); transform: scaleY(var(--h)); transform-origin: center; animation: talk 1.1s var(--d) infinite ease-in-out alternate; }
+@keyframes talk { from { transform: scaleY(calc(var(--h) * .45)); } to { transform: scaleY(var(--h)); } }
+.call__line { font-size: 13px; line-height: 1.45; padding: 8px 12px; border-radius: 12px; background: var(--ui-2); }
+.call__line b { display: block; font-size: 11px; font-weight: 600; color: var(--ui-ink-2); }
+.call__line--june { background: #fbeee8; }
+@media (prefers-reduced-motion: reduce) { .wave i { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .calls__said { transition: none; } }
+
+/* one call to follow: the voice that speaks moves, every line stays in the transcript, the call ends somewhere */
+.onecall .call__top img { width: 36px; height: 36px; }
+.onecall__now { display: grid; grid-template-columns: 64px 1fr; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; background: var(--ui-2); }
+.onecall__who { font-size: 12px; font-weight: 600; color: var(--ui-ink-2); transition: color .25s ease; }
+.onecall[data-speaker="june"] .onecall__who { color: var(--accent); }
+.onecall .wave { height: 36px; gap: 3px; padding: 0; }
+.onecall .wave i { max-width: 4px; background: #b8b8b8; transition: background-color .25s ease; }
+.onecall[data-speaker="none"] .wave i { animation: none; transform: scaleY(.15); }
+.onecall[data-speaker="june"] .wave i { background: var(--accent); }
+.onecall[data-speaker="cg"] .wave i { background: #8f8f8f; }
+.onecall__log { margin: 0; padding: 0 2px 2px; list-style: none; display: grid; gap: 8px; height: 250px; overflow-y: auto; align-content: start; scrollbar-width: none; }
+.onecall__log::-webkit-scrollbar { display: none; }
+.onecall__log li { box-sizing: border-box; display: grid; gap: 2px; max-width: 86%; padding: 8px 12px; border-radius: 14px 14px 14px 4px; background: var(--ui-2); font-size: 13px; line-height: 1.45; animation: msg-in 280ms cubic-bezier(.23, 1, .32, 1) both; }
+.onecall__log li b { font-size: 11px; font-weight: 600; color: var(--ui-ink-2); }
+.onecall__log li.june { justify-self: end; border-radius: 14px 14px 4px 14px; background: #fbeee8; }
+.onecall__log li.june b { color: var(--accent); }
+.onecall__log li.done { justify-self: stretch; max-width: none; border-radius: 12px; background: #e9f6ee; color: #1d6b3d; font-weight: 500; }
+@media (prefers-reduced-motion: reduce) { .onecall__log li { animation: none; } }
 </style>
 </head>
 <body>
 <header class="bar">
   <a class="bar__logo" href="/" aria-label="June home"><img class="bar__word" src="/assets/june-logo.svg" alt="June" width="92" height="64"><svg class="bar__heart" viewBox="-80 -52 164 174" aria-hidden="true"><path d="M 3,-6 C -20,-42 -66,-28 -68,10 C -70,48 -36,66 -2,110 C 40,70 74,44 72,6 C 70,-32 24,-42 3,-6 Z"/></svg></a>
   <nav aria-label="Main">
-    <a href="#cover" class="hide-sm">June Pro</a>
+    <a href="/how-it-works" class="hide-sm">How It Works</a>
     <a href="#price" class="hide-sm">Pricing</a>
-    <a href="/demo" class="hide-sm">Watch demo</a>
-    <a href="https://app.junecare.ai/app/">Sign in</a>
-    <a class="btn btn--sm" href="/signup">Get started free</a>
+    <a href="/demo" class="hide-sm">Watch Demo</a>
+    <a href="https://app.junecare.ai/app/">Sign In</a>
+    <a class="btn btn--sm" href="/signup">Get Started Free</a>
   </nav>
 </header>
 
@@ -581,17 +645,21 @@ main { padding-top: 88px; }
       <p class="trust"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3.5" y="7" width="9" height="6.5" rx="1.5"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg><span>HIPAA secure</span><span>BAA included</span><span>SOC 2 in progress</span></p>
     </div>
     <div class="stage stage--app">
+      <p class="try">Try it. Click any question, or open a caregiver, to see how June works.</p>
       <div class="app" data-ui>
         <aside class="app__rail" aria-hidden="true">
-          <span class="app__me"><img src="/assets/people/grace.jpg" alt="" width="20" height="20">Dana Price</span>
+          <span class="app__me"><img src="/assets/people/grace.jpg" alt="" width="20" height="20">Dana Price<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>
           <span class="app__search"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 21l-4.3-4.3M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14"/></svg>Search<kbd>⌘K</kbd></span>
-          <span class="app__group">Workspace</span>
-          <span class="app__nav"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Dashboard</span><span class="app__nav"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Conversations<span class="count">3</span></span><span class="app__nav on"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7Z"/></svg>Ask June</span><span class="app__nav"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>On Call</span><span class="app__nav"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7v5l3 2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0"/></svg>History</span><span class="app__nav"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5V4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5Zm0 0A2.5 2.5 0 0 1 6.5 17H20"/></svg>Memory</span>
+          <span class="app__nav"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>New Chat</span>
           <span class="app__group">Agency</span>
           <span class="app__nav"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg>Clients</span><span class="app__nav"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8"/></svg>Caregivers</span><span class="app__nav"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18M8 17v-4M13 17V8M18 17v-7"/></svg>Analytics</span>
+          <span class="app__group app__group-row">Projects<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span>
+          <span class="app__group">This Week</span>
+          <span class="app__chat on">Who is close to overtime?<i>···</i></span><span class="app__chat">Cancel Frank F.'s shifts<i>···</i></span><span class="app__chat">Who could take Dolores's<i>···</i></span><span class="app__chat">Open shifts this weekend<i>···</i></span><span class="app__chat">Missed clock-ins today<i>···</i></span><span class="app__chat">Plan outreach for Saturday<i>···</i></span>
         </aside>
         <div class="app__page">
-          <div class="app__head"><span class="app__title"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7Z"/></svg>Ask June</span><span class="app__counts" aria-hidden="true"><i>2</i><i>8</i></span></div>
+          <div class="app__head"><span class="app__title"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7Z"/></svg>Ask June</span></div>
+          <div class="app__tools" aria-hidden="true"><span>New chat<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span><span class="app__tool-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span><span class="app__mine">My Chats<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></div>
           <div class="ai" data-hero aria-label="Ask June on a sample agency, Willowmere Home Care">
             <div class="ai__body thread__body" aria-live="polite">
               <div class="hello"><img src="/assets/june-face.jpg" alt="" width="28" height="28"><p>Hi Dana, I'm June. I've read Willowmere's WellSky: 64 caregivers, 81 clients and 2,410 shifts. Want me to find cover for Dolores W.'s shift on Tue, Nov 10 at 8a?</p></div>
@@ -611,7 +679,7 @@ main { padding-top: 88px; }
   <section class="cover" id="cover" aria-labelledby="cover-title">
     <div class="cover__say">
       <h2 id="cover-title" data-rise>June Pro talks to your people.</h2>
-      <p data-rise style="--i:1">June Pro is the paid plan. Ask June “Can you fill the shift?” and she starts: texts and calls go out, she answers every reply herself, and your scheduler approves the yes.</p>
+      <p data-rise style="--i:1">On the free plan June texts and sends smart blasts, and you write the replies. June Pro answers every reply herself, by text and by voice. Ask “Can you fill the shift?” and she starts, and your scheduler approves the yes.</p>
       <ul data-rise style="--i:2">
         <li>June answers every text, caregivers and clients alike</li>
         <li>June calls by voice when a text is not enough</li>
@@ -620,6 +688,12 @@ main { padding-top: 88px; }
       </ul>
     </div>
     <div class="stage">
+      <div class="prodemo">
+      <div class="call onecall" data-ui data-speaker="none" aria-label="June on a call with Estelle about Dolores's shift">
+        <div class="call__top"><img src="/assets/people/estelle.jpg" alt="" width="36" height="36"><span><b>June is on a call with Estelle K.</b>About Dolores's shift, Tue 8a to 12p</span><em><i></i><span data-onecall-clock>0:00</span></em></div>
+        <div class="onecall__now"><span class="onecall__who">&nbsp;</span><span class="wave" aria-hidden="true"><i style="--d:0ms;--h:0.35"></i><i style="--d:280ms;--h:0.6"></i><i style="--d:560ms;--h:0.9"></i><i style="--d:70ms;--h:0.5"></i><i style="--d:350ms;--h:0.75"></i><i style="--d:630ms;--h:1"></i><i style="--d:140ms;--h:0.45"></i><i style="--d:420ms;--h:0.8"></i><i style="--d:700ms;--h:0.55"></i><i style="--d:210ms;--h:0.95"></i><i style="--d:490ms;--h:0.4"></i><i style="--d:0ms;--h:0.7"></i><i style="--d:280ms;--h:0.35"></i><i style="--d:560ms;--h:0.6"></i><i style="--d:70ms;--h:0.9"></i><i style="--d:350ms;--h:0.5"></i><i style="--d:630ms;--h:0.75"></i><i style="--d:140ms;--h:1"></i><i style="--d:420ms;--h:0.45"></i><i style="--d:700ms;--h:0.8"></i><i style="--d:210ms;--h:0.55"></i><i style="--d:490ms;--h:0.95"></i><i style="--d:0ms;--h:0.4"></i><i style="--d:280ms;--h:0.7"></i><i style="--d:560ms;--h:0.35"></i><i style="--d:70ms;--h:0.6"></i><i style="--d:350ms;--h:0.9"></i><i style="--d:630ms;--h:0.5"></i><i style="--d:140ms;--h:0.75"></i><i style="--d:420ms;--h:1"></i><i style="--d:700ms;--h:0.45"></i><i style="--d:210ms;--h:0.8"></i><i style="--d:490ms;--h:0.55"></i><i style="--d:0ms;--h:0.95"></i><i style="--d:280ms;--h:0.4"></i><i style="--d:560ms;--h:0.7"></i><i style="--d:70ms;--h:0.35"></i><i style="--d:350ms;--h:0.6"></i><i style="--d:630ms;--h:0.9"></i><i style="--d:140ms;--h:0.5"></i></span></div>
+        <ol class="onecall__log" aria-live="polite"></ol>
+      </div>
       <div class="thread" data-ui data-play="3" aria-label="A text thread June runs after a caregiver calls out">
         <div class="thread__top">
           <div class="thread__face"><svg viewBox="-78 -52 160 172" aria-hidden="true"><path d="M 3,-6 C -20,-42 -66,-28 -68,10 C -70,48 -36,66 -2,110 C 40,70 74,44 72,6 C 70,-32 24,-42 3,-6 Z" fill="#E8582F"/></svg></div>
@@ -638,6 +712,7 @@ main { padding-top: 88px; }
           <p class="msg msg--done">Booked in WellSky at <span data-t="4">11:46 pm</span></p>
         </div>
       </div>
+      </div>
     </div>
   </section>
 
@@ -652,7 +727,7 @@ main { padding-top: 88px; }
         <p class="plan__fig plan__price">$0<small>free forever</small></p>
         <ul>
           <li>Read and change WellSky in plain words: ask anything, cancel or move many shifts at once</li>
-          <li>Text caregivers and clients from June. You write the replies</li>
+          <li>Texts and smart blasts to caregivers and clients. You write the replies</li>
           <li>WellSky synced every hour</li>
           <li>30 rapid refreshes a month: WellSky pulled fresh the moment you ask</li>
           <li>HIPAA secure, BAA included</li>
@@ -691,7 +766,7 @@ main { padding-top: 88px; }
   <section class="faq" aria-labelledby="faq-title">
     <h2 id="faq-title">Questions agencies ask.</h2>
     <div class="drawer" id="drawer">
-      <div class="qcard is-open" style="--step:0"><span class="qcard__tab">Free</span><div class="qcard__body"><button aria-expanded="true" aria-controls="a1">Is Ask June really free?</button><div class="qcard__a" id="a1"><div><p>Yes. Ask June is free forever, with no card. It reads and changes WellSky and lets you text from June. You pay only when you want June to answer texts, make calls and act on her own, with June Pro from $1,350 a month.</p></div></div></div></div>
+      <div class="qcard is-open" style="--step:0"><span class="qcard__tab">Free</span><div class="qcard__body"><button aria-expanded="true" aria-controls="a1">Is Ask June really free?</button><div class="qcard__a" id="a1"><div><p>Yes. Ask June is free forever, with no card. It reads and changes WellSky, and June texts and sends smart blasts while you write the replies. You pay only when you want June to answer texts, make calls and act on her own, with June Pro from $1,350 a month.</p></div></div></div></div>
       <div class="qcard" style="--step:1"><span class="qcard__tab">HIPAA</span><div class="qcard__body"><button aria-expanded="false" aria-controls="a2">Is June HIPAA secure?</button><div class="qcard__a" id="a2"><div><p>Yes. We sign a BAA with every agency, and every vendor that sees care details signs one with us. SOC 2 is in progress.</p></div></div></div></div>
       <div class="qcard" style="--step:2"><span class="qcard__tab">WellSky</span><div class="qcard__body"><button aria-expanded="false" aria-controls="a3">Does June change anything in WellSky?</button><div class="qcard__a" id="a3"><div><p>Only what you ask. When you connect, June adds herself as a WellSky user. On the free plan she changes a shift only after you press. With June Pro she can act on her own, within the rules you set. Turn off her user and she is gone.</p></div></div></div></div>
       <div class="qcard" style="--step:4"><span class="qcard__tab">Caregivers</span><div class="qcard__body"><button aria-expanded="false" aria-controls="a5">What does June tell caregivers about clients?</button><div class="qcard__a" id="a5"><div><p>Only what they need to decide: rough age, care basics, the area and the pay. Diagnoses and the exact address come once they are booked. Caregivers need no app. June texts and calls.</p></div></div></div></div>
@@ -915,6 +990,7 @@ const asked = new Set();
 const toBottom = () => heroBody.scrollTo({ top: heroBody.scrollHeight, behavior: reduce ? "auto" : "smooth" });
 const chips = () => {
   const box = Object.assign(document.createElement("div"), { className: "chips" });
+  box.append(Object.assign(document.createElement("span"), { className: "chips__try", textContent: "Try:" }));
   NEXT.filter((q) => !asked.has(q)).slice(0, 3).forEach((q) => {
     box.append(Object.assign(document.createElement("button"), { type: "button", textContent: q, onclick: () => ask(q) }));
   });
@@ -964,7 +1040,7 @@ const ask = (q) => {
 const starters = hero.querySelector("[data-starters]");
 STARTERS.forEach(([q, title, sub]) => {
   const b = Object.assign(document.createElement("button"), { type: "button", className: "starter", onclick: () => ask(q) });
-  b.innerHTML = `<b>${title}</b><span>${sub}</span>`;
+  b.innerHTML = `<b>${title}</b><span>${sub}</span><i aria-hidden="true">→</i>`;
   starters.append(b);
 });
 hero.querySelector("[data-ask-form]").addEventListener("submit", (e) => {
@@ -988,6 +1064,54 @@ new IntersectionObserver((es, io) => {
   io.disconnect();
   if (!reduce) setTimeout(() => { if (!touched) ask(Q.ot); }, 1800);
 }).observe(hero);
+
+// one call to follow: each line lasts as long as it takes to say, stays in the transcript, and the call ends with what June did
+const CALL = [
+  ["june", "Hi Estelle, it's June from Willowmere Home Care. Do you have a minute?"],
+  ["cg", "Sure, what's up?"],
+  ["june", "A shift opened tomorrow, 8 to noon, about ten minutes from you."],
+  ["cg", "Who's the client?"],
+  ["june", "Dolores W. She's in her 80s and needs help with personal care and walking."],
+  ["cg", "Is that the one with the two cats?"],
+  ["june", "That's her. It pays $20.50 an hour."],
+  ["cg", "Okay, I'll take it."],
+  ["june", "Great. I'll send your scheduler the yes and text you the details."],
+];
+const oneCall = document.querySelector(".onecall");
+if (oneCall) {
+  const log = oneCall.querySelector(".onecall__log");
+  const who = oneCall.querySelector(".onecall__who");
+  const clock = oneCall.querySelector("[data-onecall-clock]");
+  let t = 0;
+  setInterval(() => { t += 1; clock.textContent = `${Math.floor(t / 60)}:${String(t % 60).padStart(2, "0")}`; }, 1000);
+  const add = (cls, label, words) => {
+    const li = Object.assign(document.createElement("li"), { className: cls });
+    if (label) li.append(Object.assign(document.createElement("b"), { textContent: label }));
+    li.append(words);
+    log.append(li);
+    log.scrollTo({ top: log.scrollHeight, behavior: reduce ? "auto" : "smooth" });
+  };
+  const say = (i) => {
+    if (i >= CALL.length) {
+      oneCall.dataset.speaker = "none";
+      who.textContent = "Call ended";
+      add("done", "", "Estelle said yes. Sent to your scheduler to approve ✓");
+      setTimeout(() => { log.replaceChildren(); t = 0; say(0); }, 5000);
+      return;
+    }
+    const [speaker, words] = CALL[i];
+    oneCall.dataset.speaker = speaker;
+    who.textContent = speaker === "june" ? "June" : "Estelle";
+    add(speaker === "june" ? "june" : "cg", speaker === "june" ? "June" : "Estelle", words);
+    const speaking = reduce ? 1800 : 900 + words.length * 45;
+    setTimeout(() => { oneCall.dataset.speaker = "none"; }, speaking);
+    setTimeout(() => say(i + 1), speaking + 600);
+  };
+  // the call starts when it scrolls into view, so it is followed from its first line
+  new IntersectionObserver((es, io) => { if (es[0].isIntersecting) { io.disconnect(); say(0); } }, { threshold: 0.4 }).observe(oneCall);
+}
+
+
 
 // one question open at a time
 const cards = [...document.querySelectorAll(".qcard")];

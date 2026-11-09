@@ -59,7 +59,7 @@ h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -0.03em; line-height: 
   padding: 16px var(--margin);
   background: var(--ground);
 }
-.bar__logo { color: var(--ink); width: 92px; flex: none; }
+.bar__logo { color: var(--ink); width: 68px; flex: none; }
 .bar__logo svg { width: 100%; height: auto; }
 .bar nav { display: flex; align-items: center; gap: clamp(16px, 2.4vw, 36px); font-size: var(--step-small); }
 .bar nav a:not(.btn) { text-decoration: none; color: var(--ink); padding: 8px 0; transition: color .2s var(--ease); }
