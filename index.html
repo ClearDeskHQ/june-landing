@@ -213,7 +213,7 @@ main { padding-top: 84px; }
 }
 .who { white-space: nowrap; }
 .hours li { grid-template-columns: minmax(0, 1fr) 64px 44px !important; }
-.app { width: 100%; max-width: 1200px; margin: 0 auto; --ground: #ededed; --page: #f7f7f7; --line: #e4e4e4; display: grid; grid-template-columns: 208px 1fr; height: min(660px, calc(100svh - 120px)); background: var(--ground); border-radius: 16px; overflow: hidden; color: #1c1c1c; font-size: 13px; box-shadow: 0 30px 80px rgba(70, 22, 8, .28); /* taste-skill-ignore: the app window floats over the stage */ }
+.app { width: 100%; max-width: 1200px; margin: 0 auto; --ground: #ededed; --page: #f7f7f7; --line: #e4e4e4; display: grid; grid-template-columns: 208px 1fr; grid-template-rows: minmax(0, 1fr); height: min(660px, calc(100svh - 120px)); background: var(--ground); border-radius: 16px; overflow: hidden; color: #1c1c1c; font-size: 13px; box-shadow: 0 30px 80px rgba(70, 22, 8, .28); /* taste-skill-ignore: the app window floats over the stage */ }
 .app svg { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .app__rail { display: flex; flex-direction: column; gap: 2px; padding: 14px 10px; color: #3a3a3a; }
 .app__me { display: flex; align-items: center; gap: 8px; padding: 4px 8px 12px; font-weight: 600; color: #111; }
@@ -226,7 +226,7 @@ main { padding-top: 84px; }
 .app__nav svg { width: 15px; height: 15px; flex: none; }
 .app__nav.on { background: #e1e1e1; color: #111; font-weight: 600; }
 .app__nav .count { margin-left: auto; padding: 0 7px; border-radius: 999px; background: #e45f3c; color: #fff; font-size: 11px; font-weight: 600; }
-.app__page { display: flex; flex-direction: column; min-width: 0; margin: 8px 8px 8px 0; background: var(--page); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.app__page { display: flex; flex-direction: column; min-width: 0; min-height: 0; margin: 8px 8px 8px 0; background: var(--page); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
 .app__head { display: flex; align-items: center; justify-content: space-between; padding: 12px 18px; border-bottom: 1px solid var(--line); }
 .app__title { display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: 600; letter-spacing: -.01em; }
 .app__title svg { width: 18px; height: 18px; }
@@ -245,8 +245,7 @@ main { padding-top: 84px; }
 @media (hover: hover) and (pointer: fine) { .starter:hover { border-color: #c9c9c9; } }
 .app .ai__ask { flex-direction: column; align-items: stretch; gap: 8px; margin: 0 20px 16px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: #fff; box-shadow: 0 1px 2px rgba(0, 0, 0, .05); }
 .app .ai__ask:focus-within { border-color: #c9c9c9; }
-.ai__row { display: flex; align-items: center; justify-content: space-between; }
-.think { padding: 2px 8px; border-radius: 6px; font-size: 12px; color: #5a5a5a; }
+.ai__row { display: flex; align-items: center; justify-content: flex-end; }
 .app .ai__ask button { width: 26px; height: 26px; background: #ededed; transition: background-color .2s ease, transform 160ms var(--out); }
 .app .ai__ask button svg { width: 14px; color: #3a3a3a; }
 .app .ai__ask:has(input:not(:placeholder-shown)) button { background: var(--accent); }
@@ -716,7 +715,7 @@ svg.hand { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: ro
             <form class="ai__ask" data-ask-form>
               <label class="sr-only" for="ai-q">Ask June</label>
               <input id="ai-q" placeholder="Ask June, / for skills, @ for a person" autocomplete="off">
-              <div class="ai__row"><span class="think">Think harder</span><button type="submit" aria-label="Send"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 13V3M3.5 7.5 8 3l4.5 4.5"/></svg></button></div>
+              <div class="ai__row"><button type="submit" aria-label="Send"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 13V3M3.5 7.5 8 3l4.5 4.5"/></svg></button></div>
             </form>
           </div>
         </div>
@@ -1080,7 +1079,7 @@ const runFill = (card) => {
 
 // the window never stands taller than the screen under the bar; zoom makes the math the script's, not CSS's
 const appWin = document.querySelector(".hero .app");
-const fit = () => { if (appWin) appWin.style.setProperty("--fit", `${Math.min(540, Math.floor((window.innerHeight - 140) / 1.2))}px`); };
+const fit = () => { if (appWin) appWin.style.setProperty("--fit", `${Math.min(540, Math.floor((window.innerHeight - 190) / 1.2))}px`); };
 fit(); window.addEventListener("resize", fit);
 const hero = document.querySelector("[data-hero]");
 const heroBody = hero.querySelector(".thread__body");
@@ -1125,7 +1124,8 @@ const OWN = `
     <div class="acts"><a class="go" href="/signup">Get Ask June free</a></div>`;
 const ask = (q) => {
   // a press brings the whole window into view, so the answer and the ask box both show
-  hero.closest(".app")?.scrollIntoView({ block: "end", behavior: reduce ? "auto" : "smooth" });
+  // the window's real bottom on screen, 16px clear of the edge; zoom confuses scrollIntoView
+  if (appWin) { const b = appWin.getBoundingClientRect().bottom; if (b > window.innerHeight - 16) window.scrollBy({ top: b - window.innerHeight + 16, behavior: reduce ? "auto" : "smooth" }); }
   heroBody.querySelectorAll(".chips, [data-starters]").forEach((c) => c.remove());
   asked.add(q);
   heroBody.append(Object.assign(document.createElement("p"), { className: "msg msg--you", textContent: q }));
