@@ -216,6 +216,8 @@ main { padding-top: 84px; }
 .app { width: 100%; max-width: 1200px; margin: 0 auto; --ground: #ededed; --page: #f7f7f7; --line: #e4e4e4; display: grid; grid-template-columns: 208px 1fr; grid-template-rows: minmax(0, 1fr); height: min(660px, calc(100svh - 120px)); background: var(--ground); border-radius: 16px; overflow: hidden; color: #1c1c1c; font-size: 13px; box-shadow: 0 30px 80px rgba(70, 22, 8, .28); /* taste-skill-ignore: the app window floats over the stage */ }
 .app svg { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .app__rail { display: flex; flex-direction: column; gap: 2px; padding: 14px 10px; color: #3a3a3a; }
+.app__rail { min-height: 0; overflow: hidden; }
+.app__rail > * { flex: none; }
 .app__me { display: flex; align-items: center; gap: 8px; padding: 4px 8px 12px; font-weight: 600; color: #111; }
 .app__me img { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; }
 .app__search { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; padding: 6px 10px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: #8a8a8a; }
