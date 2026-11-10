@@ -213,7 +213,7 @@ main { padding-top: 84px; }
 }
 .who { white-space: nowrap; }
 .hours li { grid-template-columns: minmax(0, 1fr) 64px 44px !important; }
-.app { width: 100%; max-width: 1200px; margin: 0 auto; --ground: #ededed; --page: #f7f7f7; --line: #e4e4e4; display: grid; grid-template-columns: 208px 1fr; height: 660px; background: var(--ground); border-radius: 16px; overflow: hidden; color: #1c1c1c; font-size: 13px; box-shadow: 0 30px 80px rgba(70, 22, 8, .28); /* taste-skill-ignore: the app window floats over the stage */ }
+.app { width: 100%; max-width: 1200px; margin: 0 auto; --ground: #ededed; --page: #f7f7f7; --line: #e4e4e4; display: grid; grid-template-columns: 208px 1fr; height: min(660px, calc(100svh - 120px)); background: var(--ground); border-radius: 16px; overflow: hidden; color: #1c1c1c; font-size: 13px; box-shadow: 0 30px 80px rgba(70, 22, 8, .28); /* taste-skill-ignore: the app window floats over the stage */ }
 .app svg { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .app__rail { display: flex; flex-direction: column; gap: 2px; padding: 14px 10px; color: #3a3a3a; }
 .app__me { display: flex; align-items: center; gap: 8px; padding: 4px 8px 12px; font-weight: 600; color: #111; }
@@ -272,12 +272,12 @@ main { padding-top: 84px; }
 @media (max-width: 1100px) { .hero__say, .hero__act { grid-column: 1 / -1 !important; } }
 /* the app at a size you can read from the chair: zoom keeps its own inner layout */
 @media (min-width: 1101px) {
-  .app { zoom: 1.2; width: calc(100% / 1.2); max-width: 1160px; height: 540px; }
+  .app { zoom: 1.2; width: calc(100% / 1.2); max-width: 1160px; height: var(--fit, 540px); }
   /* june's greeting and her questions open at the top, inside the first screen */
   .app .ai__body > :first-child { margin-top: 0; }
 }
 @media (max-width: 900px) {
-  .app { grid-template-columns: 1fr; height: 620px; }
+  .app { grid-template-columns: 1fr; height: min(620px, calc(100svh - 100px)); }
   .app__rail { display: none; }
   .app__page { margin: 0; border: 0; border-radius: 0; }
   .starters { grid-template-columns: 1fr; }
@@ -576,7 +576,6 @@ main { padding-top: 88px; }
 .app__tools > span { display: inline-flex; align-items: center; gap: 4px; }
 .app__tools svg { width: 14px; height: 14px; }
 .app__tool-icon { padding: 4px; }
-.app__mine { margin-left: auto; padding: 5px 10px; border: 1px solid var(--line, #e4e4e4); border-radius: 8px; background: #fff; }
 .app .ai { position: relative; }
 .app .ai::before { content: ""; position: absolute; left: 50%; top: 12%; width: 260px; height: 240px; transform: translateX(-50%); background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-80 -52 164 174'%3E%3Cpath d='M 3,-6 C -20,-42 -66,-28 -68,10 C -70,48 -36,66 -2,110 C 40,70 74,44 72,6 C 70,-32 24,-42 3,-6 Z' fill='none' stroke='%23e8582f' stroke-width='22' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat; opacity: .08; pointer-events: none; transition: opacity .4s ease; }
 .app .ai:has(.msg--you)::before { opacity: 0; }
@@ -708,7 +707,7 @@ svg.hand { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: ro
         </aside>
         <div class="app__page">
           <div class="app__head"><span class="app__title"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7Z"/></svg>Ask June</span></div>
-          <div class="app__tools" aria-hidden="true"><span>New chat<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span><span class="app__tool-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span><span class="app__mine">My Chats<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></div>
+          <div class="app__tools" aria-hidden="true"><span>New chat<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span><span class="app__tool-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span></div>
           <div class="ai" data-hero aria-label="Ask June on a sample agency, Willowmere Home Care">
             <div class="ai__body thread__body" aria-live="polite">
               <div class="hello"><img src="/assets/june-face.jpg" alt="" width="28" height="28"><p>Hi Dana, I'm June. I've read Willowmere's WellSky: 64 caregivers, 81 clients and 2,410 shifts. Want me to find cover for Dolores W.'s shift on Tue, Nov 10 at 8a?</p></div>
@@ -1079,6 +1078,10 @@ const runFill = (card) => {
   }, reduce ? 0 : 900 + i * 1400));
 };
 
+// the window never stands taller than the screen under the bar; zoom makes the math the script's, not CSS's
+const appWin = document.querySelector(".hero .app");
+const fit = () => { if (appWin) appWin.style.setProperty("--fit", `${Math.min(540, Math.floor((window.innerHeight - 140) / 1.2))}px`); };
+fit(); window.addEventListener("resize", fit);
 const hero = document.querySelector("[data-hero]");
 const heroBody = hero.querySelector(".thread__body");
 const asked = new Set();
@@ -1121,6 +1124,8 @@ const OWN = `
     <p>I can answer that on your own agency. Connect WellSky and ask me again. It takes about a minute.</p>
     <div class="acts"><a class="go" href="/signup">Get Ask June free</a></div>`;
 const ask = (q) => {
+  // a press brings the whole window into view, so the answer and the ask box both show
+  hero.closest(".app")?.scrollIntoView({ block: "end", behavior: reduce ? "auto" : "smooth" });
   heroBody.querySelectorAll(".chips, [data-starters]").forEach((c) => c.remove());
   asked.add(q);
   heroBody.append(Object.assign(document.createElement("p"), { className: "msg msg--you", textContent: q }));
