@@ -658,9 +658,18 @@ main { padding-top: 88px; }
 .plan .stack--bonus li { align-items: center; }
 .plan .stack--bonus svg { grid-row: auto; margin-top: 0; }
 .plan .stack--bonus b { font-weight: 500; }
+svg.hand { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; overflow: visible; }
+.plan .stack svg.hand, .compare td svg.hand { stroke: var(--accent); }
+.plan--pro .stack svg.hand { stroke: #ef7a52; }
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="hand-rough" filterUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+    <feTurbulence type="fractalNoise" baseFrequency="0.09" numOctaves="2" seed="4" />
+    <feDisplacementMap in="SourceGraphic" scale="1.1" />
+  </filter>
+</svg>
 <header class="bar">
   <a class="bar__logo" href="/" aria-label="June home"><img class="bar__word" src="/assets/june-logo.svg" alt="June" width="92" height="64"><svg class="bar__heart" viewBox="-80 -52 164 174" aria-hidden="true"><path d="M 3,-6 C -20,-42 -66,-28 -68,10 C -70,48 -36,66 -2,110 C 40,70 74,44 72,6 C 70,-32 24,-42 3,-6 Z"/></svg></a>
   <nav aria-label="Main">
@@ -683,7 +692,7 @@ main { padding-top: 88px; }
         <a class="btn" href="/signup">Get started free</a>
         <a class="link" href="mailto:support@junecare.ai?subject=Talk%20to%20a%20person%20about%20June">Talk to a person</a>
       </div>
-      <p class="trust"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3.5" y="7" width="9" height="6.5" rx="1.5"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>No credit card. HIPAA secure, BAA included. Your ClearDesk scheduler works alongside June.</p>
+      <p class="trust"><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M6.4 10.6c3.8-.4 7.4-.4 11.2 0 .4 3.2.4 6.2 0 9.2-3.8.4-7.4.4-11.2 0-.4-3-.4-6 0-9.2zM8.6 10.4V8c0-2 1.5-3.6 3.4-3.6s3.4 1.6 3.4 3.6v2.4M12 14.4v2"/></g></svg>No credit card. HIPAA secure, BAA included. Your ClearDesk scheduler works alongside June.</p>
     </div>
     <div class="stage stage--app">
       <div class="app" data-ui>
@@ -769,7 +778,7 @@ main { padding-top: 88px; }
   <section class="price" id="price" aria-labelledby="price-title">
     <div class="price__say">
       <h2 id="price-title">Start free. Add June Pro later.</h2>
-      <p>Ask June is free for every agency on WellSky. June Pro is there when you want June to answer, call and act on her own. Want a person on the desk too? Add a ClearDesk scheduler trained on June.</p>
+      <p>Ask June is free for every agency on WellSky. June Pro is there when you want June to answer, call and act on her own. Want a person on the desk too? Add a ClearDesk scheduler, June &amp; WellSky trained.</p>
     </div>
     <div class="plans">
       <article class="plan" data-rise>
@@ -777,10 +786,10 @@ main { padding-top: 88px; }
         <p class="plan__fig plan__price">$0<small>free forever</small></p>
         <p class="plan__dream">Answers about your agency in seconds, not reports.</p>
         <ul class="stack">
-          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-2.9 3-2.9 3M12 17h.01"/></svg><b>Ask Anything</b><span>Read and change WellSky in plain words.</span></li>
-          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg><b>Smart Blasts</b><span>Text many caregivers at once.</span></li>
-          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg><b>HIPAA Covered</b><span>Secure, with a BAA included.</span></li>
-          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12c-2-2.7-4-4-6-4a4 4 0 0 0 0 8c2 0 4-1.3 6-4zm0 0c2 2.7 4 4 6 4a4 4 0 0 0 0-8c-2 0-4 1.3-6 4z"/></svg><b>Free Forever</b><span>Not a trial. It never ends.</span></li>
+          <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M4.4 5.6c4-.8 11-.8 15.2 0 .6 3.6.6 6.2 0 9.4-2.6.5-5.2.6-7.6.6l-4.4 3.4.4-3.6c-1.2-.1-2.4-.3-3.6-.6-.8-3-.8-6.4 0-9.2zM8 9.2h8M8 12h5"/></g></svg><b>Ask Anything</b><span>Read and change WellSky in plain words.</span></li>
+          <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M20.5 3.5L3.6 10.2l6.6 3 3.1 6.8zM10.2 13.2l10.2-9.7"/></g></svg><b>Smart Blasts</b><span>Text many caregivers at once.</span></li>
+          <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M12 3.4c2.4 1.8 4.8 2.4 7.2 2.4v5.8c0 4.2-2.8 7.2-7.2 9-4.4-1.8-7.2-4.8-7.2-9V5.8c2.4 0 4.8-.6 7.2-2.4zM8.8 12.2l2.4 2.4 4.2-4.6"/></g></svg><b>HIPAA Covered</b><span>Secure, with a BAA included.</span></li>
+          <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M12 20.4c-4.6-3.4-8.2-6.4-8.2-10.4C3.8 7.1 6 5.2 8.4 5.4c1.6.1 2.9 1 3.6 2.4.7-1.4 2-2.3 3.6-2.4 2.4-.2 4.6 1.7 4.6 4.6 0 4-3.6 7-8.2 10.4z"/></g></svg><b>Free Forever</b><span>Not a trial. It never ends.</span></li>
         </ul>
         <a class="btn" href="/signup">Get Ask June free</a>
       </article>
@@ -790,16 +799,16 @@ main { padding-top: 88px; }
         <p class="plan__dream">Every shift covered, and no more midnight calls.</p>
         <p class="plan__plus">Everything in Ask June, plus:</p>
         <ul class="stack">
-          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><b>Always-On Inbox</b><span>Every text answered, day or night.</span></li>
-          <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M9 16l2 2 4-4"/></svg><b>Shift Autopilot</b><span>Open shifts filled, within your rules.</span></li>
-          <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><b>Clock-In Chaser</b><span>Missed punches fixed in WellSky.</span></li>
-          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg><b>On-Call Hero</b><span>June takes the after-hours line.</span></li>
+          <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M4.4 5.6c4-.8 11-.8 15.2 0 .6 3.6.6 6.2 0 9.4-2.6.5-5.2.6-7.6.6l-4.4 3.4.4-3.6c-1.2-.1-2.4-.3-3.6-.6-.8-3-.8-6.4 0-9.2zM10.6 8.2l-2.5 2.4 2.5 2.3M8.3 10.6h6.4"/></g></svg><b>Always-On Inbox</b><span>Every text answered, day or night.</span></li>
+          <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M5.2 5.6c4.6-.4 9-.4 13.6 0 .4 4.6.4 9.2 0 13.8-4.6.4-9 .4-13.6 0-.4-4.6-.4-9.2 0-13.8zM3.8 9.8h16.4M8 3.6v3.6M16 3.6v3.6"/><path d="M12 17.4c-1.9-1.2-3-2.3-3-3.5 0-.9.7-1.5 1.5-1.5.6 0 1.2.3 1.5.9.3-.6.9-.9 1.5-.9.8 0 1.5.6 1.5 1.5 0 1.2-1.1 2.3-3 3.5z"/></g></svg><b>Shift Autopilot</b><span>Open shifts filled, within your rules.</span></li>
+          <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M12 3.2c4.9-.1 8.9 3.9 8.8 8.9-.1 4.8-4 8.8-8.9 8.7-4.9 0-8.8-4-8.7-8.9C3.3 7 7.2 3.1 12 3.2zM12 7.6v4.8l3.2 1.8M4.6 4.6L3.2 6.4M19.4 4.6l1.4 1.8"/></g></svg><b>Clock-In Chaser</b><span>Missed punches fixed in WellSky.</span></li>
+          <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M20 14.6c-1 .4-2.2.6-3.4.4-3.8-.6-6.2-4-5.6-7.8.2-1 .6-1.8 1.2-2.6-4.2.6-7.2 4.4-6.4 8.8.8 4.2 4.8 7 9 6.2 2.4-.4 4.2-1.8 5.2-3.8z"/></g></svg><b>On-Call Hero</b><span>June takes the after-hours line.</span></li>
         </ul>
         <p class="plan__plus">Free bonuses:</p>
         <ul class="stack stack--bonus">
-          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/><path d="M9 8h7M9 12h5"/></svg><b>Call-Out Handling Playbook</b></li>
-          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M6 6l1 15h10l1-15"/><path d="M10 11v6M14 11v6"/></svg><b>WellSky Cleanup</b></li>
-          <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><circle cx="17" cy="9" r="2.5"/><path d="M2.5 20v-.5A5.5 5.5 0 0 1 8 14h2a5.5 5.5 0 0 1 5.5 5.5v.5M16 14.2a4.5 4.5 0 0 1 5.5 4.3v.5"/></svg><b>Home Care Agency Owners Circle</b></li>
+          <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M5.6 3.8h10.8c.9 0 1.6.7 1.6 1.6V9M6 3.8v16.4h10.4c.9 0 1.6-.7 1.6-1.6V15M3.6 8h4M3.6 12.2h4M3.6 16.4h4M19.2 10.4l2 2-5.2 5.2-2.6.6.6-2.6z"/></g></svg><b>Call-Out Handling Playbook</b></li>
+          <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M19.6 3.6l-7.2 7.6M11.4 9.8c1.6 1.2 2.8 2.4 3.6 3.8-1.2 2.6-2.8 4.8-4.6 6.6-2.6-.8-5-2.6-6.6-5 2.4-1.4 4.8-3.2 7.6-5.4zM8.6 18.4l2.6-3.4M6.2 16.4l3-2.8"/></g></svg><b>WellSky Cleanup</b></li>
+          <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M9.6 4.8c1.8 0 3 1.3 3 3s-1.3 3-3 3-3-1.3-3-3 1.2-3 3-3zM3.6 19.4c.3-3 2.4-4.8 6-4.8s5.7 1.8 6 4.8M15.6 5c1.6 0 2.8 1.2 2.8 2.8s-1.1 2.8-2.7 2.8M17.4 14.8c2 .5 3.2 2 3.4 4.4"/></g></svg><b>Home Care Agency Owners Circle</b></li>
         </ul>
         <a class="btn" href="mailto:support@junecare.ai?subject=June%20Pro">Talk to a person</a>
       </article>
@@ -809,15 +818,15 @@ main { padding-top: 88px; }
         <p class="plan__dream">A whole scheduling desk: June and a person, working as one.</p>
         <p class="plan__plus">Everything in June Pro, plus:</p>
         <ul class="stack">
-          <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg><b>Your Own Scheduler</b><span>A full-time ClearDesk pro, June-trained.</span></li>
-          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 2l4 4-4 4M3 11V9a3 3 0 0 1 3-3h15M7 22l-4-4 4-4M21 13v2a3 3 0 0 1-3 3H3"/></svg><b>Hand-Offs That Land</b><span>What needs a person goes to them.</span></li>
-          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg><b>The ClearDesk Bench</b><span>The team behind 450+ agencies.</span></li>
+          <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M12 4.2c2 0 3.5 1.5 3.5 3.5S14 11.3 12 11.3 8.5 9.7 8.5 7.7 10 4.2 12 4.2zM4.8 20c.3-3.6 3.2-5.6 7.2-5.6s6.9 2 7.2 5.6"/></g></svg><b>Your Own Scheduler</b><span>Full-time, June &amp; WellSky trained.</span></li>
+          <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M6.2 3.6c.9-.5 1.6-.3 2 .5l1.3 2.7c.3.7.1 1.3-.5 1.8l-1 .8c.9 2 2.4 3.6 4.5 4.6l.9-1c.5-.6 1.2-.7 1.8-.3l2.6 1.5c.8.5.9 1.2.4 2-.9 1.5-2.2 2.2-3.9 2C9.8 19.8 4.3 14 4 8.2c0-1.9.9-3.4 2.2-4.6zM15.4 8h5.4M18.4 5.4l2.6 2.6-2.6 2.6"/></g></svg><b>Hand-Offs That Land</b><span>What needs a person goes to them.</span></li>
+          <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M6 20V5.2c3.6-.5 7.2-.5 10.6 0V20M3.8 20.2h16.4M9.2 9h1.2M13 9h1.2M9.2 12.6h1.2M13 12.6h1.2M11.6 20v-3.4"/></g></svg><b>The ClearDesk Bench</b><span>The team behind 450+ agencies.</span></li>
         </ul>
         <p class="plan__plus">Free bonuses:</p>
         <ul class="stack stack--bonus">
-          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/><path d="M9 8h7M9 12h5"/></svg><b>Call-Out Handling Playbook</b></li>
-          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M6 6l1 15h10l1-15"/><path d="M10 11v6M14 11v6"/></svg><b>WellSky Cleanup</b></li>
-          <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><circle cx="17" cy="9" r="2.5"/><path d="M2.5 20v-.5A5.5 5.5 0 0 1 8 14h2a5.5 5.5 0 0 1 5.5 5.5v.5M16 14.2a4.5 4.5 0 0 1 5.5 4.3v.5"/></svg><b>Home Care Agency Owners Circle</b></li>
+          <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M5.6 3.8h10.8c.9 0 1.6.7 1.6 1.6V9M6 3.8v16.4h10.4c.9 0 1.6-.7 1.6-1.6V15M3.6 8h4M3.6 12.2h4M3.6 16.4h4M19.2 10.4l2 2-5.2 5.2-2.6.6.6-2.6z"/></g></svg><b>Call-Out Handling Playbook</b></li>
+          <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M19.6 3.6l-7.2 7.6M11.4 9.8c1.6 1.2 2.8 2.4 3.6 3.8-1.2 2.6-2.8 4.8-4.6 6.6-2.6-.8-5-2.6-6.6-5 2.4-1.4 4.8-3.2 7.6-5.4zM8.6 18.4l2.6-3.4M6.2 16.4l3-2.8"/></g></svg><b>WellSky Cleanup</b></li>
+          <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M9.6 4.8c1.8 0 3 1.3 3 3s-1.3 3-3 3-3-1.3-3-3 1.2-3 3-3zM3.6 19.4c.3-3 2.4-4.8 6-4.8s5.7 1.8 6 4.8M15.6 5c1.6 0 2.8 1.2 2.8 2.8s-1.1 2.8-2.7 2.8M17.4 14.8c2 .5 3.2 2 3.4 4.4"/></g></svg><b>Home Care Agency Owners Circle</b></li>
         </ul>
         <a class="btn btn--line" href="mailto:support@junecare.ai?subject=June%20%2B%20Scheduler">Contact us</a>
       </article>
@@ -828,20 +837,20 @@ main { padding-top: 88px; }
       <table>
         <thead><tr><th scope="col"><span class="sr-only">Feature</span></th><th scope="col">Ask June</th><th scope="col">June Pro</th><th scope="col">June + Scheduler</th></tr></thead>
         <tbody>
-          <tr><th scope="row">Ask Anything: read and change WellSky in plain words</th><td><svg viewBox="0 0 16 16" role="img" aria-label="Included"><path d="M3.5 8.5l3 3 6-7"/></svg></td><td><svg viewBox="0 0 16 16" role="img" aria-label="Included"><path d="M3.5 8.5l3 3 6-7"/></svg></td><td><svg viewBox="0 0 16 16" role="img" aria-label="Included"><path d="M3.5 8.5l3 3 6-7"/></svg></td></tr>
-          <tr><th scope="row">Smart Blasts to caregivers and clients</th><td><svg viewBox="0 0 16 16" role="img" aria-label="Included"><path d="M3.5 8.5l3 3 6-7"/></svg></td><td><svg viewBox="0 0 16 16" role="img" aria-label="Included"><path d="M3.5 8.5l3 3 6-7"/></svg></td><td><svg viewBox="0 0 16 16" role="img" aria-label="Included"><path d="M3.5 8.5l3 3 6-7"/></svg></td></tr>
+          <tr><th scope="row">Ask Anything: read and change WellSky in plain words</th><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td></tr>
+          <tr><th scope="row">Smart Blasts to caregivers and clients</th><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td></tr>
           <tr><th scope="row">WellSky sync</th><td>Every hour</td><td>Instant</td><td>Instant</td></tr>
           <tr><th scope="row">Rapid refreshes</th><td>30 a month</td><td>Unlimited</td><td>Unlimited</td></tr>
-          <tr><th scope="row">HIPAA secure, BAA included</th><td><svg viewBox="0 0 16 16" role="img" aria-label="Included"><path d="M3.5 8.5l3 3 6-7"/></svg></td><td><svg viewBox="0 0 16 16" role="img" aria-label="Included"><path d="M3.5 8.5l3 3 6-7"/></svg></td><td><svg viewBox="0 0 16 16" role="img" aria-label="Included"><path d="M3.5 8.5l3 3 6-7"/></svg></td></tr>
-          <tr><th scope="row">Always-On Inbox: every text answered</th><td><span class="sr-only">Not included</span></td><td><svg viewBox="0 0 16 16" role="img" aria-label="Included"><path d="M3.5 8.5l3 3 6-7"/></svg></td><td><svg viewBox="0 0 16 16" role="img" aria-label="Included"><path d="M3.5 8.5l3 3 6-7"/></svg></td></tr>
-          <tr><th scope="row">June on the Phone: voice calls</th><td><span class="sr-only">Not included</span></td><td><svg viewBox="0 0 16 16" role="img" aria-label="Included"><path d="M3.5 8.5l3 3 6-7"/></svg></td><td><svg viewBox="0 0 16 16" role="img" aria-label="Included"><path d="M3.5 8.5l3 3 6-7"/></svg></td></tr>
-          <tr><th scope="row">Shift Autopilot: open shifts filled</th><td><span class="sr-only">Not included</span></td><td><svg viewBox="0 0 16 16" role="img" aria-label="Included"><path d="M3.5 8.5l3 3 6-7"/></svg></td><td><svg viewBox="0 0 16 16" role="img" aria-label="Included"><path d="M3.5 8.5l3 3 6-7"/></svg></td></tr>
-          <tr><th scope="row">Clock-In Chaser: missed punches fixed</th><td><span class="sr-only">Not included</span></td><td><svg viewBox="0 0 16 16" role="img" aria-label="Included"><path d="M3.5 8.5l3 3 6-7"/></svg></td><td><svg viewBox="0 0 16 16" role="img" aria-label="Included"><path d="M3.5 8.5l3 3 6-7"/></svg></td></tr>
-          <tr><th scope="row">On-Call Hero: the after-hours line</th><td><span class="sr-only">Not included</span></td><td><svg viewBox="0 0 16 16" role="img" aria-label="Included"><path d="M3.5 8.5l3 3 6-7"/></svg></td><td><svg viewBox="0 0 16 16" role="img" aria-label="Included"><path d="M3.5 8.5l3 3 6-7"/></svg></td></tr>
-          <tr><th scope="row">Done-With-You Rollout</th><td><span class="sr-only">Not included</span></td><td><svg viewBox="0 0 16 16" role="img" aria-label="Included"><path d="M3.5 8.5l3 3 6-7"/></svg></td><td><svg viewBox="0 0 16 16" role="img" aria-label="Included"><path d="M3.5 8.5l3 3 6-7"/></svg></td></tr>
-          <tr><th scope="row">Call-Out Handling Playbook, WellSky Cleanup, Owners Circle</th><td><span class="sr-only">Not included</span></td><td><svg viewBox="0 0 16 16" role="img" aria-label="Included"><path d="M3.5 8.5l3 3 6-7"/></svg></td><td><svg viewBox="0 0 16 16" role="img" aria-label="Included"><path d="M3.5 8.5l3 3 6-7"/></svg></td></tr>
-          <tr><th scope="row">Your own June-trained ClearDesk scheduler</th><td><span class="sr-only">Not included</span></td><td><span class="sr-only">Not included</span></td><td><svg viewBox="0 0 16 16" role="img" aria-label="Included"><path d="M3.5 8.5l3 3 6-7"/></svg></td></tr>
-          <tr><th scope="row">Hand-offs go to your scheduler</th><td><span class="sr-only">Not included</span></td><td><span class="sr-only">Not included</span></td><td><svg viewBox="0 0 16 16" role="img" aria-label="Included"><path d="M3.5 8.5l3 3 6-7"/></svg></td></tr>
+          <tr><th scope="row">HIPAA secure, BAA included</th><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td></tr>
+          <tr><th scope="row">Always-On Inbox: every text answered</th><td><span class="sr-only">Not included</span></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td></tr>
+          <tr><th scope="row">June on the Phone: voice calls</th><td><span class="sr-only">Not included</span></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td></tr>
+          <tr><th scope="row">Shift Autopilot: open shifts filled</th><td><span class="sr-only">Not included</span></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td></tr>
+          <tr><th scope="row">Clock-In Chaser: missed punches fixed</th><td><span class="sr-only">Not included</span></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td></tr>
+          <tr><th scope="row">On-Call Hero: the after-hours line</th><td><span class="sr-only">Not included</span></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td></tr>
+          <tr><th scope="row">Done-With-You Rollout</th><td><span class="sr-only">Not included</span></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td></tr>
+          <tr><th scope="row">Call-Out Handling Playbook, WellSky Cleanup, Owners Circle</th><td><span class="sr-only">Not included</span></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td></tr>
+          <tr><th scope="row">Your own ClearDesk scheduler, June &amp; WellSky trained</th><td><span class="sr-only">Not included</span></td><td><span class="sr-only">Not included</span></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td></tr>
+          <tr><th scope="row">Hand-offs go to your scheduler</th><td><span class="sr-only">Not included</span></td><td><span class="sr-only">Not included</span></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td></tr>
         </tbody>
       </table>
       </div>
@@ -868,10 +877,10 @@ main { padding-top: 88px; }
       <div class="pledge__link" aria-hidden="true"><img src="/assets/june-face.jpg" alt="" width="44" height="44"><span><i></i><i></i><i></i></span><b>WellSky</b></div>
       <h3>June uses your WellSky login once</h3>
       <ul class="pledge__list">
-        <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span><b>Secure</b>Your password travels encrypted and is used once, to add June.</span></li>
-        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M10.6 10.6a2 2 0 0 0 2.8 2.8M9.9 5.1A10 10 0 0 1 12 5c6 0 9.5 7 9.5 7a17 17 0 0 1-2.6 3.4M6.6 6.6A17 17 0 0 0 2.5 12S6 19 12 19a9.6 9.6 0 0 0 4.4-1"/></svg><span><b>Private</b>It is never stored, and nobody at June ever sees it.</span></li>
-        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg><span><b>Covered</b>You sign a BAA with us before June reads a single shift.</span></li>
-        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v9M6.3 7.3a8 8 0 1 0 11.4 0"/></svg><span><b>Yours</b>June changes nothing until you turn it on. Turn her WellSky user off and she is gone.</span></li>
+        <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M6.4 10.6c3.8-.4 7.4-.4 11.2 0 .4 3.2.4 6.2 0 9.2-3.8.4-7.4.4-11.2 0-.4-3-.4-6 0-9.2zM8.6 10.4V8c0-2 1.5-3.6 3.4-3.6s3.4 1.6 3.4 3.6v2.4M12 14.4v2"/></g></svg><span><b>Secure</b>Your password travels encrypted and is used once, to add June.</span></li>
+        <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M3.4 12c2-3.6 5-5.6 8.6-5.6s6.6 2 8.6 5.6c-2 3.6-5 5.6-8.6 5.6S5.4 15.6 3.4 12zM12 9.6c1.4 0 2.4 1 2.4 2.4s-1 2.4-2.4 2.4-2.4-1-2.4-2.4 1-2.4 2.4-2.4zM4.4 4.4l15.2 15.2"/></g></svg><span><b>Private</b>It is never stored, and nobody at June ever sees it.</span></li>
+        <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M12 3.4c2.4 1.8 4.8 2.4 7.2 2.4v5.8c0 4.2-2.8 7.2-7.2 9-4.4-1.8-7.2-4.8-7.2-9V5.8c2.4 0 4.8-.6 7.2-2.4zM8.8 12.2l2.4 2.4 4.2-4.6"/></g></svg><span><b>Covered</b>You sign a BAA with us before June reads a single shift.</span></li>
+        <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M12 3.6v7.2M7.4 6.4c-2.4 1.6-3.8 4-3.6 6.6.3 4 3.8 7.2 8.2 7.2s7.9-3.2 8.2-7.2c.2-2.6-1.2-5-3.6-6.6"/></g></svg><span><b>Yours</b>June changes nothing until you turn it on. Turn her WellSky user off and she is gone.</span></li>
       </ul>
       <a class="btn" href="/signup">Get started free</a>
       <p class="talk">Rather talk first? <a class="link" href="mailto:support@junecare.ai?subject=Talk%20to%20a%20person%20about%20June">Talk to a person</a></p>
