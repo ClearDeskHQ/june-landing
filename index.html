@@ -268,7 +268,7 @@ main { padding-top: 84px; }
 .shiftcard > div:first-child { display: flex; justify-content: space-between; gap: 12px; }
 .shiftcard > div:first-child span { color: #8a8a8a; font-size: 12px; }
 .shiftcard__who { display: flex; align-items: center; gap: 10px; }
-.shiftcard__who .label { width: 44px; color: #8a8a8a; font-size: 12px; }
+.shiftcard__who .label { flex: none; width: 64px; color: #8a8a8a; font-size: 12px; }
 .shiftcard__who .badge { margin-left: auto; }
 @media (max-width: 1100px) { .hero__say, .hero__act { grid-column: 1 / -1 !important; } }
 /* the app at a size you can read from the chair: zoom keeps its own inner layout */
@@ -361,9 +361,13 @@ main { padding-top: 84px; }
 @media (max-width: 1100px) {
   .brands__logos { justify-content: flex-start; gap: 24px 40px; }
 }
+@media (max-width: 600px) {
+  .brands__logos { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px 24px; }
+  .brands img { max-width: 100%; }
+}
 
 /* questions filed like cards */
-.faq { margin-top: clamp(96px, 11vw, 168px); padding: 12px var(--margin) 0; display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 24px; }
+.faq { margin-top: clamp(72px, 8vw, 120px); padding: 12px var(--margin) 0; display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 24px; }
 .faq h2 { grid-column: 3 / span 8; font-size: var(--step-section); margin-bottom: 40px; }
 .drawer { grid-column: 3 / span 8; display: grid; }
 .qcard { --step: 0; position: relative; margin-top: -24px; padding-top: 40px; }
@@ -382,7 +386,7 @@ main { padding-top: 84px; }
 .qcard.is-open .qcard__a { grid-template-rows: 1fr; }
 
 /* first step, already open */
-.close { margin-top: clamp(96px, 11vw, 168px); background: var(--accent); color: #fff; padding: clamp(72px, 9vw, 144px) var(--margin); display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 24px; row-gap: 40px; align-items: center; }
+.close { margin-top: clamp(72px, 8vw, 120px); background: var(--accent); color: #fff; padding: clamp(72px, 9vw, 144px) var(--margin); display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 24px; row-gap: 40px; align-items: center; }
 .close__say { grid-column: 1 / span 5; align-self: center; }
 .close__say h2 { font-size: clamp(2.5rem, 1rem + 4.4vw, 5.25rem); line-height: 1.02; }
 .close__say p { margin-top: 20px; max-width: 40ch; }
@@ -489,7 +493,7 @@ main { padding-top: 84px; }
   --s-body: 1.0625rem;
   --s-small: .875rem;
 }
-body { background: var(--ground); font-size: var(--s-body); }
+body { background: var(--ground); font-size: var(--s-body); text-wrap: pretty; }
 h1, h2, h3 { font-weight: 500; letter-spacing: -0.035em; }
 .hero h1 { font-size: var(--s-display); line-height: 1.02; }
 .hero__sub, .cover__say p, .price__say p, .close__say p { font-size: var(--s-lead); line-height: 1.5; }
@@ -566,7 +570,7 @@ main { padding-top: 88px; }
 .sms b { color: var(--night-ink); font-weight: 600; }
 .sms a { color: var(--night-ink); }
 
-/* the free app as it is now: chats in the rail, new chat and my chats above, june's heart behind the hello */
+/* the free app as it is now: chats in the rail, new chat and my chats above */
 .app__me svg { width: 14px; height: 14px; margin-left: auto; color: #8a8a8a; }
 .app__group-row { display: flex; align-items: center; justify-content: space-between; padding-right: 8px; }
 .app__group-row svg { width: 14px; height: 14px; }
@@ -578,9 +582,7 @@ main { padding-top: 88px; }
 .app__tools svg { width: 14px; height: 14px; }
 .app__tool-icon { padding: 4px; }
 .app .ai { position: relative; }
-.app .ai::before { content: ""; position: absolute; left: 50%; top: 12%; width: 260px; height: 240px; transform: translateX(-50%); background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-80 -52 164 174'%3E%3Cpath d='M 3,-6 C -20,-42 -66,-28 -68,10 C -70,48 -36,66 -2,110 C 40,70 74,44 72,6 C 70,-32 24,-42 3,-6 Z' fill='none' stroke='%23e8582f' stroke-width='22' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat; opacity: .08; pointer-events: none; transition: opacity .4s ease; }
-.app .ai:has(.msg--you)::before { opacity: 0; }
-.app .ai__body { position: relative; }
+.app .ai__body { position: relative; -webkit-mask-image: linear-gradient(transparent, #000 28px); mask-image: linear-gradient(transparent, #000 28px); }
 .chips .chips__try { align-self: center; padding: 0 2px 0 0; background: none; font-size: 12px; font-weight: 600; color: var(--accent); }
 .starter { position: relative; padding-right: 30px !important; }
 .starter i { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-style: normal; color: var(--accent); transition: transform 160ms var(--out); }
@@ -592,6 +594,7 @@ main { padding-top: 88px; }
 /* june pro: a live call above the texts she answers */
 .prodemo { display: grid; gap: 12px; width: min(100%, 400px); }
 .cover .thread { width: 100%; aspect-ratio: auto; height: 300px; }
+.cover .thread__body { justify-content: flex-start; -webkit-mask-image: linear-gradient(transparent, #000 20px); mask-image: linear-gradient(transparent, #000 20px); }
 .call { display: grid; gap: 12px; padding: 16px; border-radius: 20px; }
 .call__top { display: flex; align-items: center; gap: 10px; font-size: 13px; }
 .call__top img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
@@ -621,6 +624,7 @@ main { padding-top: 88px; }
 .onecall[data-speaker="cg"] .wave i { background: #8f8f8f; }
 .onecall__log { margin: 0; padding: 0 2px 2px; list-style: none; display: grid; gap: 8px; height: 230px; overflow-y: auto; align-content: start; scrollbar-width: none; }
 .onecall__log::-webkit-scrollbar { display: none; }
+.onecall__log { -webkit-mask-image: linear-gradient(transparent, #000 20px); mask-image: linear-gradient(transparent, #000 20px); }
 .onecall__log li { box-sizing: border-box; display: grid; gap: 2px; max-width: 86%; padding: 8px 12px; border-radius: 14px 14px 14px 4px; background: var(--ui-2); font-size: 13px; line-height: 1.45; animation: msg-in 280ms cubic-bezier(.23, 1, .32, 1) both; }
 .onecall__log li b { font-size: 11px; font-weight: 600; color: var(--ui-ink-2); }
 .onecall__log li.june { justify-self: end; border-radius: 14px 14px 4px 14px; background: #fbeee8; }
@@ -641,6 +645,8 @@ main { padding-top: 88px; }
 @media (min-width: 900px) and (max-width: 1199px) { .plan--desk { grid-column: 1 / -1; } }
 .plan__dream { margin-top: -6px; font-size: var(--step-body); font-weight: 500; line-height: 1.4; }
 .plan__plus { font-size: 15px; font-weight: 600; margin-bottom: -4px; }
+.plan__talk { margin-top: -12px; font-size: 14px; }
+.plan__talk a { color: inherit; }
 .compare { grid-column: 1 / -1; margin-top: 40px; min-width: 0; }
 .compare summary { cursor: pointer; display: inline-flex; align-items: center; gap: 10px; font-size: var(--step-body); font-weight: 600; list-style: none; }
 .compare summary::-webkit-details-marker { display: none; }
@@ -744,7 +750,7 @@ svg.hand { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: ro
   <section class="cover" id="cover" aria-labelledby="cover-title">
     <div class="cover__say">
       <h2 id="cover-title" data-rise>June Pro talks to your people.</h2>
-      <p data-rise style="--i:1">On the free plan June texts and sends smart blasts, and you write the replies. June Pro answers every reply herself, by text and by voice. Ask “Can you fill the shift?” and she starts, and your scheduler approves the yes.</p>
+      <p data-rise style="--i:1">On the free plan June sends smart blasts and you write the replies. She is your on-call on the days you spend a credit. June Pro answers every reply herself, by text and by voice, day and night. Ask “Can you fill the shift?” and she starts, and your scheduler approves the yes.</p>
     </div>
     <div class="stage">
       <div class="prodemo">
@@ -760,7 +766,7 @@ svg.hand { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: ro
           <div class="thread__clock" data-clock>11:42 pm</div>
         </div>
         <div class="thread__body" aria-live="polite">
-          <p class="msg msg--event">Marcus called out at <span data-t="0">11:42 pm</span></p>
+          <p class="msg msg--event">Marcus called out of Dolores's shift at <span data-t="0">11:42 pm</span></p>
           <p class="msg msg--june">Hi Marisol, it's June from Willowmere Home Care. A shift opened tomorrow, 8 to noon, ten minutes from you. Want it?</p>
           <p class="msg msg--cg">What's the client like?</p>
           <p class="msg msg--june">Dolores is in her 80s. She needs help with personal care and walking. Two cats, no dog. It pays $20.50 an hour.</p>
@@ -788,6 +794,8 @@ svg.hand { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: ro
         <ul class="stack">
           <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M4.4 5.6c4-.8 11-.8 15.2 0 .6 3.6.6 6.2 0 9.4-2.6.5-5.2.6-7.6.6l-4.4 3.4.4-3.6c-1.2-.1-2.4-.3-3.6-.6-.8-3-.8-6.4 0-9.2zM8 9.2h8M8 12h5"/></g></svg><b>Ask Anything</b><span>Read and change WellSky in plain words.</span></li>
           <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M20.5 3.5L3.6 10.2l6.6 3 3.1 6.8zM10.2 13.2l10.2-9.7"/></g></svg><b>Smart Blasts</b><span>Text many caregivers at once.</span></li>
+          <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M6.2 3.6c.9-.5 1.6-.3 2 .5l1.3 2.7c.3.7.1 1.3-.5 1.8l-1 .8c.9 2 2.4 3.6 4.5 4.6l.9-1c.5-.6 1.2-.7 1.8-.3l2.6 1.5c.8.5.9 1.2.4 2-.9 1.5-2.2 2.2-3.9 2C9.8 19.8 4.3 14 4 8.2c0-1.9.9-3.4 2.2-4.6zM15 3.8c2.6.4 4.8 2.6 5.2 5.2M15 7c1 .3 1.7 1 2 2"/></g></svg><b>On-Call Hero</b><span>June is the on-call, a day per credit.</span></li>
+          <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M12 3.4c4.8-.1 8.7 3.8 8.6 8.7-.1 4.7-3.9 8.6-8.7 8.5-4.8 0-8.6-3.9-8.5-8.7.1-4.7 3.9-8.5 8.6-8.5zM14.4 9.2c-.5-.8-1.4-1.2-2.4-1.2-1.4 0-2.4.8-2.4 1.9 0 2.6 4.9 1.4 4.9 4.1 0 1.1-1.1 2-2.5 2-1.1 0-2-.5-2.5-1.3M12 6.4V8M12 16v1.6"/></g></svg><b>Credits</b><span>30 a month. Each is a day of on-call or an hour of instant sync.</span></li>
           <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M12 3.4c2.4 1.8 4.8 2.4 7.2 2.4v5.8c0 4.2-2.8 7.2-7.2 9-4.4-1.8-7.2-4.8-7.2-9V5.8c2.4 0 4.8-.6 7.2-2.4zM8.8 12.2l2.4 2.4 4.2-4.6"/></g></svg><b>HIPAA Covered</b><span>Secure, with a BAA included.</span></li>
           <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M12 20.4c-4.6-3.4-8.2-6.4-8.2-10.4C3.8 7.1 6 5.2 8.4 5.4c1.6.1 2.9 1 3.6 2.4.7-1.4 2-2.3 3.6-2.4 2.4-.2 4.6 1.7 4.6 4.6 0 4-3.6 7-8.2 10.4z"/></g></svg><b>Free Forever</b><span>Not a trial. It never ends.</span></li>
         </ul>
@@ -799,10 +807,10 @@ svg.hand { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: ro
         <p class="plan__dream">Every shift covered, and no more midnight calls.</p>
         <p class="plan__plus">Everything in Ask June, plus:</p>
         <ul class="stack">
+          <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M6.2 3.6c.9-.5 1.6-.3 2 .5l1.3 2.7c.3.7.1 1.3-.5 1.8l-1 .8c.9 2 2.4 3.6 4.5 4.6l.9-1c.5-.6 1.2-.7 1.8-.3l2.6 1.5c.8.5.9 1.2.4 2-.9 1.5-2.2 2.2-3.9 2C9.8 19.8 4.3 14 4 8.2c0-1.9.9-3.4 2.2-4.6zM15 3.8c2.6.4 4.8 2.6 5.2 5.2M15 7c1 .3 1.7 1 2 2"/></g></svg><b>On-Call Hero</b><span>June is the on-call. She routes and triages.</span></li>
           <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M4.4 5.6c4-.8 11-.8 15.2 0 .6 3.6.6 6.2 0 9.4-2.6.5-5.2.6-7.6.6l-4.4 3.4.4-3.6c-1.2-.1-2.4-.3-3.6-.6-.8-3-.8-6.4 0-9.2zM10.6 8.2l-2.5 2.4 2.5 2.3M8.3 10.6h6.4"/></g></svg><b>Always-On Inbox</b><span>Every text answered, day or night.</span></li>
           <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M5.2 5.6c4.6-.4 9-.4 13.6 0 .4 4.6.4 9.2 0 13.8-4.6.4-9 .4-13.6 0-.4-4.6-.4-9.2 0-13.8zM3.8 9.8h16.4M8 3.6v3.6M16 3.6v3.6"/><path d="M12 17.4c-1.9-1.2-3-2.3-3-3.5 0-.9.7-1.5 1.5-1.5.6 0 1.2.3 1.5.9.3-.6.9-.9 1.5-.9.8 0 1.5.6 1.5 1.5 0 1.2-1.1 2.3-3 3.5z"/></g></svg><b>Shift Autopilot</b><span>Open shifts filled, within your rules.</span></li>
           <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M12 3.2c4.9-.1 8.9 3.9 8.8 8.9-.1 4.8-4 8.8-8.9 8.7-4.9 0-8.8-4-8.7-8.9C3.3 7 7.2 3.1 12 3.2zM12 7.6v4.8l3.2 1.8M4.6 4.6L3.2 6.4M19.4 4.6l1.4 1.8"/></g></svg><b>Clock-In Chaser</b><span>Missed punches fixed in WellSky.</span></li>
-          <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M20 14.6c-1 .4-2.2.6-3.4.4-3.8-.6-6.2-4-5.6-7.8.2-1 .6-1.8 1.2-2.6-4.2.6-7.2 4.4-6.4 8.8.8 4.2 4.8 7 9 6.2 2.4-.4 4.2-1.8 5.2-3.8z"/></g></svg><b>On-Call Hero</b><span>June takes the after-hours line.</span></li>
         </ul>
         <p class="plan__plus">Free bonuses:</p>
         <ul class="stack stack--bonus">
@@ -810,7 +818,8 @@ svg.hand { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: ro
           <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M19.6 3.6l-7.2 7.6M11.4 9.8c1.6 1.2 2.8 2.4 3.6 3.8-1.2 2.6-2.8 4.8-4.6 6.6-2.6-.8-5-2.6-6.6-5 2.4-1.4 4.8-3.2 7.6-5.4zM8.6 18.4l2.6-3.4M6.2 16.4l3-2.8"/></g></svg><b>WellSky Cleanup</b></li>
           <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M9.6 4.8c1.8 0 3 1.3 3 3s-1.3 3-3 3-3-1.3-3-3 1.2-3 3-3zM3.6 19.4c.3-3 2.4-4.8 6-4.8s5.7 1.8 6 4.8M15.6 5c1.6 0 2.8 1.2 2.8 2.8s-1.1 2.8-2.7 2.8M17.4 14.8c2 .5 3.2 2 3.4 4.4"/></g></svg><b>Home Care Agency Owners Circle</b></li>
         </ul>
-        <a class="btn" href="mailto:support@junecare.ai?subject=June%20Pro">Talk to a person</a>
+        <a class="btn" href="/signup?plan=pro">Get June Pro</a>
+        <p class="plan__talk">Rather talk first? <a href="mailto:support@junecare.ai?subject=June%20Pro">Talk to a person</a></p>
       </article>
       <article class="plan plan--desk" data-rise style="--i:2">
         <h3 class="plan__name">June + Scheduler</h3>
@@ -839,14 +848,14 @@ svg.hand { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: ro
         <tbody>
           <tr><th scope="row">Ask Anything: read and change WellSky in plain words</th><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td></tr>
           <tr><th scope="row">Smart Blasts to caregivers and clients</th><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td></tr>
-          <tr><th scope="row">WellSky sync</th><td>Every hour</td><td>Instant</td><td>Instant</td></tr>
-          <tr><th scope="row">Rapid refreshes</th><td>30 a month</td><td>Unlimited</td><td>Unlimited</td></tr>
+          <tr><th scope="row">WellSky sync</th><td>Every hour, or instant for an hour per credit</td><td>Instant</td><td>Instant</td></tr>
+          <tr><th scope="row">On-Call Hero: June is the on-call, routing and triaging problems</th><td>A day per credit, otherwise to voicemail</td><td>Unlimited</td><td>Unlimited</td></tr>
+          <tr><th scope="row">Credits</th><td>30 a month</td><td>Not needed</td><td>Not needed</td></tr>
           <tr><th scope="row">HIPAA secure, BAA included</th><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td></tr>
           <tr><th scope="row">Always-On Inbox: every text answered</th><td><span class="sr-only">Not included</span></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td></tr>
-          <tr><th scope="row">June on the Phone: voice calls</th><td><span class="sr-only">Not included</span></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td></tr>
+          <tr><th scope="row">June on the Phone: voice calls</th><td>On on-call days</td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td></tr>
           <tr><th scope="row">Shift Autopilot: open shifts filled</th><td><span class="sr-only">Not included</span></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td></tr>
           <tr><th scope="row">Clock-In Chaser: missed punches fixed</th><td><span class="sr-only">Not included</span></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td></tr>
-          <tr><th scope="row">On-Call Hero: the after-hours line</th><td><span class="sr-only">Not included</span></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td></tr>
           <tr><th scope="row">Done-With-You Rollout</th><td><span class="sr-only">Not included</span></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td></tr>
           <tr><th scope="row">Call-Out Handling Playbook, WellSky Cleanup, Owners Circle</th><td><span class="sr-only">Not included</span></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td></tr>
           <tr><th scope="row">Your own ClearDesk scheduler, June &amp; WellSky trained</th><td><span class="sr-only">Not included</span></td><td><span class="sr-only">Not included</span></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td></tr>
