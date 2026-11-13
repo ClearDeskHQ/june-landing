@@ -30,7 +30,7 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; scroll-padding-top: 88px; }
+html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
   background: var(--ground);
@@ -54,7 +54,7 @@ h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -0.03em; line-height: 
 
 /* bar */
 .bar {
-  position: sticky; top: 0; z-index: 20;
+  position: relative; z-index: 20;
   display: flex; align-items: center; justify-content: space-between; gap: 24px;
   padding: 16px var(--margin);
   background: var(--ground);

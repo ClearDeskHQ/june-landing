@@ -25,20 +25,10 @@
 
 /* the bar floats in the margin, so the action stays one press away all the way down */
 .bar { position: fixed; top: 12px; left: var(--margin); right: var(--margin); margin-inline: auto; max-width: 2000px; padding: 8px 8px 8px 20px; background: var(--ui); border-radius: 999px; transition: max-width .45s var(--ease), padding .45s var(--ease), box-shadow .3s var(--ease); }
-.bar.is-floating { max-width: 660px; padding: 4px 4px 4px 16px; box-shadow: 0 12px 32px rgba(28, 26, 24, .1); /* taste-skill-ignore: the bar truly floats over content */ }
 .bar__logo { width: 68px; transition: width .45s var(--ease); }
 .bar__logo img { width: 100%; height: auto; }
 .bar__logo { position: relative; }
-.bar__word { transition: opacity 260ms var(--ease), filter 260ms var(--ease), transform 260ms var(--ease); transform-origin: left center; }
-.bar__heart { position: absolute; left: 0; top: 50%; width: 26px; height: 26px; fill: #e8582f; opacity: 0; transform: translateY(-50%) scale(.6); transition: opacity 260ms var(--ease), transform 320ms cubic-bezier(.34, 1.4, .64, 1); }
-.bar.is-floating .bar__logo { width: 26px; }
-.bar.is-floating .bar__word { opacity: 0; filter: blur(2px); transform: scale(.8); }
-.bar.is-floating .bar__heart { opacity: 1; transform: translateY(-50%) scale(1); }
-@media (prefers-reduced-motion: reduce) { .bar__word, .bar__heart, .bar__logo { transition: opacity 150ms ease; } }
-.bar.is-floating nav { gap: 18px; }
 .bar .btn--sm { transition: min-height .45s var(--ease), padding .45s var(--ease), background-color .18s var(--ease); }
-.bar.is-floating .btn--sm { min-height: 34px; padding: 0 14px; }
-.bar.is-floating nav a:not(.btn) { padding: 4px 0; }
 .bar nav { gap: clamp(12px, 2vw, 28px); }
 main { padding-top: 84px; }
 
@@ -205,12 +195,10 @@ main { padding-top: 84px; }
 .hero__act .trust { margin-top: 14px; }
 .hero__act .hero__go { margin-top: 0; }
 .hero .stage--app { grid-column: 1 / -1 !important; display: block; padding: clamp(12px, 2.4vw, 36px); }
-/* words left, the action closes the far side, so the app starts on the first screen */
+/* the action sits right under the headline at every width */
 @media (min-width: 1101px) {
   .hero { row-gap: 40px; padding-top: clamp(16px, 3vh, 40px); }
   .hero__say { grid-column: 1 / span 8 !important; }
-  .hero__act { grid-column: 9 / -1 !important; align-self: end; justify-self: end; margin: 0; display: grid; justify-items: end; }
-  .hero__act .trust { justify-content: flex-end; }
 }
 .who { white-space: nowrap; }
 .hours li { grid-template-columns: minmax(0, 1fr) 64px 44px !important; }
@@ -537,8 +525,8 @@ h1, h2, h3 { font-weight: 500; letter-spacing: -0.035em; }
 .app__group { color: #6f6f6f; }
 
 .plan__name { font-size: var(--s-h2) !important; line-height: 1.05; }
-.plan__price { font-size: var(--s-lead) !important; font-weight: 500; letter-spacing: 0; margin-top: -8px; }
-.plan__price small { font-size: var(--s-small) !important; margin-left: 6px; opacity: .75; }
+.plan__price { font-size: clamp(1.75rem, 1.4rem + 1vw, 2.25rem) !important; font-weight: 600; letter-spacing: -0.02em; margin-top: -8px; }
+.plan__price small { display: block; font-size: var(--s-small) !important; font-weight: 500; letter-spacing: 0; margin: 4px 0 0; opacity: .75; }
 @media (min-width: 901px) { .dialog { grid-column: 7 / -1 !important; } }
 .app__search, .app__group { color: #5e5e5e !important; }
 @media (max-width: 560px) { .hero h1 { font-size: 2.125rem; } }
@@ -556,15 +544,9 @@ h1, h2, h3 { font-weight: 500; letter-spacing: -0.035em; }
 .pledge__list b { display: block; color: var(--ink); font-size: var(--s-body); font-weight: 600; }
 .pledge .btn { width: 100%; }
 
-.bar, .bar.is-floating { top: 0; left: 0; right: 0; max-width: none; margin: 0; padding: 12px var(--margin); border-radius: 0; background: #fafafa; box-shadow: none; }
-.bar.is-floating { box-shadow: 0 1px 0 var(--panel-2); /* taste-skill-ignore: the edge of a fixed bar over content */ }
-.bar.is-floating .bar__logo, .bar__logo { width: 68px; }
-.bar.is-floating .bar__word { opacity: 1; filter: none; transform: none; }
-.bar.is-floating .bar__heart { opacity: 0; }
-.bar.is-floating .btn--sm { min-height: 42px; padding: 0 18px; }
-.bar.is-floating nav { gap: clamp(12px, 2vw, 28px); }
+.bar { position: absolute; top: 0; left: 0; right: 0; max-width: none; margin: 0; padding: 12px var(--margin); border-radius: 0; background: #fafafa; box-shadow: none; }
 main { padding-top: 88px; }
-@media (max-width: 560px) { .bar, .bar.is-floating { padding: 10px 16px; } main { padding-top: 76px; } }
+@media (max-width: 560px) { .bar { padding: 10px 16px; } main { padding-top: 76px; } }
 
 /* the texts june sends, said where carriers look for it: what, how often, the cost, and how to stop */
 .sms { display: grid; gap: 8px; max-width: 72ch; font-size: var(--s-small); color: var(--night-ink-2); line-height: 1.6; }
@@ -645,6 +627,21 @@ main { padding-top: 88px; }
 @media (min-width: 1200px) { .plans { grid-template-columns: repeat(3, minmax(0, 1fr)); } .plan__name { font-size: clamp(1.875rem, 2.4vw, 2.5rem) !important; } }
 @media (min-width: 900px) and (max-width: 1199px) { .plan--desk { grid-column: 1 / -1; } }
 .plan__dream { margin-top: -6px; font-size: var(--step-body); font-weight: 500; line-height: 1.4; }
+.plan__heart { width: 15px; height: 15px; fill: #e8582f; flex: none; }
+.plan__cd { width: 14px; height: 16px; overflow: hidden; flex: none; }
+.plan__cd img { height: 100%; width: auto; max-width: none; display: block; }
+.plan__head { display: grid; gap: 6px; }
+.plan__sub-name { font-size: 15px; font-weight: 500; opacity: .7; }
+.plan__act { display: grid; gap: 10px; justify-items: start; align-content: start; }
+.plan__act .plan__talk { margin: 0; }
+.plan__body { display: grid; gap: 18px; align-content: start; padding-top: 22px; border-top: 1px solid rgba(0,0,0,.1); }
+.plan--pro .plan__body { border-top-color: rgba(255,255,255,.16); }
+/* three cards share row tracks so name, price, promise, button and list line up */
+@media (min-width: 1200px) { .plans { grid-template-rows: repeat(5, auto); } .plan { grid-row: span 5; grid-template-rows: subgrid; row-gap: 20px; } }
+.plan__line { display: flex !important; align-items: baseline; gap: 6px; line-height: 1.4; }
+.plan__line + .plan__line { margin-top: 4px !important; }
+.plan__line svg, .plan__line .plan__cd { align-self: center; }
+.plan__was { margin-right: 4px; opacity: .55; text-decoration-thickness: 2px; text-decoration-color: var(--accent); }
 .plan__plus { font-size: 15px; font-weight: 600; margin-bottom: -4px; }
 .plan__talk { margin-top: -12px; font-size: 14px; }
 .plan__talk a { color: inherit; }
@@ -678,7 +675,7 @@ svg.hand { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: ro
   </filter>
 </svg>
 <header class="bar">
-  <a class="bar__logo" href="/" aria-label="June home"><img class="bar__word" src="/assets/june-logo.svg" alt="June" width="92" height="64"><svg class="bar__heart" viewBox="-80 -52 164 174" aria-hidden="true"><path d="M 3,-6 C -20,-42 -66,-28 -68,10 C -70,48 -36,66 -2,110 C 40,70 74,44 72,6 C 70,-32 24,-42 3,-6 Z"/></svg></a>
+  <a class="bar__logo" href="/" aria-label="June home"><img class="bar__word" src="/assets/june-logo.svg" alt="June" width="92" height="64"></a>
   <nav aria-label="Main">
     <a href="/how-it-works" class="hide-sm">How It Works</a>
     <a href="#price" class="hide-sm">Pricing</a>
@@ -784,28 +781,31 @@ svg.hand { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: ro
 
   <section class="price" id="price" aria-labelledby="price-title">
     <div class="price__say">
-      <h2 id="price-title">Start free. Add June Pro later.</h2>
-      <p>Ask June is free for every agency on WellSky. June Pro is there when you want June to answer, call and act on her own. Want a person on the desk too? Add a ClearDesk scheduler, June &amp; WellSky trained.</p>
+      <h2 id="price-title">Start free. Add June Pro, or a whole desk.</h2>
+      <p>Ask June is free for every agency on WellSky. June Pro is there when you want June to answer, call and act on her own. Want a person on the desk too? Add a ClearDesk scheduler and June costs less.</p>
     </div>
     <div class="plans">
       <article class="plan" data-rise>
-        <h3 class="plan__name">Ask June</h3>
+        <div class="plan__head"><h3 class="plan__name">Ask June</h3><p class="plan__sub-name">For any agency on WellSky</p></div>
         <p class="plan__fig plan__price">$0<small>free forever</small></p>
         <p class="plan__dream">Answers about your agency in seconds, not reports.</p>
+        <div class="plan__act"><a class="btn" href="/signup">Get Ask June free</a><p class="plan__talk">Not a trial. It never ends.</p></div>
+        <div class="plan__body">
         <ul class="stack">
           <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M4.4 5.6c4-.8 11-.8 15.2 0 .6 3.6.6 6.2 0 9.4-2.6.5-5.2.6-7.6.6l-4.4 3.4.4-3.6c-1.2-.1-2.4-.3-3.6-.6-.8-3-.8-6.4 0-9.2zM8 9.2h8M8 12h5"/></g></svg><b>Ask Anything</b><span>Read and change WellSky in plain words.</span></li>
           <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M20.5 3.5L3.6 10.2l6.6 3 3.1 6.8zM10.2 13.2l10.2-9.7"/></g></svg><b>Smart Blasts</b><span>Text many caregivers at once.</span></li>
           <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M6.2 3.6c.9-.5 1.6-.3 2 .5l1.3 2.7c.3.7.1 1.3-.5 1.8l-1 .8c.9 2 2.4 3.6 4.5 4.6l.9-1c.5-.6 1.2-.7 1.8-.3l2.6 1.5c.8.5.9 1.2.4 2-.9 1.5-2.2 2.2-3.9 2C9.8 19.8 4.3 14 4 8.2c0-1.9.9-3.4 2.2-4.6zM15 3.8c2.6.4 4.8 2.6 5.2 5.2M15 7c1 .3 1.7 1 2 2"/></g></svg><b>On-Call Hero</b><span>June is the on-call, a day per credit.</span></li>
           <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M12 3.4c4.8-.1 8.7 3.8 8.6 8.7-.1 4.7-3.9 8.6-8.7 8.5-4.8 0-8.6-3.9-8.5-8.7.1-4.7 3.9-8.5 8.6-8.5zM14.4 9.2c-.5-.8-1.4-1.2-2.4-1.2-1.4 0-2.4.8-2.4 1.9 0 2.6 4.9 1.4 4.9 4.1 0 1.1-1.1 2-2.5 2-1.1 0-2-.5-2.5-1.3M12 6.4V8M12 16v1.6"/></g></svg><b>Credits</b><span>20 a month. Each is a day of on-call or an hour of instant sync.</span></li>
           <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M12 3.4c2.4 1.8 4.8 2.4 7.2 2.4v5.8c0 4.2-2.8 7.2-7.2 9-4.4-1.8-7.2-4.8-7.2-9V5.8c2.4 0 4.8-.6 7.2-2.4zM8.8 12.2l2.4 2.4 4.2-4.6"/></g></svg><b>HIPAA Covered</b><span>Secure, with a BAA included.</span></li>
-          <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M12 20.4c-4.6-3.4-8.2-6.4-8.2-10.4C3.8 7.1 6 5.2 8.4 5.4c1.6.1 2.9 1 3.6 2.4.7-1.4 2-2.3 3.6-2.4 2.4-.2 4.6 1.7 4.6 4.6 0 4-3.6 7-8.2 10.4z"/></g></svg><b>Free Forever</b><span>Not a trial. It never ends.</span></li>
         </ul>
-        <a class="btn" href="/signup">Get Ask June free</a>
+        </div>
       </article>
       <article class="plan plan--pro" data-rise style="--i:1">
-        <h3 class="plan__name">June Pro</h3>
-        <p class="plan__fig plan__price">$1,800<small>a month, to start</small></p>
+        <div class="plan__head"><h3 class="plan__name">June Pro</h3><p class="plan__sub-name">June on her own, day and night</p></div>
+        <p class="plan__fig plan__price">$1,800<small>a month</small></p>
         <p class="plan__dream">Every shift covered, and no more midnight calls.</p>
+        <div class="plan__act"><a class="btn" href="/signup?plan=pro">Get June Pro</a><p class="plan__talk">Rather talk first? <a href="mailto:support@junecare.ai?subject=June%20Pro">Talk to a person</a></p></div>
+        <div class="plan__body">
         <p class="plan__plus">Everything in Ask June, plus:</p>
         <ul class="stack">
           <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M6.2 3.6c.9-.5 1.6-.3 2 .5l1.3 2.7c.3.7.1 1.3-.5 1.8l-1 .8c.9 2 2.4 3.6 4.5 4.6l.9-1c.5-.6 1.2-.7 1.8-.3l2.6 1.5c.8.5.9 1.2.4 2-.9 1.5-2.2 2.2-3.9 2C9.8 19.8 4.3 14 4 8.2c0-1.9.9-3.4 2.2-4.6zM15 3.8c2.6.4 4.8 2.6 5.2 5.2M15 7c1 .3 1.7 1 2 2"/></g></svg><b>On-Call Hero</b><span>June is the on-call. She routes and triages.</span></li>
@@ -819,34 +819,32 @@ svg.hand { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: ro
           <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M19.6 3.6l-7.2 7.6M11.4 9.8c1.6 1.2 2.8 2.4 3.6 3.8-1.2 2.6-2.8 4.8-4.6 6.6-2.6-.8-5-2.6-6.6-5 2.4-1.4 4.8-3.2 7.6-5.4zM8.6 18.4l2.6-3.4M6.2 16.4l3-2.8"/></g></svg><b>WellSky Cleanup</b></li>
           <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M9.6 4.8c1.8 0 3 1.3 3 3s-1.3 3-3 3-3-1.3-3-3 1.2-3 3-3zM3.6 19.4c.3-3 2.4-4.8 6-4.8s5.7 1.8 6 4.8M15.6 5c1.6 0 2.8 1.2 2.8 2.8s-1.1 2.8-2.7 2.8M17.4 14.8c2 .5 3.2 2 3.4 4.4"/></g></svg><b>Home Care Agency Owners Circle</b></li>
         </ul>
-        <a class="btn" href="/signup?plan=pro">Get June Pro</a>
-        <p class="plan__talk">Rather talk first? <a href="mailto:support@junecare.ai?subject=June%20Pro">Talk to a person</a></p>
+        </div>
       </article>
       <article class="plan plan--desk" data-rise style="--i:2">
-        <h3 class="plan__name">June + Scheduler</h3>
-        <p class="plan__fig plan__price">Contact us</p>
+        <div class="plan__head"><h3 class="plan__name">June Complete</h3><p class="plan__sub-name">June Pro + ClearDesk Remote Team Staff</p></div>
+        <p class="plan__fig plan__price"><s class="plan__was">$1,800</s> $1,300<small class="plan__line"><svg class="plan__heart" viewBox="-80 -52 164 174" aria-hidden="true"><path d="M 3,-6 C -20,-42 -66,-28 -68,10 C -70,48 -36,66 -2,110 C 40,70 74,44 72,6 C 70,-32 24,-42 3,-6 Z"/></svg>June Pro, a month</small><small class="plan__line"><span class="plan__cd" aria-hidden="true"><img src="/assets/logos/cleardesk.png" alt="" width="512" height="96"></span>Plus full-time ClearDesk staff</small></p>
         <p class="plan__dream">A whole scheduling desk: June and a person, working as one.</p>
+        <div class="plan__act"><a class="btn" href="mailto:support@junecare.ai?subject=June%20Complete">Talk to us</a><p class="plan__talk">No contract. Not a fit? A refund or a fast replacement.</p></div>
+        <div class="plan__body">
         <p class="plan__plus">Everything in June Pro, plus:</p>
         <ul class="stack">
-          <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M12 4.2c2 0 3.5 1.5 3.5 3.5S14 11.3 12 11.3 8.5 9.7 8.5 7.7 10 4.2 12 4.2zM4.8 20c.3-3.6 3.2-5.6 7.2-5.6s6.9 2 7.2 5.6"/></g></svg><b>Your Own Scheduler</b><span>Full-time, June &amp; WellSky trained.</span></li>
+          <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M12 4.2c2 0 3.5 1.5 3.5 3.5S14 11.3 12 11.3 8.5 9.7 8.5 7.7 10 4.2 12 4.2zM4.8 20c.3-3.6 3.2-5.6 7.2-5.6s6.9 2 7.2 5.6"/></g></svg><b>Your Own Scheduler</b><span>Full-time, in your time zone, June &amp; WellSky trained.</span></li>
+          <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M3.8 4.4c2.8-.3 5.6-.3 8.4 0l8 8-7.8 7.8-8.2-8.2c-.4-2.6-.5-5.1-.4-7.6zM8.2 8.6h.2"/></g></svg><b>Up to 70% Less</b><span>Than hiring a scheduler in the U.S.</span></li>
+          <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M12 3.6l2.5 5.3 5.7.7-4.2 3.9 1.1 5.7-5.1-2.8-5.1 2.8 1.1-5.7-4.2-3.9 5.7-.7z"/></g></svg><b>Top 0.5% of Talent</b><span>85% stay for the long term.</span></li>
           <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M6.2 3.6c.9-.5 1.6-.3 2 .5l1.3 2.7c.3.7.1 1.3-.5 1.8l-1 .8c.9 2 2.4 3.6 4.5 4.6l.9-1c.5-.6 1.2-.7 1.8-.3l2.6 1.5c.8.5.9 1.2.4 2-.9 1.5-2.2 2.2-3.9 2C9.8 19.8 4.3 14 4 8.2c0-1.9.9-3.4 2.2-4.6zM15.4 8h5.4M18.4 5.4l2.6 2.6-2.6 2.6"/></g></svg><b>Hand-Offs That Land</b><span>What needs a person goes to them.</span></li>
           <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M6 20V5.2c3.6-.5 7.2-.5 10.6 0V20M3.8 20.2h16.4M9.2 9h1.2M13 9h1.2M9.2 12.6h1.2M13 12.6h1.2M11.6 20v-3.4"/></g></svg><b>The ClearDesk Bench</b><span>The team behind 450+ agencies.</span></li>
         </ul>
-        <p class="plan__plus">Free bonuses:</p>
-        <ul class="stack stack--bonus">
-          <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M5.6 3.8h10.8c.9 0 1.6.7 1.6 1.6V9M6 3.8v16.4h10.4c.9 0 1.6-.7 1.6-1.6V15M3.6 8h4M3.6 12.2h4M3.6 16.4h4M19.2 10.4l2 2-5.2 5.2-2.6.6.6-2.6z"/></g></svg><b>Call-Out Handling Playbook</b></li>
-          <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M19.6 3.6l-7.2 7.6M11.4 9.8c1.6 1.2 2.8 2.4 3.6 3.8-1.2 2.6-2.8 4.8-4.6 6.6-2.6-.8-5-2.6-6.6-5 2.4-1.4 4.8-3.2 7.6-5.4zM8.6 18.4l2.6-3.4M6.2 16.4l3-2.8"/></g></svg><b>WellSky Cleanup</b></li>
-          <li><svg class="hand" viewBox="0 0 24 24" aria-hidden="true"><g filter="url(#hand-rough)"><path d="M9.6 4.8c1.8 0 3 1.3 3 3s-1.3 3-3 3-3-1.3-3-3 1.2-3 3-3zM3.6 19.4c.3-3 2.4-4.8 6-4.8s5.7 1.8 6 4.8M15.6 5c1.6 0 2.8 1.2 2.8 2.8s-1.1 2.8-2.7 2.8M17.4 14.8c2 .5 3.2 2 3.4 4.4"/></g></svg><b>Home Care Agency Owners Circle</b></li>
-        </ul>
-        <a class="btn btn--line" href="mailto:support@junecare.ai?subject=June%20%2B%20Scheduler">Contact us</a>
+        </div>
       </article>
     </div>
     <details class="compare" data-rise style="--i:4">
       <summary>Compare every feature</summary>
       <div class="compare__scroll">
       <table>
-        <thead><tr><th scope="col"><span class="sr-only">Feature</span></th><th scope="col">Ask June</th><th scope="col">June Pro</th><th scope="col">June + Scheduler</th></tr></thead>
+        <thead><tr><th scope="col"><span class="sr-only">Feature</span></th><th scope="col">Ask June</th><th scope="col">June Pro</th><th scope="col">June Complete</th></tr></thead>
         <tbody>
+          <tr><th scope="row">Price of June</th><td>$0</td><td>$1,800 a month</td><td>$1,300 a month, plus your scheduler</td></tr>
           <tr><th scope="row">Ask Anything: read and change WellSky in plain words</th><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td></tr>
           <tr><th scope="row">Smart Blasts to caregivers and clients</th><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td></tr>
           <tr><th scope="row">WellSky sync</th><td>Every hour, or instant for an hour per credit</td><td>Instant</td><td>Instant</td></tr>
@@ -860,6 +858,7 @@ svg.hand { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: ro
           <tr><th scope="row">Done-With-You Rollout</th><td><span class="sr-only">Not included</span></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td></tr>
           <tr><th scope="row">Call-Out Handling Playbook, WellSky Cleanup, Owners Circle</th><td><span class="sr-only">Not included</span></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td></tr>
           <tr><th scope="row">Your own ClearDesk scheduler, June &amp; WellSky trained</th><td><span class="sr-only">Not included</span></td><td><span class="sr-only">Not included</span></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td></tr>
+          <tr><th scope="row">Scheduler at up to 70% less than a U.S. hire, no contract</th><td><span class="sr-only">Not included</span></td><td><span class="sr-only">Not included</span></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td></tr>
           <tr><th scope="row">Hand-offs go to your scheduler</th><td><span class="sr-only">Not included</span></td><td><span class="sr-only">Not included</span></td><td><svg class="hand" viewBox="0 0 24 24" role="img" aria-label="Included"><g filter="url(#hand-rough)"><path d="M4.6 12.8l5 5L19.6 6.6"/></g></svg></td></tr>
         </tbody>
       </table>
@@ -917,12 +916,6 @@ svg.hand { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: ro
 <script type="module" src="/assets/site.js"></script>
 <script type="module">
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-// the bar casts its shadow and shrinks once it sits over content
-const bar = document.querySelector(".bar");
-const lift = () => bar.classList.toggle("is-floating", scrollY > 8);
-addEventListener("scroll", lift, { passive: true });
-lift();
 
 // each thread runs on the visitor's own clock
 const fmt = (d) => d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }).toLowerCase();
